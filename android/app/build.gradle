@@ -27,6 +27,10 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion flutter.compileSdkVersion
+<<<<<<< HEAD
+=======
+    ndkVersion flutter.ndkVersion
+>>>>>>> d02614a7c11b6bb036c186e125cf629b8caeffea
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -43,7 +47,13 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+<<<<<<< HEAD
         applicationId "com.example.practice"
+=======
+        applicationId "com.eighteenclass.gnumap.gnumap"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+>>>>>>> d02614a7c11b6bb036c186e125cf629b8caeffea
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
