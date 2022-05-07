@@ -19,6 +19,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=2.18.0-74.0.dev <3.0.0'
+  flutter: "^1.26.0-8.0.pre"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -83,3 +84,4 @@ fonts:
         weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
