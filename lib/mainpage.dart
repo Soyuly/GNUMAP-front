@@ -15,7 +15,6 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         titleSpacing: 0,
         title: Container(
-
           margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,24 +26,123 @@ class _MainPageState extends State<MainPage> {
                     fontFamily: 'AppleSDGothicNeo',
                     fontWeight: FontWeight.bold,
                   )),
-              Icon(
-                  Icons.settings,
-                  color : Color.fromRGBO(13, 13, 16, 0.69))
+              Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
             ],
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-
       ),
       body: Container(
-        margin: const EdgeInsets.fromLTRB(13, 10, 13, 0),
-        child: CupertinoSearchTextField(decoration: BoxDecoration(
-          color: Color.fromRGBO(188, 188, 188, 0.54),
-            borderRadius: BorderRadius.circular(10)
-        ),),
+        margin: const EdgeInsets.fromLTRB(13, 0, 0, 0),
+        child: Column(children: [
+          Container(child: SearchBar()),
+          SizedBox(height: 35, child: History()),
+          Container(height: 30, width: 500, child: FavoriteTitle()),
+          SizedBox(
+            height: 100,
+            child: Favorite(),
+          )
+        ]),
       ),
-      bottomNavigationBar: BottomAppBar(),
     );
+  }
+}
+
+class SearchBar extends StatefulWidget {
+  const SearchBar({Key? key}) : super(key: key);
+
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
+      child: CupertinoSearchTextField(
+        itemSize: 20,
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(188, 188, 188, 0.54),
+            borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+}
+
+class History extends StatelessWidget {
+  const History({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final List<String> histories = <String>['30동', '컴퓨터과학관', '24동', '경상대교양학관'];
+    return Container(
+      margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: histories.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+              child: Text(histories[index],
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Color.fromRGBO(0, 16, 72, 0.6),
+                      fontFamily: 'AppleSDGothicNeo')),
+            );
+          }),
+    );
+  }
+}
+
+class FavoriteTitle extends StatelessWidget {
+  const FavoriteTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(6, 0, 0, 0),
+      child: Text('편의시설',
+          style: TextStyle(
+              fontSize: 20,
+              color: Color.fromRGBO(0, 16, 72, 0.6),
+              fontFamily: 'AppleSDGothicNeo')),
+    );
+  }
+}
+
+class Favorite extends StatefulWidget {
+  const Favorite({Key? key}) : super(key: key);
+
+  @override
+  State<Favorite> createState() => _FavoriteState();
+}
+
+class _FavoriteState extends State<Favorite> {
+  @override
+  Widget build(BuildContext context) {
+    final List<String> favoriteItems = <String>['도서관', '박물관', '컴퓨터과학관', '교양학관'];
+    final List<String> favoriteIndex = <String>['1동', '', '30동', '24동'];
+    return Container(
+        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: favoriteItems.length,
+            itemBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                width: 70,
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('assets/cs.jpg')),
+                      borderRadius: BorderRadius.circular(50),
+                    )),
+              );
+            }));
   }
 }
