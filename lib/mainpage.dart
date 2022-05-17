@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gnumap/CImages.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -38,10 +39,32 @@ class _MainPageState extends State<MainPage> {
         child: Column(children: [
           Container(child: SearchBar()),
           SizedBox(height: 35, child: History()),
-          Container(height: 30, width: 500, child: FavoriteTitle()),
+          Container(
+              height: 30,
+              child:
+                  Align(alignment: Alignment.topLeft, child: FavoriteTitle())),
           SizedBox(
             height: 100,
             child: Favorite(),
+          ),
+          Container(
+              height: 40,
+              child: Align(
+                  alignment: Alignment.topLeft, child: ConvenientTitle())),
+          Container(
+              margin: EdgeInsets.fromLTRB(5, 0, 15, 0),
+              child: ConvenientItems_top()),
+          Container(
+              margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+              child: ConvenientItems_bottom()),
+          Container(
+              height: 35,
+              margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
+              child: Align(alignment: Alignment.topLeft, child: GnumapTitle())),
+          Container(
+            margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+            height: 130,
+            child: Minimap(),
           )
         ]),
       ),
@@ -102,7 +125,7 @@ class FavoriteTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 0, 0, 0),
-      child: Text('편의시설',
+      child: Text('즐겨찾기',
           style: TextStyle(
               fontSize: 20,
               color: Color.fromRGBO(0, 16, 72, 0.6),
@@ -144,5 +167,55 @@ class _FavoriteState extends State<Favorite> {
                     )),
               );
             }));
+  }
+}
+
+class ConvenientTitle extends StatelessWidget {
+  const ConvenientTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(6, 10, 0, 0),
+      child: Text('편의시설',
+          style: TextStyle(
+              fontSize: 20,
+              color: Color.fromRGBO(0, 16, 72, 0.6),
+              fontFamily: 'AppleSDGothicNeo')),
+    );
+  }
+}
+
+class GnumapTitle extends StatelessWidget {
+  const GnumapTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Text('GNU MAP',
+          style: TextStyle(
+              fontSize: 20,
+              color: Color.fromRGBO(0, 16, 72, 0.6),
+              fontFamily: 'AppleSDGothicNeo')),
+      Icon(Icons.arrow_forward_ios_rounded)
+    ]);
+  }
+}
+
+class Minimap extends StatelessWidget {
+  const Minimap({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+        ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              fit: BoxFit.cover, image: AssetImage('assets/minimap.png')),
+          borderRadius: BorderRadius.circular(20),
+        ));
   }
 }
