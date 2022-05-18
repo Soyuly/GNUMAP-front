@@ -94,7 +94,7 @@ class _SearchBarState extends State<SearchBar> {
         onSubmitted: (name) async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PathInfo()),
+            MaterialPageRoute(builder: (context) => PathInfo(name:name)),
           );
         },
       ),
