@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gnumap/CImages.dart';
+import 'gnuMap.dart';
 import 'package:location/location.dart';
 import 'package:gnumap/pathInfo.dart';
 
@@ -199,14 +200,23 @@ class GnumapTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text('GNU MAP',
-          style: TextStyle(
-              fontSize: 20,
-              color: Color.fromRGBO(0, 16, 72, 0.6),
-              fontFamily: 'AppleSDGothicNeo')),
-      Icon(Icons.arrow_forward_ios_rounded)
-    ]);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => SearchingPath()));
+      },
+      child: Container(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text('GNU MAP',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Color.fromRGBO(0, 16, 72, 0.6),
+                  fontFamily: 'AppleSDGothicNeo')),
+          Icon(Icons.arrow_forward_ios_rounded),
+        ]),
+      ),
+    );
   }
 }
 
@@ -215,19 +225,20 @@ class Minimap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-        ),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              fit: BoxFit.cover, image: AssetImage('assets/minimap.png')),
-          borderRadius: BorderRadius.circular(20),
-        ));
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => SearchingPath()));
+        },
+        child: Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover, image: AssetImage('assets/minimap.png')),
+              borderRadius: BorderRadius.circular(20),
+            )));
   }
-}
-
-class Position {
-
 }
