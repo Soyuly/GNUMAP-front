@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gnumap/CImages.dart';
-import 'SearchingPath.dart';
+import 'gnuMap.dart';
 import 'package:location/location.dart';
 import 'package:gnumap/pathInfo.dart';
 
@@ -92,12 +92,6 @@ class _SearchBarState extends State<SearchBar> {
         decoration: BoxDecoration(
             color: Color.fromRGBO(188, 188, 188, 0.54),
             borderRadius: BorderRadius.circular(10)),
-        onSubmitted: (name) async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PathInfo()),
-          );
-        },
       ),
     );
   }
@@ -241,8 +235,4 @@ class Minimap extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )));
   }
-}
-
-class Position {
-
 }
