@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'mainpage.dart';
 
 class SearchingPath extends StatelessWidget {
   const SearchingPath({Key? key}) : super(key: key);
@@ -8,8 +9,20 @@ class SearchingPath extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SlidingUpPanelExample"),
-      ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          centerTitle: true,
+          title: Text(
+            "GNU Map",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+          )),
       body: SlidingUpPanel(
         borderRadius: BorderRadius.circular(10.0),
         minHeight: 100,
@@ -55,7 +68,7 @@ class SearchingPath extends StatelessWidget {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Container(
-                      child: Image.asset('assets/aram.jpg',
+                      child: Image.asset('assets/cs.jpg',
                           width: MediaQuery.of(context).size.width - 40,
                           fit: BoxFit.fitWidth),
                     ),
@@ -105,9 +118,21 @@ class SearchingPath extends StatelessWidget {
           ],
         ),
         body: Center(
-            child: Container(
-          child: Image.asset('assets/map.png',
-              width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth),
+            child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 20, right: 10),
+              child: SearchBar(),
+            ),
+            Container(
+              child: Image.asset('assets/map.png',
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fitWidth),
+            )
+          ],
         )),
       ),
     );
