@@ -92,6 +92,12 @@ class _SearchBarState extends State<SearchBar> {
         decoration: BoxDecoration(
             color: Color.fromRGBO(188, 188, 188, 0.54),
             borderRadius: BorderRadius.circular(10)),
+        onSubmitted: (name) async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PathInfo(name:name)),
+          );
+        },
       ),
     );
   }
