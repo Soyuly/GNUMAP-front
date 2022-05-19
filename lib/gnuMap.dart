@@ -11,7 +11,22 @@ class SearchingPath extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _navigationBar,
+      appBar: CupertinoNavigationBar(
+          leading: Align(
+              widthFactor: 1.0,
+              child: TextButton(
+                child: Text("< 메인",
+                    style: TextStyle(
+                        color: CupertinoColors.black,
+                        fontFamily: 'GyeonggiMedium')),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )),
+          middle: Text("GNU Map",
+              style: TextStyle(
+                  color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
+          backgroundColor: CupertinoColors.white),
       body: SlidingUpPanel(
           borderRadius: BorderRadius.circular(10.0),
           minHeight: 100,
@@ -149,16 +164,3 @@ class _NaverMapTestState extends State<NaverMapTest> {
     _controller.complete(controller);
   }
 }
-
-var _navigationBar = CupertinoNavigationBar(
-    leading: Align(
-      widthFactor: 1.0,
-      child: Text("< 메인",
-          style: TextStyle(
-              color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
-      alignment: Alignment.center,
-    ),
-    middle: Text("GNU Map",
-        style: TextStyle(
-            color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
-    backgroundColor: CupertinoColors.white);
