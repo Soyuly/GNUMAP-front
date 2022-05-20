@@ -18,6 +18,7 @@ class SearchingPath extends StatelessWidget {
                 child: Text("< 메인",
                     style: TextStyle(
                         color: CupertinoColors.black,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'GyeonggiMedium')),
                 onPressed: () {
                   Navigator.pop(context);
