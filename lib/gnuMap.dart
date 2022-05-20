@@ -31,21 +31,34 @@ class SearchingPath extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
           minHeight: 100,
           padding: EdgeInsets.only(left: 10, right: 10),
-          collapsed: Container(
-            width: MediaQuery.of(context).size.width - 40,
+          header: Container(
+            color: Colors.white,
+            width: 352,
             margin: EdgeInsets.only(left: 20, right: 20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                Container(
+                  child: Column(children: [
                     Container(
-                      margin: EdgeInsets.only(top: 7, bottom: 5),
+                      margin: EdgeInsets.only(top: 7, bottom: 5, left: 150),
                       width: 30,
                       height: 5,
                       decoration: BoxDecoration(color: Colors.grey[300]),
-                    ),
-                  ],
+                    )
+                  ]),
+                ),
+                Text("컴퓨터과학관, 30동",
+                    textAlign: TextAlign.center,
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("소요시간 20분 소요거리 4km"),
+                Text("경남 진주시 진주대로 501 30동"),
+                SizedBox(
+                  height: 10,
                 ),
               ],
             ),
@@ -57,17 +70,8 @@ class SearchingPath extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("컴퓨터과학관, 30동",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18)),
                     SizedBox(
-                      height: 10,
-                    ),
-                    Text("소요시간 20분 소요거리 4km"),
-                    Text("경남 진주시 진주대로 501 30동"),
-                    SizedBox(
-                      height: 10,
+                      height: 90,
                     ),
                     Align(
                       alignment: Alignment.topCenter,
