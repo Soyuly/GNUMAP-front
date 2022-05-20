@@ -15,22 +15,7 @@ class SearchingPath extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
-          leading: Align(
-              widthFactor: 1.0,
-              child: TextButton(
-                child: Text("< 메인",
-                    style: TextStyle(
-                        color: CupertinoColors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'GyeonggiMedium')),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )),
-          middle: Text("GNU Map",
-              style: TextStyle(
-                  color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
-          backgroundColor: CupertinoColors.white),
+          middle: Text('GNU MAP'), backgroundColor: CupertinoColors.white),
       body: SlidingUpPanel(
           borderRadius: BorderRadius.circular(10.0),
           minHeight: 100,
