@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'mainpage.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
 import 'dart:async';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SearchingPath extends StatelessWidget {
   const SearchingPath({Key? key}) : super(key: key);
@@ -130,9 +133,7 @@ class SearchingPath extends StatelessWidget {
           body: Stack(
             children: [
               Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: NaverMapTest(),
+                child: WebViewExample(),
               ),
               Positioned(
                   child: Container(
@@ -145,27 +146,23 @@ class SearchingPath extends StatelessWidget {
   }
 }
 
-class NaverMapTest extends StatefulWidget {
+class WebViewExample extends StatefulWidget {
   @override
-  _NaverMapTestState createState() => _NaverMapTestState();
+  WebViewExampleState createState() => WebViewExampleState();
 }
 
-class _NaverMapTestState extends State<NaverMapTest> {
-  Completer<NaverMapController> _controller = Completer();
-  MapType _mapType = MapType.Basic;
+class WebViewExampleState extends State<WebViewExample> {
+  @override
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: NaverMap(
-        onMapCreated: onMapCreated,
-        mapType: _mapType,
-      ),
+    return WebView(
+      initialUrl: 'https://www.naver.com',
     );
-  }
-
-  void onMapCreated(NaverMapController controller) {
-    if (_controller.isCompleted) _controller = Completer();
-    _controller.complete(controller);
   }
 }
