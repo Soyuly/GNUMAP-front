@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gnumap/mainpage.dart';
 import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:typed_data';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -15,9 +18,10 @@ class PathInfo extends StatefulWidget {
 
 class _PathInfoState extends State<PathInfo> {
   List info = [];
-  WebViewController? _controller;
   double? lat;
   double? lng;
+  String? distance;
+  String? time;
   Location location = Location();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
@@ -51,7 +55,20 @@ class _PathInfoState extends State<PathInfo> {
       lng = res.longitude;
     });
 
-    return {lat, lng};
+    var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+    var response = await http.post(url, body: {
+      'curLat': '${lat}',
+      'curLng': '${lng}',
+      'num': '${widget.name}'
+    });
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    String jsonData = response.body;
+    var info = jsonDecode(response.body);
+    distance = info['distance'];
+    time = info['time'];
+
+    return {lat, lng, distance, time};
   }
 
   Widget build(BuildContext context) {
@@ -80,30 +97,22 @@ class _PathInfoState extends State<PathInfo> {
               }
               // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
               else {
-                log('lat : ${lat}, lng : ${lng}');
+                log('lat : ${lat}, lng : ${lng}, distance : ${distance}');
                 return Column(
                   children: [
                     Expanded(
-                      flex: 15,
-                      child: WebView(
-                        initialUrl:
-                            'http://203.255.3.246:5001/find/${lat}/${lng}/${widget.name}',
-                        javascriptMode: JavascriptMode.unrestricted,
-                        onWebViewCreated:
-                            (WebViewController webviewController) {
-                          _controller = webviewController;
-                        },
-                        javascriptChannels: Set.from([
-                          JavascriptChannel(
-                              name: 'JavaScriptChannel',
-                              onMessageReceived: (JavascriptMessage message) {
-                                print(message.message);
-                                info = message.message.split(",");
-                                log(info[0]);
-                              })
-                        ]),
-                      ),
-                    ),
+                        flex: 15,
+                        child: InAppWebView(
+                          initialUrlRequest: URLRequest(
+                              url: Uri.parse("http://203.255.3.246:5001/find"),
+                              method: 'POST',
+                              body: Uint8List.fromList(utf8.encode(
+                                  "lat=${lat}&lng=${lng}&num=${widget.name}")),
+                              headers: {
+                                'Content-Type':
+                                    'application/x-www-form-urlencoded'
+                              }),
+                        )),
                     Expanded(
                       flex: 1,
                       child: Row(
@@ -133,7 +142,7 @@ class _PathInfoState extends State<PathInfo> {
                                         fontFamily: 'AppleSDGothicNeo',
                                         fontWeight: FontWeight.bold)),
                               ),
-                              Text('11s',
+                              Text('${distance}',
                                   style: TextStyle(
                                       fontSize: 19,
                                       color: Color.fromRGBO(0, 16, 72, 0.6),
@@ -144,7 +153,7 @@ class _PathInfoState extends State<PathInfo> {
                             children: [
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                child: Text('소요거리',
+                                child: Text('소요시간',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Color.fromRGBO(0, 122, 255, 1),
@@ -152,7 +161,7 @@ class _PathInfoState extends State<PathInfo> {
                                         fontWeight: FontWeight.bold)),
                               ),
                               Container(
-                                child: Text('30분',
+                                child: Text('${time}',
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Color.fromRGBO(0, 16, 72, 0.6),
