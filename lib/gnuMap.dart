@@ -7,6 +7,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'mainpage.dart';
 import 'dart:async';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:like_button/like_button.dart';
 
 class SearchingPath extends StatelessWidget {
   const SearchingPath({Key? key}) : super(key: key);
@@ -15,32 +16,55 @@ class SearchingPath extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
-          middle: Text('GNU MAP'), backgroundColor: CupertinoColors.white),
+          leading: Align(
+              widthFactor: 1.0,
+              child: TextButton(
+                child: Text("< 메인",
+                    style: TextStyle(
+                        color: CupertinoColors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'GyeonggiMedium')),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )),
+          middle: Text("GNU Map",
+              style: TextStyle(
+                  color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
+          backgroundColor: CupertinoColors.white),
       body: SlidingUpPanel(
           borderRadius: BorderRadius.circular(10.0),
           minHeight: 100,
           padding: EdgeInsets.only(left: 10, right: 10),
           header: Container(
-            color: Colors.white,
             width: 352,
+            color: Colors.white,
             margin: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Column(children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 7, bottom: 5, left: 150),
-                      width: 30,
-                      height: 5,
-                      decoration: BoxDecoration(color: Colors.grey[300]),
-                    )
-                  ]),
+                  child: Center(
+                    child: Column(children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 7, bottom: 5),
+                        width: 30,
+                        height: 5,
+                        decoration: BoxDecoration(color: Colors.grey[300]),
+                      )
+                    ]),
+                  ),
                 ),
-                Text("컴퓨터과학관, 30동",
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                Row(
+                  children: [
+                    Text("컴퓨터과학관, 30동",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18)),
+                    SizedBox(width: 6),
+                    LikeButton(onTap: onLikeButtonTapped, size: 20),
+                  ],
+                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -150,4 +174,15 @@ class WebViewExampleState extends State<WebViewExample> {
       initialUrl: 'https://www.naver.com',
     );
   }
+}
+
+// like button 클릭 시 보낼 요청
+Future<bool> onLikeButtonTapped(bool isLiked) async {
+  /// send your request here
+  // final bool success= await sendRequest();
+
+  /// if failed, you can do nothing
+  // return success? !isLiked:isLiked;
+
+  return !isLiked;
 }
