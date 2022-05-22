@@ -38,6 +38,7 @@ dependencies:
   flutter_inappwebview: ^5.4.3+7
   http: ^0.13.4
   like_button: ^2.0.4
+  webview_flutter: ^3.0.4
   sqflite:
   path:
 
