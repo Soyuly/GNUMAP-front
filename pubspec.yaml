@@ -35,9 +35,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   location: ^4.3.0
-  webview_flutter: ^3.0.4
   flutter_inappwebview: ^5.4.3+7
   http: ^0.13.4
+  like_button: ^2.0.4
+  sqflite:
+  path:
+
 
 dev_dependencies:
   flutter_test:
