@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:gnumap/models/db.dart';
 
 Future main() async {
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
 
   if (Platform.isAndroid) {
@@ -26,5 +27,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false, home: MainPage());
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)..maxConnectionsPerHost = 5;
   }
 }

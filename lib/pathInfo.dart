@@ -10,6 +10,8 @@ import 'dart:typed_data';
 import 'package:gnumap/models/db.dart';
 import 'package:like_button/like_button.dart';
 import 'package:gnumap/main.dart';
+import 'dart:io';
+import 'dart:io';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -61,21 +63,17 @@ class _PathInfoState extends State<PathInfo> {
     });
 
     var client = new http.Client();
-
+    var response;
     try {
       var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-      var response = await client.post(url, body: {
+      response = await client.post(url, body: {
         'curLat': '${lat}',
         'curLng': '${lng}',
         'num': '${widget.name}'
-      }).timeout(const Duration(seconds: 10));
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      String jsonData = response.body;
-      var info = jsonDecode(response.body);
-      distance = info['distance'];
-      time = info['time'];
-    } catch (e) {
+      }).timeout(Duration(seconds: 10), onTimeout: () {
+        return http.Response('Error', 408);
+      }).catchError((exception) => {http.Response('Error', 408)});
+    } on HttpException {
       return showCupertinoDialog(
           context: context,
           builder: (context) {
@@ -95,6 +93,32 @@ class _PathInfoState extends State<PathInfo> {
           });
     } finally {
       client.close();
+    }
+    try {
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      String jsonData = response.body;
+      var info = jsonDecode(response.body);
+      distance = info['distance'];
+      time = info['time'];
+    } on FormatException {
+      return showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('해당하는 건물정보가 없습니다'),
+              content: Text('다른 검색어를 입력해주세요'),
+              actions: [
+                CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text("확인"),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyApp()));
+                    })
+              ],
+            );
+          });
     }
     List _items = [];
 
