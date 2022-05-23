@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:gnumap/models/db.dart';
 import 'package:like_button/like_button.dart';
+import 'package:gnumap/main.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -59,21 +60,49 @@ class _PathInfoState extends State<PathInfo> {
       lng = res.longitude;
     });
 
-    var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-    var response = await http.post(url, body: {
-      'curLat': '${lat}',
-      'curLng': '${lng}',
-      'num': '${widget.name}'
-    });
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-    String jsonData = response.body;
-    var info = jsonDecode(response.body);
-    distance = info['distance'];
-    time = info['time'];
+    var client = new http.Client();
 
-    print('추가됨');
-    await _historyHelper.add('${widget.name}');
+    try {
+      var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+      var response = await client.post(url, body: {
+        'curLat': '${lat}',
+        'curLng': '${lng}',
+        'num': '${widget.name}'
+      }).timeout(const Duration(seconds: 10));
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      String jsonData = response.body;
+      var info = jsonDecode(response.body);
+      distance = info['distance'];
+      time = info['time'];
+    } catch (e) {
+      return showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('서버가 불안정합니다'),
+              content: Text('잠시 후 다시 시도해주세요'),
+              actions: [
+                CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text("확인"),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyApp()));
+                    })
+              ],
+            );
+          });
+    } finally {
+      client.close();
+    }
+    List _items = [];
+
+    _items = await _historyHelper.isEmpty('${widget.name}');
+
+    if (_items.isEmpty) {
+      await _historyHelper.add('${widget.name}');
+    }
 
     return {lat, lng, distance, time};
   }

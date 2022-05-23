@@ -159,6 +159,12 @@ class _HistoryState extends State<History> {
                       return Container(
                         margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
                         child: TextButton(
+                          onLongPress: () async {
+                            print('삭제');
+                            await _historyHelper
+                                .remove(_histories[index]['name']);
+                            await _getHistories();
+                          },
                           onPressed: () async {
                             await Navigator.push(
                               context,
@@ -174,7 +180,7 @@ class _HistoryState extends State<History> {
                                   fontFamily: 'AppleSDGothicNeo')),
                           style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
-                              minimumSize: Size(50, 50),
+                              minimumSize: Size(10, 30),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               alignment: Alignment.centerLeft),
                         ),

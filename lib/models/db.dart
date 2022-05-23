@@ -19,13 +19,6 @@ class HistoryHelper {
     return db;
   }
 
-  Future getItems() async {
-    final db = await _openDb();
-
-    List items = await db.query('History', columns: ['name']);
-    return items.toList();
-  }
-
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
     await db.execute('''
@@ -34,6 +27,23 @@ class HistoryHelper {
         name TEXT NOT NULL
       )
     ''');
+  }
+
+  // 모든 아이템들을 가져온다
+  Future getItems() async {
+    final db = await _openDb();
+
+    List items = await db.query('History', columns: ['name']);
+    return items.toList();
+  }
+
+  Future isEmpty(String num) async {
+    final db = await _openDb();
+
+    List items = await db.query('History',
+        columns: ['name'], where: 'name = ?', whereArgs: [num]);
+
+    return items.toList();
   }
 
   // 새로운 데이터를 추가한다.
@@ -64,13 +74,12 @@ class HistoryHelper {
   }
 
   // 데이터를 삭제한다.
-  Future<int> remove(int id) async {
+  Future remove(String name) async {
     final db = await _openDb();
     await db.delete(
       'History', // table name
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'name = ?',
+      whereArgs: [name],
     );
-    return id;
   }
 }

@@ -23,9 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late List _histories = [];
-  final HistoryHelper _historyHelper = HistoryHelper();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false, home: MainPage());
