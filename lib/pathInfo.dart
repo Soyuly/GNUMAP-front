@@ -10,6 +10,7 @@ import 'dart:typed_data';
 import 'package:gnumap/models/db.dart';
 import 'package:like_button/like_button.dart';
 import 'package:gnumap/main.dart';
+import 'models/db.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
