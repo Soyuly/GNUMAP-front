@@ -4,6 +4,7 @@ import 'package:gnumap/CImages.dart';
 import 'gnuMap.dart';
 import 'package:location/location.dart';
 import 'package:gnumap/pathInfo.dart';
+import 'package:gnumap/models/db.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -17,19 +18,20 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
         title: Container(
           margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('그누맵',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Color.fromRGBO(13, 13, 16, 0.69),
-                    fontFamily: 'AppleSDGothicNeo',
-                    fontWeight: FontWeight.bold,
-                  )),
+            children: [
+              Container(
+                child: Text('그누맵',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Color.fromRGBO(13, 13, 16, 0.69),
+                      fontFamily: 'AppleSDGothicNeo',
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
               Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
             ],
           ),
@@ -103,27 +105,83 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
-class History extends StatelessWidget {
+class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
+
+  @override
+  State<History> createState() => _HistoryState();
+}
+
+class _HistoryState extends State<History> {
+  late List _histories = [];
+  final HistoryHelper _historyHelper = HistoryHelper();
+
+  Future _getHistories() async {
+    _histories = await _historyHelper.getItems();
+    print(_histories);
+    return _histories;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getHistories();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> histories = <String>['30동', '컴퓨터과학관', '24동', '경상대교양학관'];
     return Container(
-      margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: histories.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
-              child: Text(histories[index],
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Color.fromRGBO(0, 16, 72, 0.6),
-                      fontFamily: 'AppleSDGothicNeo')),
-            );
-          }),
-    );
+        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+        child: FutureBuilder(
+            future: _getHistories(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData == false) {
+                return Container(child: Text('로딩중임'));
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+              else {
+                print(_histories);
+                return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _histories.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                        child: TextButton(
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PathInfo(
+                                      name: _histories[index]['name'])),
+                            );
+                          },
+                          child: Text(_histories[index]['name'],
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromRGBO(0, 16, 72, 0.6),
+                                  fontFamily: 'AppleSDGothicNeo')),
+                          style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size(50, 50),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              alignment: Alignment.centerLeft),
+                        ),
+                      );
+                    });
+              }
+            }));
   }
 }
 

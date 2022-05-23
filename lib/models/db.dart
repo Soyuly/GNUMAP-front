@@ -1,0 +1,76 @@
+// post_helper.dart
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+class HistoryHelper {
+  // 데이터베이스를 시작한다.
+  Future _openDb() async {
+    final databasePath = await getDatabasesPath();
+    String path = join(databasePath, 'gnumap.db');
+
+    final db = await openDatabase(
+      path,
+      version: 1,
+      onConfigure: (Database db) => {},
+      onCreate: _onCreate,
+      onUpgrade: (Database db, int oldVersion, int newVersion) => {},
+    );
+
+    return db;
+  }
+
+  Future getItems() async {
+    final db = await _openDb();
+
+    List items = await db.query('History', columns: ['name']);
+    return items.toList();
+  }
+
+  // 데이터베이스 테이블을 생성한다.
+  Future _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE History (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL
+      )
+    ''');
+  }
+
+  // 새로운 데이터를 추가한다.
+  Future add(String item) async {
+    final db = await _openDb();
+    await db.insert(
+      'History', // table name
+      {
+        'name': '$item',
+      }, // new History row data
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // 변경된 데이터를 업데이트한다.
+  Future update(item) async {
+    final db = await _openDb();
+    await db.update(
+      'History', // table name
+      {
+        'title': 'changed History title ...',
+        'name': 'changed History content ...',
+      }, // update History row data
+      where: 'id = ?',
+      whereArgs: [item.id],
+    );
+    return item;
+  }
+
+  // 데이터를 삭제한다.
+  Future<int> remove(int id) async {
+    final db = await _openDb();
+    await db.delete(
+      'History', // table name
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return id;
+  }
+}
