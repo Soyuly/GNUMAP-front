@@ -59,7 +59,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -69,6 +68,8 @@ flutter:
   assets:
     - assets/cs.jpg
     - assets/minimap.png
+    - assets/loading.gif
+    - assets/error.gif
     - assets/convenient/atm.jpg
     - assets/convenient/blood.jpg
     - assets/convenient/cafe.jpg
@@ -93,13 +94,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-fonts:
-  - family: AppleSDGothicNeo
-    fonts:
-      - asset: fonts/AppleFont/AppleSDGothicNeoR.ttf
-      - asset: fonts/AppleFont/AppleSDGothicNeoM.ttf
-        weight: 500
-      - asset: fonts/AppleFont/AppleSDGothicNeoB.ttf
-        weight: 700
+  fonts:
+    - family: AppleSDGothicNeo
+      fonts:
+        - asset: assets/fonts/AppleFont/AppleSDGothicNeoR.ttf
+        - asset: assets/fonts/AppleFont/AppleSDGothicNeoM.ttf
+          weight: 500
+        - asset: assets/fonts/AppleFont/AppleSDGothicNeoB.ttf
+          weight: 700
+
+    - family: GangwonEduSaeeum
+      fonts:
+        - asset: assets/fonts/강원교육새음.ttf   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
