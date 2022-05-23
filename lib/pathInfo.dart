@@ -72,7 +72,25 @@ class _PathInfoState extends State<PathInfo> {
         'num': '${widget.name}'
       }).timeout(Duration(seconds: 10), onTimeout: () {
         return http.Response('Error', 408);
-      }).catchError((exception) => {http.Response('Error', 408)});
+      });
+    } on SocketException {
+      return showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('네트워크 연결상태가 불안정합니다'),
+              content: Text('잠시 후 다시 시도해주세요'),
+              actions: [
+                CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text("확인"),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyApp()));
+                    })
+              ],
+            );
+          });
     } on HttpException {
       return showCupertinoDialog(
           context: context,
@@ -106,8 +124,8 @@ class _PathInfoState extends State<PathInfo> {
           context: context,
           builder: (context) {
             return CupertinoAlertDialog(
-              title: Text('해당하는 건물정보가 없습니다'),
-              content: Text('다른 검색어를 입력해주세요'),
+              title: Text('검색어에 해당하는 건물이 없습니다'),
+              content: Text('올바른 검색어를 입력해주세요.'),
               actions: [
                 CupertinoDialogAction(
                     isDefaultAction: true,
@@ -156,17 +174,45 @@ class _PathInfoState extends State<PathInfo> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
               if (snapshot.hasData == false) {
-                return Container(child: Text('로딩중임'));
+                return Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/loading.gif",
+                          height: 205.0,
+                          width: 200.0,
+                        ),
+                        Text('하모가 열심히 길을 찾고 있습니다.',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Color.fromRGBO(0, 122, 255, 1),
+                              fontFamily: 'GangwonEduSaeeum',
+                            ))
+                      ],
+                    ));
               }
               //error가 발생하게 될 경우 반환하게 되는 부분
               else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
+                return Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/error.gif",
+                          height: 205.0,
+                          width: 200.0,
+                        ),
+                        Text('${widget.name}으로 가는 경로가 존재하지 않습니다.',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Color.fromRGBO(0, 122, 255, 1),
+                              fontFamily: 'GangwonEduSaeeum',
+                            ))
+                      ],
+                    ));
               }
               // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
               else {
