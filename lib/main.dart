@@ -3,6 +3,7 @@ import 'package:gnumap/mainpage.dart';
 import 'package:location/location.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'dart:io';
+import 'package:gnumap/models/db.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late List _histories = [];
+  final HistoryHelper _historyHelper = HistoryHelper();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false, home: MainPage());

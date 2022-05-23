@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/main.dart';
 import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:gnumap/models/db.dart';
+import 'package:like_button/like_button.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -17,6 +19,8 @@ class PathInfo extends StatefulWidget {
 }
 
 class _PathInfoState extends State<PathInfo> {
+  late List _histories = [];
+  final HistoryHelper _historyHelper = HistoryHelper();
   List info = [];
   double? lat;
   double? lng;
@@ -68,13 +72,29 @@ class _PathInfoState extends State<PathInfo> {
     distance = info['distance'];
     time = info['time'];
 
+    print('추가됨');
+    await _historyHelper.add('${widget.name}');
+
     return {lat, lng, distance, time};
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
-          // Try removing opacity to observe the lack of a blur effect and of sliding content.
+          trailing: IconButton(
+            icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
+            onPressed: () => log('버튼눌림'),
+          ),
+          leading: GestureDetector(
+            onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MyApp())),
+            child: Container(
+              child: Icon(
+                CupertinoIcons.left_chevron,
+                color: CupertinoColors.destructiveRed,
+              ),
+            ),
+          ),
           backgroundColor: CupertinoColors.systemBackground,
           middle: Text(widget.name),
         ),
@@ -178,4 +198,14 @@ class _PathInfoState extends State<PathInfo> {
               }
             }));
   }
+}
+
+Future<bool> onLikeButtonTapped(bool isLiked) async {
+  /// send your request here
+  // final bool success= await sendRequest();
+
+  /// if failed, you can do nothing
+  // return success? !isLiked:isLiked;
+  print('버튼눌림');
+  return !isLiked;
 }
