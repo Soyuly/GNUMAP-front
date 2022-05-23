@@ -138,6 +138,27 @@ class _PathInfoState extends State<PathInfo> {
             );
           });
     }
+
+    if (distance == null) {
+      return showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('검색가능한 거리를 초과하였습니다.'),
+              content: Text('경상국립대 내에서 이용해주세요'),
+              actions: [
+                CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text("확인"),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyApp()));
+                    })
+              ],
+            );
+          });
+    }
+
     List _items = [];
 
     _items = await _historyHelper.isEmpty('${widget.name}');
