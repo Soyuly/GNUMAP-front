@@ -10,6 +10,7 @@ import 'mainpage.dart';
 import 'dart:async';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'revise_info.dart';
 
 class SearchingPath extends StatelessWidget {
   const SearchingPath({Key? key}) : super(key: key);
@@ -117,10 +118,16 @@ class SearchingPath extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        '정보수정요청',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => ReviseInfo()));
+                        },
+                        child: Text(
+                          '정보수정요청',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ]),
@@ -177,8 +184,6 @@ Future<bool> onLikeButtonTapped(bool isLiked) async {
 
   return !isLiked;
 }
-
-final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
 class Favorite extends StatefulWidget {
   const Favorite({Key? key}) : super(key: key);
