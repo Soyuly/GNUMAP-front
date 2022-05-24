@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gnumap/CImages.dart';
-import 'gnuMap.dart';
 import 'package:location/location.dart';
+
+import 'package:gnumap/CImages.dart';
+import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/models/db.dart';
 
@@ -266,8 +267,7 @@ class GnumapTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => SearchingPath()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => GnuMap()));
       },
       child: Container(
         child:
@@ -291,8 +291,7 @@ class Minimap extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (_) => SearchingPath()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => GnuMap()));
         },
         child: Container(
             margin: EdgeInsets.fromLTRB(0, 0, 8, 0),

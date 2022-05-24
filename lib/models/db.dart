@@ -6,7 +6,7 @@ class HistoryHelper {
   // 데이터베이스를 시작한다.
   Future _openDb() async {
     final databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'gnumap.db');
+    String path = join(databasePath, 'historys.db');
 
     final db = await openDatabase(
       path,
@@ -88,7 +88,7 @@ class FavoriteHelper {
   // 데이터베이스를 시작한다.
   Future _openDb() async {
     final databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'gnumap.db');
+    String path = join(databasePath, 'favorite.db');
 
     final db = await openDatabase(
       path,

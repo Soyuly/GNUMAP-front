@@ -1,29 +1,116 @@
 import 'dart:io';
+import 'dart:async';
+
+import 'package:gnumap/models/db.dart';
+import 'package:gnumap/pathInfo.dart';
+import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/revise_info.dart';
+import 'package:location/location.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gnumap/models/db.dart';
-import 'package:gnumap/pathInfo.dart';
-import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'mainpage.dart';
-import 'dart:async';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:like_button/like_button.dart';
-import 'revise_info.dart';
 
-class SearchingPath extends StatelessWidget {
-  const SearchingPath({Key? key}) : super(key: key);
+class GnuMap extends StatelessWidget {
+  const GnuMap({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CupertinoNavigationBar(
-          middle: Text("GNU Map",
-              style: TextStyle(
-                  color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
-          backgroundColor: CupertinoColors.white),
-      body: SlidingUpPanel(
+        appBar: CupertinoNavigationBar(
+            middle: Text("GNU Map",
+                style: TextStyle(
+                    color: CupertinoColors.black,
+                    fontFamily: 'GyeonggiMedium')),
+            backgroundColor: CupertinoColors.white),
+        body: slidingUpPanel());
+  }
+}
+
+class WebViewExample extends StatefulWidget {
+  @override
+  WebViewExampleState createState() => WebViewExampleState();
+}
+
+class WebViewExampleState extends State<WebViewExample> {
+  @override
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebView(
+      initialUrl: 'https://www.naver.com',
+    );
+  }
+}
+
+// like button 클릭 시 보낼 요청
+Future<bool> onLikeButtonTapped(bool isLiked) async {
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+  late List _favorites = [];
+
+  List _items = [];
+
+  Future _getHistories() async {
+    _favorites = await _favoriteHelper.getItems();
+    print(_favorites);
+    return _favorites;
+  }
+
+  // 즐겨찾기 추가
+  if (isLiked) {
+    print("no");
+    _favoriteHelper.add("sdsdsdsd");
+    _getHistories();
+  }
+  // 즐겨찾기 삭제
+  else {
+    print("yes");
+  }
+
+  return !isLiked;
+}
+
+class likeButton extends StatelessWidget {
+  const likeButton({Key? key}) : super(key: key);
+
+  final result = true;
+  @override
+  Widget build(BuildContext context) {
+    if (result) {
+      return LikeButton(
+        onTap: onLikeButtonTapped,
+        size: 20,
+        isLiked: true,
+      );
+    } else {
+      return LikeButton(
+        onTap: onLikeButtonTapped,
+        size: 20,
+        isLiked: false,
+      );
+    }
+  }
+}
+
+class slidingUpPanel extends StatelessWidget {
+  const slidingUpPanel({Key? key}) : super(key: key);
+
+  final result = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = "컴퓨터과학관, 30동";
+
+    // 검색을 진행한 상태
+    if (result) {
+      return SlidingUpPanel(
           borderRadius: BorderRadius.circular(10.0),
           minHeight: 100,
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -48,13 +135,12 @@ class SearchingPath extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text("컴퓨터과학관, 30동",
+                    Text(name,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18)),
                     SizedBox(width: 6),
-                    LikeButton(onTap: onLikeButtonTapped, size: 20),
-                    Favorite()
+                    likeButton()
                   ],
                 ),
                 SizedBox(
@@ -99,17 +185,6 @@ class SearchingPath extends StatelessWidget {
                     Text("2층: 열람실"),
                     Text("3층: 308호, 312호"),
                     Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
                   ],
                 ),
               ),
@@ -118,8 +193,8 @@ class SearchingPath extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: () {
+                      TextButton(
+                        onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (_) => ReviseInfo()));
                         },
@@ -148,96 +223,20 @@ class SearchingPath extends StatelessWidget {
                 child: SearchBar(),
               ))
             ],
-          )),
-    );
-  }
-}
-
-class WebViewExample extends StatefulWidget {
-  @override
-  WebViewExampleState createState() => WebViewExampleState();
-}
-
-class WebViewExampleState extends State<WebViewExample> {
-  @override
-  void initState() {
-    super.initState();
-    // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WebView(
-      initialUrl: 'https://www.naver.com',
-    );
-  }
-}
-
-// like button 클릭 시 보낼 요청
-Future<bool> onLikeButtonTapped(bool isLiked) async {
-  /// send your request here
-  // final bool success= await sendRequest();
-
-  /// if failed, you can do nothing
-  // return success? !isLiked:isLiked;
-
-  return !isLiked;
-}
-
-class Favorite extends StatefulWidget {
-  const Favorite({Key? key}) : super(key: key);
-
-  @override
-  State<Favorite> createState() => _FavoriteState();
-}
-
-class _FavoriteState extends State<Favorite> {
-  late List _favorites = [];
-  final FavoriteHelper _favoriteHelper = FavoriteHelper();
-
-  Future _getFavorites() async {
-    _favorites = await _favoriteHelper.getItems();
-    print(_favorites);
-    return _favorites;
-  }
-
-  bool isFavorites(String item) {
-    return true;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getFavorites();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
-        child: FutureBuilder(
-            future: _getFavorites(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              // 즐겨찾기에 추가되어 있지 않으면
-              if (snapshot.hasData == false) {
-                return Container(child: Text('로딩중임'));
-              }
-              //error가 발생하게 될 경우 반환하게 되는 부분
-              else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
-              }
-              // 즐겨찾기에 추가되어 있으면
-              else {
-                return Container(child: Text('dfdf'));
-              }
-            }));
+          ));
+    } else {
+      return Stack(
+        children: [
+          Container(
+            child: WebViewExample(),
+          ),
+          Positioned(
+              child: Container(
+            margin: const EdgeInsets.only(left: 20, right: 10, top: 10),
+            child: SearchBar(),
+          ))
+        ],
+      );
+    }
   }
 }
