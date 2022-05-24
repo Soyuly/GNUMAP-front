@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gnumap/models/db.dart';
+import 'package:gnumap/pathInfo.dart';
 import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'mainpage.dart';
 import 'dart:async';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'revise_info.dart';
 
 class SearchingPath extends StatelessWidget {
   const SearchingPath({Key? key}) : super(key: key);
@@ -51,6 +54,7 @@ class SearchingPath extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 18)),
                     SizedBox(width: 6),
                     LikeButton(onTap: onLikeButtonTapped, size: 20),
+                    Favorite()
                   ],
                 ),
                 SizedBox(
@@ -114,10 +118,16 @@ class SearchingPath extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        '정보수정요청',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => ReviseInfo()));
+                        },
+                        child: Text(
+                          '정보수정요청',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ]),
@@ -173,4 +183,61 @@ Future<bool> onLikeButtonTapped(bool isLiked) async {
   // return success? !isLiked:isLiked;
 
   return !isLiked;
+}
+
+class Favorite extends StatefulWidget {
+  const Favorite({Key? key}) : super(key: key);
+
+  @override
+  State<Favorite> createState() => _FavoriteState();
+}
+
+class _FavoriteState extends State<Favorite> {
+  late List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    print(_favorites);
+    return _favorites;
+  }
+
+  bool isFavorites(String item) {
+    return true;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getFavorites();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+        child: FutureBuilder(
+            future: _getFavorites(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              // 즐겨찾기에 추가되어 있지 않으면
+              if (snapshot.hasData == false) {
+                return Container(child: Text('로딩중임'));
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              }
+              // 즐겨찾기에 추가되어 있으면
+              else {
+                return Container(child: Text('dfdf'));
+              }
+            }));
+  }
 }
