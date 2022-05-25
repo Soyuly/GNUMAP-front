@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'dart:async';
-
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gnumap/models/db.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/mainpage.dart';
 import 'package:gnumap/revise_info.dart';
 import 'package:location/location.dart';
-
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:like_button/like_button.dart';
 
 class GnuMap extends StatelessWidget {
@@ -20,11 +19,7 @@ class GnuMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
-            middle: Text("GNU Map",
-                style: TextStyle(
-                    color: CupertinoColors.black,
-                    fontFamily: 'GyeonggiMedium')),
-            backgroundColor: CupertinoColors.white),
+            middle: Text('GNU MAP'), backgroundColor: CupertinoColors.white),
         body: slidingUpPanel());
   }
 }
@@ -39,13 +34,15 @@ class WebViewExampleState extends State<WebViewExample> {
   void initState() {
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WebView(
-      initialUrl: 'https://www.naver.com',
+    return InAppWebView(
+      initialUrlRequest: URLRequest(
+          url: Uri.parse("http://203.255.3.246:5001/gnumap"),
+          method: 'GET',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
     );
   }
 }

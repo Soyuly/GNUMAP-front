@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gnumap/mainpage.dart';
 import 'package:location/location.dart';
+import 'package:gnumap/revise_info.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'dart:io';
 import 'package:gnumap/models/db.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: MainPage());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: ReviseInfo());
   }
 }
 
