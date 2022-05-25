@@ -51,51 +51,88 @@ class WebViewExampleState extends State<WebViewExample> {
 }
 
 // like button 클릭 시 보낼 요청
-Future<bool> onLikeButtonTapped(bool isLiked) async {
-  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+class likeButton extends StatelessWidget {
+  String name;
+  likeButton(this.name);
+
   late List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
-  List _items = [];
-
-  Future _getHistories() async {
+  Future _getFavorites() async {
     _favorites = await _favoriteHelper.getItems();
     print(_favorites);
     return _favorites;
   }
 
-  // 즐겨찾기 추가
-  if (isLiked) {
-    print("no");
-    _favoriteHelper.add("sdsdsdsd");
-    _getHistories();
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    late List _favorites = [];
+    final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+    // 즐겨찾기 추가
+    if (isLiked) {
+      _favoriteHelper.remove(this.name);
+      print("no");
+    }
+    // 즐겨찾기 삭제
+    else {
+      _favoriteHelper.add(this.name);
+      print("yes");
+    }
+
+    return !isLiked;
   }
-  // 즐겨찾기 삭제
-  else {
-    print("yes");
+
+  bool isExist() {
+    for (int i = 0; i < _favorites.length; i++) {
+      if (_favorites[i]['name'] == this.name) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  return !isLiked;
-}
-
-class likeButton extends StatelessWidget {
-  const likeButton({Key? key}) : super(key: key);
-
-  final result = true;
   @override
   Widget build(BuildContext context) {
-    if (result) {
-      return LikeButton(
-        onTap: onLikeButtonTapped,
-        size: 20,
-        isLiked: true,
-      );
-    } else {
-      return LikeButton(
-        onTap: onLikeButtonTapped,
-        size: 20,
-        isLiked: false,
-      );
-    }
+    String name = this.name;
+    return Container(
+        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+        child: FutureBuilder(
+            future: _getFavorites(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                if (isExist()) {
+                  return LikeButton(
+                    onTap: onLikeButtonTapped,
+                    size: 20,
+                    isLiked: true,
+                  );
+                } else {
+                  return LikeButton(
+                    onTap: onLikeButtonTapped,
+                    size: 20,
+                    isLiked: false,
+                  );
+                }
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              } else {
+                return LikeButton(
+                  onTap: onLikeButtonTapped,
+                  size: 20,
+                  isLiked: false,
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+            }));
   }
 }
 
@@ -106,7 +143,7 @@ class slidingUpPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = "컴퓨터과학관, 30동";
+    final name = "30동";
 
     // 검색을 진행한 상태
     if (result) {
@@ -140,7 +177,7 @@ class slidingUpPanel extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18)),
                     SizedBox(width: 6),
-                    likeButton()
+                    likeButton(name)
                   ],
                 ),
                 SizedBox(
