@@ -216,30 +216,69 @@ class Favorite extends StatefulWidget {
 }
 
 class _FavoriteState extends State<Favorite> {
+  late List _favorites = [];
+  late List _favoritesString = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    for (int i = 0; i < _favorites.length; i++) {
+      _favoritesString.add(_favorites[i]['name']);
+    }
+    print(_favoritesString);
+    return _favorites;
+  }
+
+  @override // setState의 구조이다.
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> favoriteItems = <String>['도서관', '박물관', '컴퓨터과학관', '교양학관'];
-    final List<String> favoriteIndex = <String>['1동', '', '30동', '24동'];
+    final List<dynamic> favoriteItems = _favoritesString;
     return Container(
         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: favoriteItems.length,
-            itemBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                width: 70,
-                child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                    child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                    ),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/cs.jpg')),
-                      borderRadius: BorderRadius.circular(50),
-                    )),
-              );
+        child: FutureBuilder(
+            future: _getFavorites(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: favoriteItems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        width: 70,
+                        child: Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                            child: Scaffold(
+                              backgroundColor: Colors.transparent,
+                            ),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('assets/cs.jpg')),
+                              borderRadius: BorderRadius.circular(50),
+                            )),
+                      );
+                    });
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              } else {
+                return SizedBox(
+                  height: 10,
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
             }));
   }
 }
