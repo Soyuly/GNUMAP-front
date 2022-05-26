@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'dart:io';
@@ -24,6 +25,26 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: MainPage());
+    return ThemeBuilder(
+        defaultBrightness: Brightness.light,
+        debugShowCheckedModeBanner: false,
+        builder: (context, _brightness) {
+          return MaterialApp(
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              brightness: _brightness,
+            ),
+            home: MainPage(),
+          );
+        }
+    );
   }
 }
+
+
+
+
+
+
+
+

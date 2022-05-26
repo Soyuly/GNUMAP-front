@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_toggle_tab: ^1.1.7
   flutter:
     sdk: flutter
   sliding_up_panel: ^2.0.0+1
@@ -39,8 +40,11 @@ dependencies:
   http: ^0.13.4
   like_button: ^2.0.4
   webview_flutter: ^3.0.4
-  sqflite:
-  path:
+  day_night_switcher: ^0.2.0+1
+
+
+#  sqflite:
+#  path:
 
 
 dev_dependencies:
@@ -52,7 +56,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -79,6 +83,10 @@ flutter:
     - assets/convenient/stationary.jpg
     - assets/convenient/strawberry.jpg
     - assets/convenient/aed.jpg
+    - assets/convenient/CU 경상대느티마루점.jpg
+    - assets/convenient/CU 공학관점.jpg
+    - assets/convenient/운동장.jfif
+    - assets/convenient/운동장2.jfif
     
 
 
