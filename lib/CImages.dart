@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ConvenientItems_top extends StatelessWidget {
   const ConvenientItems_top({Key? key}) : super(key: key);
@@ -25,7 +26,8 @@ class ConvenientItems_top extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('편의점',
+            Text(tr('convenient_store'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -51,7 +53,8 @@ class ConvenientItems_top extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('ATM',
+            Text(tr('atm'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -77,7 +80,7 @@ class ConvenientItems_top extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('우체국',
+            Text(tr('post_office'),
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -103,7 +106,8 @@ class ConvenientItems_top extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('문구점',
+            Text(tr('stationery_store'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -129,7 +133,8 @@ class ConvenientItems_top extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('AED',
+            Text(tr('exercise'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -165,7 +170,8 @@ class ConvenientItems_bottom extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('딸기방',
+            Text(tr('strawberry'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -191,7 +197,7 @@ class ConvenientItems_bottom extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('식당',
+            Text(tr('cafeteria'),
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -217,7 +223,8 @@ class ConvenientItems_bottom extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('프린터',
+            Text(tr('printer'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -243,7 +250,8 @@ class ConvenientItems_bottom extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('카페',
+            Text(tr('cafe'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -269,7 +277,8 @@ class ConvenientItems_bottom extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),
-            Text('헌혈의집',
+            Text(tr('blood'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,

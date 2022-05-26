@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:location/location.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: Text('그누맵',
+                child: Text(tr('gnumap'),
                     style: TextStyle(
                       fontSize: 30,
                       color: Color.fromRGBO(13, 13, 16, 0.69),
@@ -70,7 +70,7 @@ class _MainPageState extends State<MainPage> {
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.hasData == false) {
-                              return Container(child: Text('로딩중임'));
+                              return Container(child: Text(tr('loading')));
                             }
                             //error가 발생하게 될 경우 반환하게 되는 부분
                             else if (snapshot.hasError) {
@@ -97,7 +97,9 @@ class _MainPageState extends State<MainPage> {
                                           print('삭제');
                                           await _historyHelper.remove(
                                               _histories[index]['name']);
-                                          await _getHistories();
+                                          setState(() {
+                                            _getHistories();
+                                          });
                                         },
                                         onPressed: () async {
                                           await Navigator.push(
@@ -201,7 +203,7 @@ class FavoriteTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 0, 0, 0),
-      child: Text('즐겨찾기',
+      child: Text(tr('favorites'),
           style: TextStyle(
               fontSize: 20,
               color: Color.fromRGBO(0, 16, 72, 0.6),
@@ -292,7 +294,7 @@ class ConvenientTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 10, 0, 0),
-      child: Text('편의시설',
+      child: Text(tr('convenient'),
           style: TextStyle(
               fontSize: 20,
               color: Color.fromRGBO(0, 16, 72, 0.6),
@@ -313,7 +315,7 @@ class GnumapTitle extends StatelessWidget {
       child: Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('GNU MAP',
+          Text(tr('map'),
               style: TextStyle(
                   fontSize: 20,
                   color: Color.fromRGBO(0, 16, 72, 0.6),

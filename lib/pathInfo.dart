@@ -13,6 +13,7 @@ import 'package:like_button/like_button.dart';
 import 'package:gnumap/main.dart';
 import 'models/db.dart';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -87,8 +88,8 @@ class _PathInfoState extends State<PathInfo> {
             useRootNavigator: false,
             builder: (context) {
               return CupertinoAlertDialog(
-                title: Text('네트워크 연결상태가 불안정합니다.'),
-                content: Text('네트워크 연결상태를 확인해주세요.'),
+                title: Text(tr('network_error_title')),
+                content: Text(tr('network_error')),
                 actions: [
                   CupertinoDialogAction(
                       isDefaultAction: true,
@@ -108,8 +109,8 @@ class _PathInfoState extends State<PathInfo> {
             useRootNavigator: false,
             builder: (context) {
               return CupertinoAlertDialog(
-                title: Text('서버가 불안정합니다.'),
-                content: Text('다시 검색해주세요.'),
+                title: Text(tr('server_error_title')),
+                content: Text(tr('server_error')),
                 actions: [
                   CupertinoDialogAction(
                       isDefaultAction: true,
@@ -139,8 +140,8 @@ class _PathInfoState extends State<PathInfo> {
             useRootNavigator: false,
             builder: (context) {
               return CupertinoAlertDialog(
-                title: Text('검색어에 해당하는 건물이 없습니다.'),
-                content: Text('올바른 검색어를 입력해주세요'),
+                title: Text(tr('search_error_title')),
+                content: Text(tr('search_error')),
                 actions: [
                   CupertinoDialogAction(
                       isDefaultAction: true,
