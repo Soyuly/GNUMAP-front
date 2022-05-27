@@ -40,10 +40,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
     return Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text(
-            '정보수정요청',
-            style: Theme.of(context).textTheme.headline5,
-          ),
+          middle: Text('정보수정요청'),
         ),
         body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -136,7 +133,19 @@ class _ReviseInfoState extends State<ReviseInfo> {
               SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () async {
-                    try {
+                    if (buildingNameController.text.isEmpty || buildingNumController.text.isEmpty ||
+                        buildingLocationController.text.isEmpty || reviseInfoController.text.isEmpty) {
+                      _clear();
+
+                      Fluttertoast.showToast(
+                          msg: '잘못된 정보입니다. 다시 입력해주세요',
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                          textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                          fontSize: 13);
+                    } else {
                       var url =
                       Uri.parse('http://203.255.3.246:5001/getreviseInfo');
 
@@ -149,7 +158,6 @@ class _ReviseInfoState extends State<ReviseInfo> {
                         'request_revise': "${reviseInfoController.text}",
                       }).whenComplete(() => _clear());
 
-                      var future = response;
 
                       if (response.body == 'recieved') {
                         _clear();
@@ -164,20 +172,18 @@ class _ReviseInfoState extends State<ReviseInfo> {
                             fontSize: 13);
                       }
 
-                    } catch (e) {
-                      if (buildingNameController.text.length == 0 || buildingNumController.text.length == 0 ||
-                          buildingLocationController.text.length == 0 || reviseInfoController.text.length == 0) {
-                        _clear();
-
-                        Fluttertoast.showToast(
-                            msg: '잘못된 정보입니다. 다시 입력해주세요',
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
-                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
-                            fontSize: 13);
-                      }
+                    // } catch (e) {
+                    //     _clear();
+                    //
+                    //     Fluttertoast.showToast(
+                    //         msg: '잘못된 정보입니다. 다시 입력해주세요',
+                    //         toastLength: Toast.LENGTH_LONG,
+                    //         gravity: ToastGravity.BOTTOM,
+                    //         timeInSecForIosWeb: 1,
+                    //         backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                    //         textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                    //         fontSize: 13);
+                    // }
                     }
                   },
                   child: Text("보내기"),
