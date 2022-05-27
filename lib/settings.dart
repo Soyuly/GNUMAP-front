@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:gnumap/main.dart';
 import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/revise_info.dart';
 import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 
@@ -112,11 +113,15 @@ class _SettingPageState extends State<SettingPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('문의사항 보내기',style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'GyeonggiMedium'),),
+                      Text('정보수정 요청 보내기',style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'GyeonggiMedium'),),
                       Text('어플에 장애나, 잘못된 정보가 있을경우 개발자에게 연락을 취할 수 있습니다.',style: TextStyle(fontFamily: 'GyeonggiMedium')),
                       SizedBox(width: 200,child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("문의사항 보내기"),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ReviseInfo())
+                          );
+                        },
+                        child: Text("정보수정 요청 보내기"),
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
                             padding: MaterialStateProperty.all(EdgeInsets.all(5)),

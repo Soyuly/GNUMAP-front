@@ -160,7 +160,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                       print('서버에러');
                     }
                   },
-                  child: Text("수정요청"),
+                  child: Text("보내기"),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     padding: EdgeInsets.all(10),

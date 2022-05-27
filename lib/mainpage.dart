@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:location/location.dart';
@@ -15,6 +16,19 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool click = true;
+  bool isDarkModeEnabled = false;
+
+  void _changeTheme() {
+    ThemeBuilder.of(context)?.changeTheme();
+  }
+
+  void onStateChanged(bool isDarkModeEnabled) {
+    setState(() {
+      this.isDarkModeEnabled = isDarkModeEnabled;
+    });
+  }
+
   late List _histories = [];
   final HistoryHelper _historyHelper = HistoryHelper();
 
@@ -33,20 +47,36 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Container(
           margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                child: Text(tr('gnumap'),
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Color.fromRGBO(13, 13, 16, 0.69),
-                      fontFamily: 'AppleSDGothicNeo',
-                      fontWeight: FontWeight.bold,
-                    )),
+              Text('그누맵',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color.fromRGBO(13, 13, 16, 0.69),
+                    fontFamily: 'AppleSDGothicNeo',
+                    fontWeight: FontWeight.bold,
+                  )),
+              Spacer(),
+              TextButton(onPressed: () {
+                setState(() {
+                  click = !click;
+                  _changeTheme();
+                });
+              }, child: Icon((click == false) ? Icons.brightness_2_sharp : Icons.sunny, color: Colors.black)),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SettingPage(title: "설정")));
+                },
+                child: Icon(Icons.settings, color: Colors.black),
               ),
               Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
             ],
@@ -57,7 +87,7 @@ class _MainPageState extends State<MainPage> {
       ),
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.fromLTRB(13, 0, 0, 0),
+          margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
           child: SingleChildScrollView(
             child: Column(children: [
               SafeArea(child: SearchBar()),
@@ -139,8 +169,9 @@ class _MainPageState extends State<MainPage> {
                                           await Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => PathInfo(
-                                                    name: _histories[index]
+                                                builder: (context) =>
+                                                    PathInfo(
+                                                        name: _histories[index]
                                                         ['name'])),
                                           );
                                         },
@@ -150,7 +181,7 @@ class _MainPageState extends State<MainPage> {
                                                 color: Color.fromRGBO(
                                                     0, 16, 72, 0.6),
                                                 fontFamily:
-                                                    'AppleSDGothicNeo')),
+                                                'AppleSDGothicNeo')),
                                         style: TextButton.styleFrom(
                                             padding: EdgeInsets.zero,
                                             minimumSize: Size(10, 30),
@@ -348,11 +379,11 @@ class GnumapTitle extends StatelessWidget {
       },
       child: Container(
         child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(tr('map'),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text('GNU MAP',
               style: TextStyle(
                   fontSize: 20,
-                  color: Color.fromRGBO(0, 16, 72, 0.6),
+                  color: Colors.lightBlueAccent,
                   fontFamily: 'AppleSDGothicNeo')),
           Icon(Icons.arrow_forward_ios_rounded),
         ]),
@@ -381,4 +412,10 @@ class Minimap extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )));
   }
+}
+
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  throw UnimplementedError();
 }
