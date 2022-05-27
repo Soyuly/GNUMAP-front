@@ -29,15 +29,8 @@ class _MainPageState extends State<MainPage> {
     return _histories;
   }
 
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getHistories();
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(context.locale.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent, //appBar 투명색
@@ -98,7 +91,29 @@ class _MainPageState extends State<MainPage> {
           margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
           child: SingleChildScrollView(
             child: Column(children: [
-              SafeArea(child: SearchBar()),
+              SafeArea(
+                  child: Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
+                child: CupertinoSearchTextField(
+                  itemSize: 20,
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(188, 188, 188, 0.54),
+                      borderRadius: BorderRadius.circular(10)),
+                  onSubmitted: (name) async {
+                    bool isBack = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PathInfo(name: name)),
+                    );
+
+                    if (isBack) {
+                      setState(() {
+                        _getHistories();
+                      });
+                    }
+                  },
+                ),
+              )),
               SizedBox(
                   height: 35,
                   child: Container(
@@ -164,7 +179,7 @@ class _MainPageState extends State<MainPage> {
                                                         }),
                                                     CupertinoDialogAction(
                                                         isDefaultAction: true,
-                                                        child: Text("확인"),
+                                                        child: Text("취소"),
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context);
@@ -185,8 +200,8 @@ class _MainPageState extends State<MainPage> {
                                         child: Text(_histories[index]['name'],
                                             style: TextStyle(
                                                 fontSize: 13,
-                                                color: Color.fromRGBO(
-                                                    0, 16, 72, 0.6),
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                                 fontFamily:
                                                     'AppleSDGothicNeo')),
                                         style: TextButton.styleFrom(
@@ -235,34 +250,6 @@ class _MainPageState extends State<MainPage> {
             ]),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatefulWidget {
-  const SearchBar({Key? key}) : super(key: key);
-
-  @override
-  State<SearchBar> createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<SearchBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
-      child: CupertinoSearchTextField(
-        itemSize: 20,
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(188, 188, 188, 0.54),
-            borderRadius: BorderRadius.circular(10)),
-        onSubmitted: (name) async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PathInfo(name: name)),
-          );
-        },
       ),
     );
   }

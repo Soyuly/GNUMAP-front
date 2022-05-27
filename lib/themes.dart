@@ -35,7 +35,14 @@ var lightThemeData = ThemeData(
           fontSize: 12,
           color: Color.fromRGBO(0, 16, 72, 0.6),
           fontFamily: 'AppleSDGothicNeo',
-        )),
+        ),
+        headline6: TextStyle(
+            fontSize: 18,
+            color: Color.fromRGBO(0, 122, 255, 1),
+            fontFamily: 'AppleSDGothicNeo',
+            fontWeight: FontWeight.bold),
+        subtitle1: TextStyle(
+            fontSize: 18, color: Colors.black, fontFamily: 'AppleSDGothicNeo')),
     brightness: Brightness.light);
 
 var darkThemeData = ThemeData(
@@ -70,6 +77,13 @@ var darkThemeData = ThemeData(
         fontSize: 12,
         color: Colors.white,
         fontFamily: 'AppleSDGothicNeo',
-      )),
+      ),
+      headline6: TextStyle(
+          fontSize: 18,
+          color: Colors.white,
+          fontFamily: 'AppleSDGothicNeo',
+          fontWeight: FontWeight.bold),
+      subtitle1: TextStyle(
+          fontSize: 18, color: Colors.white, fontFamily: 'AppleSDGothicNeo')),
   brightness: Brightness.dark,
 );

@@ -37,6 +37,12 @@ class _PathInfoState extends State<PathInfo> {
   late PermissionStatus _permissionGranted;
   late LocationData locationData;
 
+  Future _getHistories() async {
+    _histories = await _historyHelper.getItems();
+    print(_histories);
+    return _histories;
+  }
+
   initState() {
     super.initState();
     _locateMe();
@@ -179,6 +185,9 @@ class _PathInfoState extends State<PathInfo> {
 
     if (_items.isEmpty) {
       await _historyHelper.add('${widget.name}');
+      setState(() {
+        _getHistories();
+      });
     } else {
       _historyHelper.remove('${widget.name}');
       await _historyHelper.add('${widget.name}');
@@ -189,11 +198,11 @@ class _PathInfoState extends State<PathInfo> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: CupertinoColors.white,
         appBar: CupertinoNavigationBar(
           leading: GestureDetector(
-              onTap: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp())),
+              onTap: () async {
+                Navigator.pop(context, true);
+              },
               child: Icon(
                 CupertinoIcons.left_chevron,
                 color: CupertinoColors.destructiveRed,
@@ -216,24 +225,27 @@ class _PathInfoState extends State<PathInfo> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
               if (snapshot.hasData == false) {
-                return Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/loading.gif",
-                          height: 205.0,
-                          width: 200.0,
-                        ),
-                        Text('하모가 열심히 길을 찾고 있습니다.',
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Color.fromRGBO(0, 122, 255, 1),
-                              fontFamily: 'GangwonEduSaeeum',
-                            ))
-                      ],
-                    ));
+                return Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/loading.gif",
+                            height: 205.0,
+                            width: 200.0,
+                          ),
+                          Text('하모가 열심히 길을 찾고 있습니다.',
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Color.fromRGBO(0, 122, 255, 1),
+                                fontFamily: 'GangwonEduSaeeum',
+                              ))
+                        ],
+                      )),
+                );
               }
               //error가 발생하게 될 경우 반환하게 되는 부분
               else if (snapshot.hasError) {
@@ -297,17 +309,11 @@ class _PathInfoState extends State<PathInfo> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: Text('소요거리',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color.fromRGBO(0, 122, 255, 1),
-                                        fontFamily: 'AppleSDGothicNeo',
-                                        fontWeight: FontWeight.bold)),
+                                    style:
+                                        Theme.of(context).textTheme.headline6),
                               ),
                               Text('${distance}',
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      color: Color.fromRGBO(0, 16, 72, 0.6),
-                                      fontFamily: 'AppleSDGothicNeo')),
+                                  style: Theme.of(context).textTheme.subtitle1),
                             ],
                           ),
                           Row(
@@ -315,18 +321,13 @@ class _PathInfoState extends State<PathInfo> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: Text('소요시간',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color.fromRGBO(0, 122, 255, 1),
-                                        fontFamily: 'AppleSDGothicNeo',
-                                        fontWeight: FontWeight.bold)),
+                                    style:
+                                        Theme.of(context).textTheme.headline6),
                               ),
                               Container(
                                 child: Text('${time}',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color.fromRGBO(0, 16, 72, 0.6),
-                                        fontFamily: 'AppleSDGothicNeo')),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1),
                               ),
                             ],
                           ),
