@@ -315,14 +315,12 @@ class _FavoriteState extends State<Favorite> {
     return _favoritesString;
   }
 
-
   // _getFavorites();
   // @override // setState의 구조이다.
   // void setState(VoidCallback fn) {
   //   // TODO: implement setState
   //   super.setState(fn);
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +342,6 @@ class _FavoriteState extends State<Favorite> {
                               await Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) => GnuMap()));
-                              _updateFavorites();
                             },
                             child: Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
