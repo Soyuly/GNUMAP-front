@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/models/db.dart';
+import 'package:gnumap/settings.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -47,7 +49,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Container(
           margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
@@ -62,19 +63,22 @@ class _MainPageState extends State<MainPage> {
                     fontWeight: FontWeight.bold,
                   )),
               Spacer(),
-              TextButton(onPressed: () {
-                setState(() {
-                  click = !click;
-                  _changeTheme();
-                });
-              }, child: Icon((click == false) ? Icons.brightness_2_sharp : Icons.sunny, color: Colors.black)),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      click = !click;
+                      _changeTheme();
+                    });
+                  },
+                  child: Icon(
+                      (click == false) ? Icons.brightness_2_sharp : Icons.sunny,
+                      color: Colors.black)),
               TextButton(
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              SettingPage(title: "설정")));
+                          builder: (context) => SettingPage(title: "설정")));
                 },
                 child: Icon(Icons.settings, color: Colors.black),
               ),
@@ -169,9 +173,8 @@ class _MainPageState extends State<MainPage> {
                                           await Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PathInfo(
-                                                        name: _histories[index]
+                                                builder: (context) => PathInfo(
+                                                    name: _histories[index]
                                                         ['name'])),
                                           );
                                         },
@@ -181,7 +184,7 @@ class _MainPageState extends State<MainPage> {
                                                 color: Color.fromRGBO(
                                                     0, 16, 72, 0.6),
                                                 fontFamily:
-                                                'AppleSDGothicNeo')),
+                                                    'AppleSDGothicNeo')),
                                         style: TextButton.styleFrom(
                                             padding: EdgeInsets.zero,
                                             minimumSize: Size(10, 30),
@@ -379,7 +382,7 @@ class GnumapTitle extends StatelessWidget {
       },
       child: Container(
         child:
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('GNU MAP',
               style: TextStyle(
                   fontSize: 20,
