@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gnumap/settings.dart';
 import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,7 +9,6 @@ import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/models/db.dart';
-import 'package:gnumap/settings.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);

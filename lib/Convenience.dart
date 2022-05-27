@@ -12,22 +12,23 @@ class ConveniencePage extends StatefulWidget {
   final String title;
   final String image;
 
-
-  const ConveniencePage({Key? key, required this.category, required this.title, required this.image}) : super(key: key);
+  const ConveniencePage(
+      {Key? key,
+      required this.category,
+      required this.title,
+      required this.image})
+      : super(key: key);
 
   @override
   State<ConveniencePage> createState() => _ConveniencePageState();
 }
 
 class _ConveniencePageState extends State<ConveniencePage> {
-
   @override
   Widget build(BuildContext context) {
     _getConvenient() async {
       var url = Uri.parse('http://203.255.3.246:5001/getInfoConvenient');
-      var options = {
-        'number': "${widget.category}"
-      };
+      var options = {'number': "${widget.category}"};
       var response = await http.post(url, body: options);
       // print('${response.body}');
       String jsonString = response.body;
@@ -47,140 +48,146 @@ class _ConveniencePageState extends State<ConveniencePage> {
           middle: Text('편의시설'),
         ),
         body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-              Center(
-                child: Container(
-                padding: EdgeInsets.fromLTRB(155, 10, 0, 0),
-                height: 80,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(widget.image)),
-                ),
-                child: Text(
-                  widget.title,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
-                ),
+          child: Column(children: [
+            Expanded(
+              flex: 4,
+              child: Stack(children: [
+                Container(
+                    padding: EdgeInsets.fromLTRB(155, 10, 0, 0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: AssetImage(widget.image)),
+                    )),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ]),
             ),
-              ),
-            FutureBuilder(
-                future: _getConvenient(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
-                  if (snapshot.hasData == false) {
-                    return CircularProgressIndicator();
-                  }
-                  //error가 발생하게 될 경우 반환하게 되는 부분
-                  else if (snapshot.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Error: ${snapshot.error}',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    );
-                  }
-                  // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
-                  else {
-                    List list = snapshot.data;
-                    return SizedBox(
-                      height: 535,
-                      child: ListView.separated(
-                        // padding: const EdgeInsets.all(8),
-                        itemCount: list.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var li = list[index];
-                          // print("${li['id']} ${li['name']}  ${li['address']}");
-                          // Text("${li['name']}"),
-                          // Text("${li['phone']}"),
-                          // Text("${li['distance']}"),
-                          return GestureDetector(
-                              onTap: () async {
-                                Navigator.push(
+            Expanded(
+              flex: 20,
+              child: FutureBuilder(
+                  future: _getConvenient(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+                    if (snapshot.hasData == false) {
+                      return CircularProgressIndicator();
+                    }
+                    //error가 발생하게 될 경우 반환하게 되는 부분
+                    else if (snapshot.hasError) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Error: ${snapshot.error}',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      );
+                    }
+                    // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                    else {
+                      List list = snapshot.data;
+                      return SizedBox(
+                        height: 535,
+                        child: ListView.separated(
+                          // padding: const EdgeInsets.all(8),
+                          itemCount: list.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var li = list[index];
+                            // print("${li['id']} ${li['name']}  ${li['address']}");
+                            // Text("${li['name']}"),
+                            // Text("${li['phone']}"),
+                            // Text("${li['distance']}"),
+                            return GestureDetector(
+                                onTap: () async {
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => _DetailPage(
-                                              list: li,
-                                        ),
-                                    ),
-                                );
-                              },
-                              child: Container(
-                                  padding: EdgeInsets.fromLTRB(15, 15, 0, 6),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 3),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              child: Image(
-                                                  fit: BoxFit.cover,
-                                                  width: 145,
-                                                  height: 125,
-                                                  image: AssetImage(
-                                                      // "${li['image']}")),
-                                              'assets/convenient/cafe.jpg')),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  14, 0, 0, 0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "${li['name']}",
-                                                    style: TextStyle(
-                                                        fontSize: 17,
-                                                        fontFamily:
-                                                            'GyeonggiMedium',
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  Text(
-                                                    "${li['phone']}",
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        fontFamily:
-                                                            'GyeonggiMedium'),
-                                                  ),
-                                                  Container(
-                                                    padding: EdgeInsets.fromLTRB(
-                                                        0, 60, 0, 0),
-                                                    child: Text(
-                                                        "현재위치로부터 m",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            fontFamily:
-                                                                'GyeonggiMedium')),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                      builder: (context) => _DetailPage(
+                                        list: li,
                                       ),
-                                    ],
-                                  )));
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                      ),
-                    );
-                  }
-                })
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                    padding: EdgeInsets.fromLTRB(15, 15, 0, 6),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 3),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: Image(
+                                                    fit: BoxFit.cover,
+                                                    width: 145,
+                                                    height: 125,
+                                                    image: AssetImage(
+                                                        // "${li['image']}")),
+                                                        'assets/convenient/cafe.jpg')),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    14, 0, 0, 0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${li['name']}",
+                                                      style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontFamily:
+                                                              'GyeonggiMedium',
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Text(
+                                                      "${li['phone']}",
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontFamily:
+                                                              'GyeonggiMedium'),
+                                                    ),
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 60, 0, 0),
+                                                      child: Text("현재위치로부터 m",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontFamily:
+                                                                  'GyeonggiMedium')),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )));
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                        ),
+                      );
+                    }
+                  }),
+            )
           ]),
         ),
       ),
@@ -208,7 +215,6 @@ class _DetailPageState extends State<_DetailPage> {
   int? distance;
   int? time;
   var pathInfo;
-
 
   initState() {
     super.initState();
@@ -240,16 +246,13 @@ class _DetailPageState extends State<_DetailPage> {
     // 'curLat': '${lat}',
     // 'curLng': '${lng}',
 
-
     final url = Uri.parse('http://203.255.3.246:5001/pathConvenient');
     final response = await http.post(url, body: {
-
       'curLat': '35.15394690852627',
       'curLng': '128.09967466553798',
       'destLat': '${widget.list['lat']}',
       'destLng': '${widget.list['lng']}'
     });
-
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
@@ -294,13 +297,14 @@ class _DetailPageState extends State<_DetailPage> {
                       flex: 15,
                       child: InAppWebView(
                         initialUrlRequest: URLRequest(
-                            url: Uri.parse("http://203.255.3.246:5001/findConvenient"),
+                            url: Uri.parse(
+                                "http://203.255.3.246:5001/findConvenient"),
                             method: 'POST',
                             body: Uint8List.fromList(utf8.encode(
                                 "curLat=35.15394690852627&curLng=128.09967466553798&destLat=${widget.list['lat']}&destLng=${widget.list['lng']}")),
                             headers: {
                               'Content-Type':
-                              'application/x-www-form-urlencoded'
+                                  'application/x-www-form-urlencoded'
                             }),
                       ),
                     ),
@@ -319,7 +323,7 @@ class _DetailPageState extends State<_DetailPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                        super.widget));
+                                            super.widget));
                                 print('search button is clicked');
                               }),
                           Row(
@@ -367,8 +371,6 @@ class _DetailPageState extends State<_DetailPage> {
                   ],
                 );
               }
-            }
-        )
-    );
+            }));
   }
 }
