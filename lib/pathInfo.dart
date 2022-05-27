@@ -342,32 +342,38 @@ class _PathInfoState extends State<PathInfo> {
   }
 }
 
-Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
-  /// send your request here
-  // final bool success= await sendRequest();
+// Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
+//   /// send your request here
+//   // final bool success= await sendRequest();
 
-  /// if failed, you can do nothing
-  // return success? !isLiked:isLiked;
+//   /// if failed, you can do nothing
+//   // return success? !isLiked:isLiked;
 
-  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+//   final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
-  var client = new http.Client();
-  var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-  var response = await client.post(url, body: {'num': '$name'});
-  var info = jsonDecode(response.body);
+//   // 검색한 이름으로 건물 정보를 가져오기
+//   var client = new http.Client();
+//   var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+//   var response = await client.post(url, body: {'num': '$name'});
+//   var info = jsonDecode(response.body);
 
-  await _favoriteHelper.add(info['name'], info['num']);
-  print('버튼눌림');
-  return !isLiked;
-}
+//   await _favoriteHelper.add(info['name'], info['num']);
+//   print('버튼눌림');
+//   return !isLiked;
+// }
 
 class likeButton extends StatelessWidget {
+  // 그 전에 검색할 때, 자신의 위치가 샌프란시스코로 나옴, 누가 달아논 주석을 본 거 같은데 다시 찾으려니 안 보임..
+  // 디바이스에 이미 즐겨찾기가 추가된 상태라면, 빨간색 하트를 표시하게 하고, 아니면, 회색하트를 표시하게함
+  // 즐겨찾기 추가를 하면, 검색어에 해당하는 건물 데이터, 이미지 위치를 서버에서 받아온다.
+  // CupertinoSearchTextField 에서 isBack에 setState안에 _getFavorites 함수 실행
   String name;
   likeButton(this.name);
 
   late List _favorites = [];
   final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
+  // 즐겨찾기 정보를 가져옴
   Future _getFavorites() async {
     _favorites = await _favoriteHelper.getItems();
     print(_favorites);
@@ -375,34 +381,33 @@ class likeButton extends StatelessWidget {
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    late List _favorites = [];
-    final FavoriteHelper _favoriteHelper = FavoriteHelper();
+    // 검색한 이름으로 건물 정보를 가져오기
+    // TODO: 여기서 에러남,, 데이터를 받아와야 하는데, 출력하니 null 값으로 들어옴
 
-    var client = new http.Client();
-    var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-    var response = await client.post(url, body: {'num': '$name'});
-    var info = jsonDecode(response.body);
-
-    print('버튼눌림');
-
-    // 즐겨찾기 추가
+    // 즐겨찾기에서 삭제(isLiked가 true 인 상태에서 클릭했을 때)
     if (isLiked) {
       _favoriteHelper.remove(this.name);
       _favoriteHelper.remove(this.name);
+      print(this.name);
       print("removed");
     }
-    // 즐겨찾기 삭제
+    // 즐겨찾기 추가(isLiked가 false 인 상태에서 클릭했을 때)
     else {
-      _favoriteHelper.add(info['name'], info['num']);
-      _favoriteHelper.add(info['name'], info['num']);
+      var client = new http.Client();
+      var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+      var response = await client.post(url, body: {'num': '$name'});
+      var info = jsonDecode(response.body);
       print(info['name']);
       print(info['num']);
+      _favoriteHelper.add(info['name'], info['num']);
+      _favoriteHelper.add(info['name'], info['num']);
       print("added");
     }
 
     return !isLiked;
   }
 
+  // 이미 검색어가 즐겨찾기에 추가되어 있는지 확인
   bool isExist() {
     for (int i = 0; i < _favorites.length; i++) {
       if (_favorites[i]['name'] == this.name) {
@@ -421,6 +426,7 @@ class likeButton extends StatelessWidget {
             future: _getFavorites(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
+                // 이미 추가되어 있으면 isLiked: true로 하트 소환 아니면 isLiked: false로 하트 소환
                 if (isExist()) {
                   return LikeButton(
                     onTap: onLikeButtonTapped,
@@ -445,6 +451,7 @@ class likeButton extends StatelessWidget {
                   ),
                 );
               } else {
+                // 로딩 되기 전에는 isLiked: false 로 하트 소환
                 return LikeButton(
                   onTap: onLikeButtonTapped,
                   size: 25,

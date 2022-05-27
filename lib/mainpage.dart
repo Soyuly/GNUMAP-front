@@ -22,11 +22,19 @@ class _MainPageState extends State<MainPage> {
 
   late List _histories = [];
   final HistoryHelper _historyHelper = HistoryHelper();
+  late List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
   Future _getHistories() async {
     _histories = await _historyHelper.getItems();
     print(_histories);
     return _histories;
+  }
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    print(_favorites);
+    return _favorites;
   }
 
   @override
@@ -109,6 +117,7 @@ class _MainPageState extends State<MainPage> {
                     if (isBack) {
                       setState(() {
                         _getHistories();
+                        _getFavorites();
                       });
                     }
                   },
