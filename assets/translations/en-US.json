@@ -1,0 +1,41 @@
+{
+    "gnumap" : "GNUMAP",
+    "favorites" : "Favorites",
+    "convenient" : "Convenients",
+    "convenient_store" : "Convenience\nstore",
+    "atm" : "ATM\n",
+    "post_office" : "Post office\n",
+    "stationery_store" : "Stationery\nStore",
+    "map" : "GNU MAP",
+    "distance" : "Distance",
+    "time" : "Time",
+    "loading" : "loading...",
+
+    "exercise" : "Exercise\n",
+    "strawberry" : "Strawberry\nRoom",
+    "cafeteria" : "Cafeteria\n",
+    "printer" : "Printer\n",
+    "cafe" : "Cafe\n",
+    "blood" : "Blood\nDonation",
+
+
+    
+    "display_setting" : "Set screen mode",
+    "display_description" : "You can set the light mode and the dark mode.",
+    "lang_setting" : "Language support",
+    "lang_description" : "You can set up a customized language",
+    "location_setting" : "Setting location information",
+    "location_description" : "You are granted the required location service privileges for pathfinding and current location services.",
+    "go_to_location" : "Location Permissions Settings Shortcuts",
+    "revise_setting" : "Send inquiries",
+    "revise_description" : "You can contact the developer if there is an application failure or incorrect information.",
+    "go_to_revise" : "Send inquiries",
+    
+    "network_error_title" : "The network connection is unstable.",
+    "network_error" : "Please check the network connection status.",
+    "search_error_title" : "No buildings corresponding to the search term.",
+    "search_error" : "Please enter a valid search term",
+    "server_error_title" : "The server is unstable.",
+    "server_error" : "Please try again in a momentarily."        
+    
+    }

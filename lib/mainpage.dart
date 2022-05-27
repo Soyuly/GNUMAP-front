@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gnumap/settings.dart';
+import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
@@ -15,6 +18,34 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool click = true;
+  bool isDarkModeEnabled = false;
+
+  void _changeTheme() {
+    ThemeBuilder.of(context)?.changeTheme();
+  }
+
+  void onStateChanged(bool isDarkModeEnabled) {
+    setState(() {
+      this.isDarkModeEnabled = isDarkModeEnabled;
+    });
+  }
+
+  late List _histories = [];
+  final HistoryHelper _historyHelper = HistoryHelper();
+
+  Future _getHistories() async {
+    _histories = await _historyHelper.getItems();
+    print(_histories);
+    return _histories;
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getHistories();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,14 +55,32 @@ class _MainPageState extends State<MainPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                child: Text('그누맵',
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Color.fromRGBO(13, 13, 16, 0.69),
-                      fontFamily: 'AppleSDGothicNeo',
-                      fontWeight: FontWeight.bold,
-                    )),
+              Text('그누맵',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color.fromRGBO(13, 13, 16, 0.69),
+                    fontFamily: 'AppleSDGothicNeo',
+                    fontWeight: FontWeight.bold,
+                  )),
+              Spacer(),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      click = !click;
+                      _changeTheme();
+                    });
+                  },
+                  child: Icon(
+                      (click == false) ? Icons.brightness_2_sharp : Icons.sunny,
+                      color: Colors.black)),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingPage(title: "설정")));
+                },
+                child: Icon(Icons.settings, color: Colors.black),
               ),
               Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
             ],
@@ -40,39 +89,148 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Container(
-        margin: const EdgeInsets.fromLTRB(13, 0, 0, 0),
-        child: Column(children: [
-          Container(child: SearchBar()),
-          SizedBox(height: 35, child: History()),
-          Container(
-              height: 30,
-              child:
-                  Align(alignment: Alignment.topLeft, child: FavoriteTitle())),
-          SizedBox(
-            height: 100,
-            child: Favorite(),
+      body: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              SafeArea(child: SearchBar()),
+              SizedBox(
+                  height: 35,
+                  child: Container(
+                      margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+                      child: FutureBuilder(
+                          future: _getHistories(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Container(child: Text(tr('loading')));
+                            }
+                            //error가 발생하게 될 경우 반환하게 되는 부분
+                            else if (snapshot.hasError) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Error: ${snapshot.error}',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              );
+                            }
+                            // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                            else {
+                              print(_histories);
+                              return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _histories.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                                      child: TextButton(
+                                        onLongPress: () async {
+                                          showCupertinoDialog(
+                                              context: context,
+                                              useRootNavigator: false,
+                                              builder: (context) {
+                                                return CupertinoAlertDialog(
+                                                  title: Text('히스토리 항목 삭제'),
+                                                  content: Text(
+                                                      '히스토리${_histories[index]['name']}를 정말 삭제하시겠습니까?'),
+                                                  actions: [
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text(
+                                                          "삭제",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        onPressed: () async {
+                                                          print('삭제');
+                                                          await _historyHelper
+                                                              .remove(
+                                                                  _histories[
+                                                                          index]
+                                                                      ['name']);
+                                                          setState(() {
+                                                            _getHistories();
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        }),
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text("확인"),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        })
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => PathInfo(
+                                                    name: _histories[index]
+                                                        ['name'])),
+                                          );
+                                        },
+                                        child: Text(_histories[index]['name'],
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Color.fromRGBO(
+                                                    0, 16, 72, 0.6),
+                                                fontFamily:
+                                                    'AppleSDGothicNeo')),
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            minimumSize: Size(10, 30),
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                    );
+                                  });
+                            }
+                          }))),
+              Container(
+                  height: 30,
+                  child: Align(
+                      alignment: Alignment.topLeft, child: FavoriteTitle())),
+              SizedBox(
+                height: 100,
+                child: Favorite(),
+              ),
+              Container(
+                  height: 40,
+                  child: Align(
+                      alignment: Alignment.topLeft, child: ConvenientTitle())),
+              SafeArea(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(5, 0, 15, 0),
+                    child: ConvenientItems_top()),
+              ),
+              SafeArea(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+                    child: ConvenientItems_bottom()),
+              ),
+              Container(
+                  height: 35,
+                  margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
+                  child: Align(
+                      alignment: Alignment.topLeft, child: GnumapTitle())),
+              Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+                height: 130,
+                child: Minimap(),
+              )
+            ]),
           ),
-          Container(
-              height: 40,
-              child: Align(
-                  alignment: Alignment.topLeft, child: ConvenientTitle())),
-          Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 15, 0),
-              child: ConvenientItems_top()),
-          Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
-              child: ConvenientItems_bottom()),
-          Container(
-              height: 35,
-              margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
-              child: Align(alignment: Alignment.topLeft, child: GnumapTitle())),
-          Container(
-            margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
-            height: 130,
-            child: Minimap(),
-          ),
-        ]),
+        ),
       ),
     );
   }
@@ -106,92 +264,6 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
-class History extends StatefulWidget {
-  const History({Key? key}) : super(key: key);
-
-  @override
-  State<History> createState() => _HistoryState();
-}
-
-class _HistoryState extends State<History> {
-  late List _histories = [];
-  final HistoryHelper _historyHelper = HistoryHelper();
-
-  Future _getHistories() async {
-    _histories = await _historyHelper.getItems();
-    print(_histories);
-    return _histories;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getHistories();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
-        child: FutureBuilder(
-            future: _getHistories(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData == false) {
-                return Container(child: Text('로딩중임'));
-              }
-              //error가 발생하게 될 경우 반환하게 되는 부분
-              else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
-              }
-              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
-              else {
-                print(_histories);
-                return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _histories.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
-                        child: TextButton(
-                          onLongPress: () async {
-                            print('삭제');
-                            await _historyHelper
-                                .remove(_histories[index]['name']);
-                            await _getHistories();
-                          },
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PathInfo(
-                                      name: _histories[index]['name'])),
-                            );
-                          },
-                          child: Text(_histories[index]['name'],
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Color.fromRGBO(0, 16, 72, 0.6),
-                                  fontFamily: 'AppleSDGothicNeo')),
-                          style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size(10, 30),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              alignment: Alignment.centerLeft),
-                        ),
-                      );
-                    });
-              }
-            }));
-  }
-}
-
 class FavoriteTitle extends StatelessWidget {
   const FavoriteTitle({Key? key}) : super(key: key);
 
@@ -199,7 +271,7 @@ class FavoriteTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 0, 0, 0),
-      child: Text('즐겨찾기',
+      child: Text(tr('favorites'),
           style: TextStyle(
               fontSize: 20,
               color: Color.fromRGBO(0, 16, 72, 0.6),
@@ -296,7 +368,7 @@ class ConvenientTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 10, 0, 0),
-      child: Text('편의시설',
+      child: Text(tr('convenient'),
           style: TextStyle(
               fontSize: 20,
               color: Color.fromRGBO(0, 16, 72, 0.6),
@@ -320,7 +392,7 @@ class GnumapTitle extends StatelessWidget {
           Text('GNU MAP',
               style: TextStyle(
                   fontSize: 20,
-                  color: Color.fromRGBO(0, 16, 72, 0.6),
+                  color: Colors.lightBlueAccent,
                   fontFamily: 'AppleSDGothicNeo')),
           Icon(Icons.arrow_forward_ios_rounded),
         ]),
@@ -349,4 +421,10 @@ class Minimap extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )));
   }
+}
+
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  throw UnimplementedError();
 }

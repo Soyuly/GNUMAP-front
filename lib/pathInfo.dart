@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gnumap/main.dart';
+import 'package:gnumap/mainpage.dart';
 import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:developer';
@@ -12,9 +13,11 @@ import 'package:like_button/like_button.dart';
 import 'package:gnumap/main.dart';
 import 'models/db.dart';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
+
   const PathInfo({Key? key, required this.name}) : super(key: key);
 
   @override
@@ -74,41 +77,47 @@ class _PathInfoState extends State<PathInfo> {
         return http.Response('Error', 408);
       });
     } on SocketException {
-      return showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Text('네트워크 연결상태가 불안정합니다'),
-              content: Text('잠시 후 다시 시도해주세요'),
-              actions: [
-                CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: Text("확인"),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MyApp()));
-                    })
-              ],
-            );
-          });
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(tr('network_error_title')),
+                content: Text(tr('network_error')),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
     } on HttpException {
-      return showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Text('서버가 불안정합니다'),
-              content: Text('잠시 후 다시 시도해주세요'),
-              actions: [
-                CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: Text("확인"),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MyApp()));
-                    })
-              ],
-            );
-          });
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(tr('server_error_title')),
+                content: Text(tr('server_error')),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
     } finally {
       client.close();
     }
@@ -120,50 +129,58 @@ class _PathInfoState extends State<PathInfo> {
       distance = info['distance'];
       time = info['time'];
     } on FormatException {
-      return showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Text('검색어에 해당하는 건물이 없습니다'),
-              content: Text('올바른 검색어를 입력해주세요.'),
-              actions: [
-                CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: Text("확인"),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MyApp()));
-                    })
-              ],
-            );
-          });
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(tr('search_error_title')),
+                content: Text(tr('search_error')),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
     }
 
     if (distance == null) {
-      return showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: Text('검색가능한 거리를 초과하였습니다.'),
-              content: Text('경상국립대 내에서 이용해주세요'),
-              actions: [
-                CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: Text("확인"),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MyApp()));
-                    })
-              ],
-            );
-          });
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text('검색가능한 거리를 초과하였습니다.'),
+                content: Text('경상국립대 내에서 이용해주세요'),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
     }
 
     List _items = [];
-
     _items = await _historyHelper.isEmpty('${widget.name}');
 
     if (_items.isEmpty) {
+      await _historyHelper.add('${widget.name}');
+    } else {
+      _historyHelper.remove('${widget.name}');
       await _historyHelper.add('${widget.name}');
     }
 
@@ -173,18 +190,17 @@ class _PathInfoState extends State<PathInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
-          trailing: IconButton(
-            icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
-            onPressed: () => log('버튼눌림'),
-          ),
           leading: GestureDetector(
-            onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyApp())),
-            child: Container(
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp())),
               child: Icon(
                 CupertinoIcons.left_chevron,
                 color: CupertinoColors.destructiveRed,
-              ),
+              )),
+          trailing: Material(
+            child: IconButton(
+              icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
+              onPressed: () => log('버튼눌림'),
             ),
           ),
           backgroundColor: CupertinoColors.systemBackground,
@@ -320,12 +336,21 @@ class _PathInfoState extends State<PathInfo> {
   }
 }
 
-Future<bool> onLikeButtonTapped(bool isLiked) async {
+Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
   /// send your request here
   // final bool success= await sendRequest();
 
   /// if failed, you can do nothing
   // return success? !isLiked:isLiked;
+
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  var client = new http.Client();
+  var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+  var response = await client.post(url, body: {'num': '$name'});
+  var info = jsonDecode(response.body);
+
+  await _favoriteHelper.add(info['name'], info['num']);
   print('버튼눌림');
   return !isLiked;
 }
