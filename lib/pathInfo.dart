@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:gnumap/main.dart';
 import 'package:gnumap/mainpage.dart';
 import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,11 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:gnumap/models/db.dart';
+import 'package:like_button/like_button.dart';
+import 'package:gnumap/main.dart';
+import 'models/db.dart';
+import 'dart:io';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -18,6 +24,8 @@ class PathInfo extends StatefulWidget {
 }
 
 class _PathInfoState extends State<PathInfo> {
+  late List _histories = [];
+  final HistoryHelper _historyHelper = HistoryHelper();
   List info = [];
   double? lat;
   double? lng;
@@ -31,6 +39,11 @@ class _PathInfoState extends State<PathInfo> {
   initState() {
     super.initState();
     _locateMe();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   _locateMe() async {
@@ -56,18 +69,122 @@ class _PathInfoState extends State<PathInfo> {
       lng = res.longitude;
     });
 
-    var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-    var response = await http.post(url, body: {
-      'curLat': '${lat}',
-      'curLng': '${lng}',
-      'num': '${widget.name}'
-    });
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-    String jsonData = response.body;
-    var info = jsonDecode(response.body);
-    distance = info['distance'];
-    time = info['time'];
+    var client = new http.Client();
+    var response;
+    try {
+      var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+      response = await client.post(url, body: {
+        'curLat': '${lat}',
+        'curLng': '${lng}',
+        'num': '${widget.name}'
+      }).timeout(Duration(seconds: 10), onTimeout: () {
+        return http.Response('Error', 408);
+      });
+    } on SocketException {
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text('네트워크 연결상태가 불안정합니다.'),
+                content: Text('네트워크 연결상태를 확인해주세요.'),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
+    } on HttpException {
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text('서버가 불안정합니다.'),
+                content: Text('다시 검색해주세요.'),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
+    } finally {
+      client.close();
+    }
+    try {
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      String jsonData = response.body;
+      var info = jsonDecode(response.body);
+      distance = info['distance'];
+      time = info['time'];
+    } on FormatException {
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text('검색어에 해당하는 건물이 없습니다.'),
+                content: Text('올바른 검색어를 입력해주세요'),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
+    }
+
+    if (distance == null) {
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text('검색가능한 거리를 초과하였습니다.'),
+                content: Text('경상국립대 내에서 이용해주세요'),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
+      });
+    }
+
+    List _items = [];
+
+    _items = await _historyHelper.isEmpty('${widget.name}');
+
+    if (_items.isEmpty) {
+      await _historyHelper.add('${widget.name}');
+    }
 
     return {lat, lng, distance, time};
   }
@@ -75,7 +192,10 @@ class _PathInfoState extends State<PathInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
-          // Try removing opacity to observe the lack of a blur effect and of sliding content.
+          trailing: IconButton(
+            icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
+            onPressed: () => log('버튼눌림'),
+          ),
           backgroundColor: CupertinoColors.systemBackground,
           middle: Text(widget.name),
         ),
@@ -84,17 +204,45 @@ class _PathInfoState extends State<PathInfo> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
               if (snapshot.hasData == false) {
-                return Container(child: Text('로딩중임'));
+                return Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/loading.gif",
+                          height: 205.0,
+                          width: 200.0,
+                        ),
+                        Text('하모가 열심히 길을 찾고 있습니다.',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Color.fromRGBO(0, 122, 255, 1),
+                              fontFamily: 'GangwonEduSaeeum',
+                            ))
+                      ],
+                    ));
               }
               //error가 발생하게 될 경우 반환하게 되는 부분
               else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
+                return Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/error.gif",
+                          height: 205.0,
+                          width: 200.0,
+                        ),
+                        Text('${widget.name}으로 가는 경로가 존재하지 않습니다.',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Color.fromRGBO(0, 122, 255, 1),
+                              fontFamily: 'GangwonEduSaeeum',
+                            ))
+                      ],
+                    ));
               }
               // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
               else {
@@ -180,4 +328,14 @@ class _PathInfoState extends State<PathInfo> {
         )
     );
   }
+}
+
+Future<bool> onLikeButtonTapped(bool isLiked) async {
+  /// send your request here
+  // final bool success= await sendRequest();
+
+  /// if failed, you can do nothing
+  // return success? !isLiked:isLiked;
+  print('버튼눌림');
+  return !isLiked;
 }

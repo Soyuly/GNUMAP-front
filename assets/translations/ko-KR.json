@@ -1,0 +1,27 @@
+{
+"gnumap" : "그누맵",
+"favorites" : "즐겨찾기",
+"convenient" : "편의시설",
+"convenient_store" : "편의점",
+"atm" : "ATM",
+"post_office" : "우체국",
+"stationery_store" : "문구점",
+"map" : "GNU MAP",
+"distance" : "소요거리",
+"time" : "소요시간",
+
+
+"display_setting" : "화면모드 설정",
+"display_description" : "라이트모드와 다크모드를 설정할 수 있습니다.",
+"lang_setting" : "언어지원",
+"lang_description" : "맞춤형 언어를 설정할 수 있습니다",
+"location_setting" : "위치정보설정",
+"location_description" : "경로찾기와 현위치 서비스에 필요한 위치정보서비스 권한을 허용받습니다.",
+"go_to_location" : "위치권한 설정 바로가기",
+"revise_setting" : "문의사항 보내기",
+"revise_description" : "어플의 장애나, 잘못된 정보가 있을경우 개발자한테 연락할 수 있습니다.",
+"go_to_revise" : "문의사항 보내기"
+
+
+
+}

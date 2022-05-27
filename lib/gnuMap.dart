@@ -1,38 +1,150 @@
 import 'dart:io';
-
+import 'dart:async';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:gnumap/models/db.dart';
+import 'package:gnumap/pathInfo.dart';
+import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/revise_info.dart';
+import 'package:location/location.dart';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'mainpage.dart';
-import 'dart:async';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:like_button/like_button.dart';
 
-class SearchingPath extends StatelessWidget {
-  const SearchingPath({Key? key}) : super(key: key);
+class GnuMap extends StatelessWidget {
+  const GnuMap({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CupertinoNavigationBar(
-          leading: Align(
-              widthFactor: 1.0,
-              child: TextButton(
-                child: Text("< 메인",
-                    style: TextStyle(
-                        color: CupertinoColors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'GyeonggiMedium')),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )),
-          middle: Text("GNU Map",
-              style: TextStyle(
-                  color: CupertinoColors.black, fontFamily: 'GyeonggiMedium')),
-          backgroundColor: CupertinoColors.white),
-      body: SlidingUpPanel(
+        appBar: CupertinoNavigationBar(
+            middle: Text('GNU MAP'), backgroundColor: CupertinoColors.white),
+        body: slidingUpPanel());
+  }
+}
+
+class WebViewExample extends StatefulWidget {
+  @override
+  WebViewExampleState createState() => WebViewExampleState();
+}
+
+class WebViewExampleState extends State<WebViewExample> {
+  @override
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InAppWebView(
+      initialUrlRequest: URLRequest(
+          url: Uri.parse("http://203.255.3.246:5001/gnumap"),
+          method: 'GET',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
+    );
+  }
+}
+
+// like button 클릭 시 보낼 요청
+
+class likeButton extends StatelessWidget {
+  String name;
+  likeButton(this.name);
+
+  late List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    print(_favorites);
+    return _favorites;
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    late List _favorites = [];
+    final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+    // 즐겨찾기 추가
+    if (isLiked) {
+      _favoriteHelper.remove(this.name);
+      print("no");
+    }
+    // 즐겨찾기 삭제
+    else {
+      _favoriteHelper.add(this.name);
+      print("yes");
+    }
+
+    return !isLiked;
+  }
+
+  bool isExist() {
+    for (int i = 0; i < _favorites.length; i++) {
+      if (_favorites[i]['name'] == this.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String name = this.name;
+    return Container(
+        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+        child: FutureBuilder(
+            future: _getFavorites(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                if (isExist()) {
+                  return LikeButton(
+                    onTap: onLikeButtonTapped,
+                    size: 20,
+                    isLiked: true,
+                  );
+                } else {
+                  return LikeButton(
+                    onTap: onLikeButtonTapped,
+                    size: 20,
+                    isLiked: false,
+                  );
+                }
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              } else {
+                return LikeButton(
+                  onTap: onLikeButtonTapped,
+                  size: 20,
+                  isLiked: false,
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+            }));
+  }
+}
+
+class slidingUpPanel extends StatelessWidget {
+  const slidingUpPanel({Key? key}) : super(key: key);
+
+  final result = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = "30동";
+
+    // 검색을 진행한 상태
+    if (result) {
+      return SlidingUpPanel(
           borderRadius: BorderRadius.circular(10.0),
           minHeight: 100,
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -57,12 +169,12 @@ class SearchingPath extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text("컴퓨터과학관, 30동",
+                    Text(name,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18)),
                     SizedBox(width: 6),
-                    LikeButton(onTap: onLikeButtonTapped, size: 20),
+                    likeButton(name)
                   ],
                 ),
                 SizedBox(
@@ -107,17 +219,6 @@ class SearchingPath extends StatelessWidget {
                     Text("2층: 열람실"),
                     Text("3층: 308호, 312호"),
                     Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
-                    Text("4층: 415호, 416호, 409호"),
                   ],
                 ),
               ),
@@ -126,10 +227,16 @@ class SearchingPath extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        '정보수정요청',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => ReviseInfo()));
+                        },
+                        child: Text(
+                          '정보수정요청',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ]),
@@ -150,39 +257,20 @@ class SearchingPath extends StatelessWidget {
                 child: SearchBar(),
               ))
             ],
-          )),
-    );
+          ));
+    } else {
+      return Stack(
+        children: [
+          Container(
+            child: WebViewExample(),
+          ),
+          Positioned(
+              child: Container(
+            margin: const EdgeInsets.only(left: 20, right: 10, top: 10),
+            child: SearchBar(),
+          ))
+        ],
+      );
+    }
   }
-}
-
-class WebViewExample extends StatefulWidget {
-  @override
-  WebViewExampleState createState() => WebViewExampleState();
-}
-
-class WebViewExampleState extends State<WebViewExample> {
-  @override
-  void initState() {
-    super.initState();
-    // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WebView(
-      initialUrl: 'https://www.naver.com',
-    );
-  }
-}
-
-// like button 클릭 시 보낼 요청
-Future<bool> onLikeButtonTapped(bool isLiked) async {
-  /// send your request here
-  // final bool success= await sendRequest();
-
-  /// if failed, you can do nothing
-  // return success? !isLiked:isLiked;
-
-  return !isLiked;
 }

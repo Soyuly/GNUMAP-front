@@ -5,7 +5,11 @@ import 'package:gnumap/settings.dart';
 import 'package:gnumap/theme_changer.dart';
 import 'gnuMap.dart';
 import 'package:location/location.dart';
+
+import 'package:gnumap/CImages.dart';
+import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
+import 'package:gnumap/models/db.dart';
 
 class DarkMode extends StatelessWidget {
   const DarkMode({Key? key}) : super(key: key);
@@ -24,6 +28,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
   bool isDarkModeEnabled = false;
 
   void _changeTheme() {
@@ -33,13 +38,26 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       this.isDarkModeEnabled = isDarkModeEnabled;
     });
+
+  late List _histories = [];
+  final HistoryHelper _historyHelper = HistoryHelper();
+
+  Future _getHistories() async {
+    _histories = await _historyHelper.getItems();
+    print(_histories);
+    return _histories;
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getHistories();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
         title: Container(
           margin: const EdgeInsets.fromLTRB(15, 0, 13, 0),
           child: Row(
@@ -110,6 +128,109 @@ class _MainPageState extends State<MainPage> {
               child: Minimap(),
             )
           ]),
+          margin: const EdgeInsets.fromLTRB(13, 0, 0, 0),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              SafeArea(child: SearchBar()),
+              SizedBox(
+                  height: 35,
+                  child: Container(
+                      margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+                      child: FutureBuilder(
+                          future: _getHistories(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Container(child: Text('로딩중임'));
+                            }
+                            //error가 발생하게 될 경우 반환하게 되는 부분
+                            else if (snapshot.hasError) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Error: ${snapshot.error}',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              );
+                            }
+                            // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                            else {
+                              print(_histories);
+                              return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _histories.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                                      child: TextButton(
+                                        onLongPress: () async {
+                                          print('삭제');
+                                          await _historyHelper.remove(
+                                              _histories[index]['name']);
+                                          await _getHistories();
+                                        },
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => PathInfo(
+                                                    name: _histories[index]
+                                                        ['name'])),
+                                          );
+                                        },
+                                        child: Text(_histories[index]['name'],
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Color.fromRGBO(
+                                                    0, 16, 72, 0.6),
+                                                fontFamily:
+                                                    'AppleSDGothicNeo')),
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            minimumSize: Size(10, 30),
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                    );
+                                  });
+                            }
+                          }))),
+              Container(
+                  height: 30,
+                  child: Align(
+                      alignment: Alignment.topLeft, child: FavoriteTitle())),
+              SizedBox(
+                height: 100,
+                child: Favorite(),
+              ),
+              Container(
+                  height: 40,
+                  child: Align(
+                      alignment: Alignment.topLeft, child: ConvenientTitle())),
+              SafeArea(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(5, 0, 15, 0),
+                    child: ConvenientItems_top()),
+              ),
+              SafeArea(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+                    child: ConvenientItems_bottom()),
+              ),
+              Container(
+                  height: 35,
+                  margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
+                  child: Align(
+                      alignment: Alignment.topLeft, child: GnumapTitle())),
+              Container(
+                margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+                height: 130,
+                child: Minimap(),
+              )
+            ]),
+          ),
         ),
       ),
     );
@@ -193,30 +314,69 @@ class Favorite extends StatefulWidget {
 }
 
 class _FavoriteState extends State<Favorite> {
+  late List _favorites = [];
+  late List _favoritesString = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    for (int i = 0; i < _favorites.length; i++) {
+      _favoritesString.add(_favorites[i]['name']);
+    }
+    print(_favoritesString);
+    return _favorites;
+  }
+
+  @override // setState의 구조이다.
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> favoriteItems = <String>['도서관', '박물관', '컴퓨터과학관', '교양학관'];
-    final List<String> favoriteIndex = <String>['1동', '', '30동', '24동'];
+    final List<dynamic> favoriteItems = _favoritesString;
     return Container(
         margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: favoriteItems.length,
-            itemBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                width: 70,
-                child: Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                    child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                    ),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/cs.jpg')),
-                      borderRadius: BorderRadius.circular(50),
-                    )),
-              );
+        child: FutureBuilder(
+            future: _getFavorites(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: favoriteItems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        width: 70,
+                        child: Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                            child: Scaffold(
+                              backgroundColor: Colors.transparent,
+                            ),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('assets/cs.jpg')),
+                              borderRadius: BorderRadius.circular(50),
+                            )),
+                      );
+                    });
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              } else {
+                return SizedBox(
+                  height: 10,
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
             }));
   }
 }
@@ -244,8 +404,7 @@ class GnumapTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => SearchingPath()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => GnuMap()));
       },
       child: Container(
         child:
@@ -269,8 +428,7 @@ class Minimap extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (_) => SearchingPath()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => GnuMap()));
         },
         child: Container(
             margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
