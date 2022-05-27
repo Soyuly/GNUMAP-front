@@ -1,25 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gnumap/CImages.dart';
-import 'package:gnumap/settings.dart';
-import 'package:gnumap/theme_changer.dart';
-import 'gnuMap.dart';
 import 'package:location/location.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/models/db.dart';
-
-class DarkMode extends StatelessWidget {
-  const DarkMode({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MainPage();
-  }
-}
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -63,9 +50,9 @@ class _MainPageState extends State<MainPage> {
 
       appBar: AppBar(
         title: Container(
-          margin: const EdgeInsets.fromLTRB(15, 0, 13, 0),
+          margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('그누맵',
                   style: TextStyle(
@@ -91,6 +78,7 @@ class _MainPageState extends State<MainPage> {
                 },
                 child: Icon(Icons.settings, color: Colors.black),
               ),
+              Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
             ],
           ),
         ),
@@ -112,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.hasData == false) {
-                              return Container(child: Text('로딩중임'));
+                              return Container(child: Text(tr('loading')));
                             }
                             //error가 발생하게 될 경우 반환하게 되는 부분
                             else if (snapshot.hasError) {
@@ -136,10 +124,46 @@ class _MainPageState extends State<MainPage> {
                                       margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
                                       child: TextButton(
                                         onLongPress: () async {
-                                          print('삭제');
-                                          await _historyHelper.remove(
-                                              _histories[index]['name']);
-                                          await _getHistories();
+                                          showCupertinoDialog(
+                                              context: context,
+                                              useRootNavigator: false,
+                                              builder: (context) {
+                                                return CupertinoAlertDialog(
+                                                  title: Text('히스토리 항목 삭제'),
+                                                  content: Text(
+                                                      '히스토리${_histories[index]['name']}를 정말 삭제하시겠습니까?'),
+                                                  actions: [
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text(
+                                                          "삭제",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        onPressed: () async {
+                                                          print('삭제');
+                                                          await _historyHelper
+                                                              .remove(
+                                                                  _histories[
+                                                                          index]
+                                                                      ['name']);
+                                                          setState(() {
+                                                            _getHistories();
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        }),
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text("확인"),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        })
+                                                  ],
+                                                );
+                                              });
                                         },
                                         onPressed: () async {
                                           await Navigator.push(
@@ -237,31 +261,6 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
-class History extends StatelessWidget {
-  const History({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final List<String> histories = <String>['30동', '컴퓨터과학관', '24동', '경상대교양학관'];
-    return Container(
-      margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: histories.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
-              child: Text(histories[index],
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Color.fromRGBO(0, 16, 72, 0.6),
-                      fontFamily: 'AppleSDGothicNeo')),
-            );
-          }),
-    );
-  }
-}
-
 class FavoriteTitle extends StatelessWidget {
   const FavoriteTitle({Key? key}) : super(key: key);
 
@@ -269,10 +268,10 @@ class FavoriteTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 0, 0, 0),
-      child: Text('즐겨찾기',
+      child: Text(tr('favorites'),
           style: TextStyle(
               fontSize: 20,
-              color: Colors.lightBlueAccent,
+              color: Color.fromRGBO(0, 16, 72, 0.6),
               fontFamily: 'AppleSDGothicNeo')),
     );
   }
@@ -360,10 +359,10 @@ class ConvenientTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 10, 0, 0),
-      child: Text('편의시설',
+      child: Text(tr('convenient'),
           style: TextStyle(
               fontSize: 20,
-              color: Colors.lightBlueAccent,
+              color: Color.fromRGBO(0, 16, 72, 0.6),
               fontFamily: 'AppleSDGothicNeo')),
     );
   }

@@ -21,7 +21,8 @@ class HistoryHelper {
 
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE History (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL
@@ -34,16 +35,16 @@ class HistoryHelper {
     final db = await _openDb();
 
     List items = await db.query('History', columns: ['name']);
-    return items.toList();
+    return List.from(items.toList().reversed);
   }
 
   Future isEmpty(String num) async {
     final db = await _openDb();
-
+    num = num.replaceAll("동", "");
     List items = await db.query('History',
         columns: ['name'], where: 'name = ?', whereArgs: [num]);
 
-    return items.toList();
+    return List.from(items.toList().reversed);
   }
 
   // 새로운 데이터를 추가한다.
@@ -103,7 +104,8 @@ class FavoriteHelper {
 
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE Favorites (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL

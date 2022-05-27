@@ -13,6 +13,7 @@ import 'package:like_button/like_button.dart';
 import 'package:gnumap/main.dart';
 import 'models/db.dart';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -39,11 +40,6 @@ class _PathInfoState extends State<PathInfo> {
   initState() {
     super.initState();
     _locateMe();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   _locateMe() async {
@@ -88,8 +84,8 @@ class _PathInfoState extends State<PathInfo> {
             useRootNavigator: false,
             builder: (context) {
               return CupertinoAlertDialog(
-                title: Text('네트워크 연결상태가 불안정합니다.'),
-                content: Text('네트워크 연결상태를 확인해주세요.'),
+                title: Text(tr('network_error_title')),
+                content: Text(tr('network_error')),
                 actions: [
                   CupertinoDialogAction(
                       isDefaultAction: true,
@@ -109,8 +105,8 @@ class _PathInfoState extends State<PathInfo> {
             useRootNavigator: false,
             builder: (context) {
               return CupertinoAlertDialog(
-                title: Text('서버가 불안정합니다.'),
-                content: Text('다시 검색해주세요.'),
+                title: Text(tr('server_error_title')),
+                content: Text(tr('server_error')),
                 actions: [
                   CupertinoDialogAction(
                       isDefaultAction: true,
@@ -140,8 +136,8 @@ class _PathInfoState extends State<PathInfo> {
             useRootNavigator: false,
             builder: (context) {
               return CupertinoAlertDialog(
-                title: Text('검색어에 해당하는 건물이 없습니다.'),
-                content: Text('올바른 검색어를 입력해주세요'),
+                title: Text(tr('search_error_title')),
+                content: Text(tr('search_error')),
                 actions: [
                   CupertinoDialogAction(
                       isDefaultAction: true,
@@ -179,10 +175,12 @@ class _PathInfoState extends State<PathInfo> {
     }
 
     List _items = [];
-
     _items = await _historyHelper.isEmpty('${widget.name}');
 
     if (_items.isEmpty) {
+      await _historyHelper.add('${widget.name}');
+    } else {
+      _historyHelper.remove('${widget.name}');
       await _historyHelper.add('${widget.name}');
     }
 
@@ -192,9 +190,18 @@ class _PathInfoState extends State<PathInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
-          trailing: IconButton(
-            icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
-            onPressed: () => log('버튼눌림'),
+          leading: GestureDetector(
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp())),
+              child: Icon(
+                CupertinoIcons.left_chevron,
+                color: CupertinoColors.destructiveRed,
+              )),
+          trailing: Material(
+            child: IconButton(
+              icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
+              onPressed: () => log('버튼눌림'),
+            ),
           ),
           backgroundColor: CupertinoColors.systemBackground,
           middle: Text(widget.name),
@@ -324,9 +331,8 @@ class _PathInfoState extends State<PathInfo> {
                     ),
                   ],
                 );
-              }}
-        )
-    );
+              }
+            }));
   }
 }
 

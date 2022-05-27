@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
-import 'Convenience.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ConvenientItems_top extends StatelessWidget {
   const ConvenientItems_top({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start,children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       SizedBox(
         child: Column(
           children: [
@@ -161,7 +160,7 @@ class ConvenientItems_bottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       SizedBox(
         child: Column(
           children: [
@@ -281,29 +280,27 @@ class ConvenientItems_bottom extends StatelessWidget {
       SizedBox(
         child: Column(
           children: [
-            TextButton(onPressed: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ConveniencePage(category: 9, title: '헌혈', image: 'assets/convenient/blood.jpg',))
-              );
-            },
-              child:SizedBox(
-                width: 60,
-                height: 60,
-                child: Container(
-                    margin: EdgeInsets.all(4),
-                    child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                    ),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                              'assets/convenient/blood.jpg')),
-                      borderRadius: BorderRadius.circular(50),
-                    ))
-                ,
-              ),
-            ),Text('헌혈', style: TextStyle(fontSize: 12),)
+            SizedBox(
+              width: 65,
+              height: 65,
+              child: Container(
+                  margin: EdgeInsets.all(5),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('assets/convenient/blood.jpg')),
+                    borderRadius: BorderRadius.circular(50),
+                  )),
+            ),
+            Text(tr('blood'),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontFamily: 'AppleSDGothicNeo'))
           ],
         ),
       ),
