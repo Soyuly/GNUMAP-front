@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/splash.dart';
 import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:gnumap/revise_info.dart';
@@ -55,22 +56,20 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         builder: (context, _brightness) {
           return MaterialApp(
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              brightness: _brightness,
-            ),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => Splash(),
-              '/home': (context) => MainPage(),
-            }
-          );
-        }
-    );
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+                brightness: _brightness,
+              ),
+              initialRoute: '/',
+              routes: {
+                '/': (context) => Splash(),
+                '/home': (context) => MainPage(),
+              });
+        });
   }
 }
 
@@ -80,11 +79,3 @@ class MyHttpOverrides extends HttpOverrides {
     return super.createHttpClient(context)..maxConnectionsPerHost = 5;
   }
 }
-
-
-
-
-
-
-
-

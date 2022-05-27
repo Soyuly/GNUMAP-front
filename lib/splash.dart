@@ -11,20 +11,17 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        padding: const EdgeInsets.all(10),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/logo.png', width: 200),
-            ]
-          )
-        )
-      )
-    );
+        body: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(10),
+            child: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  Image.asset('assets/logo.jpg', width: 200),
+                ]))));
   }
+
   @override
   void initState() {
     super.initState();
@@ -33,5 +30,3 @@ class _SplashState extends State<Splash> {
     });
   }
 }
-
-

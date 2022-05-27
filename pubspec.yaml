@@ -73,6 +73,7 @@ flutter:
     - assets/minimap.png
     - assets/loading.gif
     - assets/error.gif
+    - assets/logo.jpg
     - assets/convenient/atm.jpg
     - assets/convenient/blood.jpg
     - assets/convenient/cafe.jpg
