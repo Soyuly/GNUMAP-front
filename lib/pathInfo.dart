@@ -336,12 +336,21 @@ class _PathInfoState extends State<PathInfo> {
   }
 }
 
-Future<bool> onLikeButtonTapped(bool isLiked) async {
+Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
   /// send your request here
   // final bool success= await sendRequest();
 
   /// if failed, you can do nothing
   // return success? !isLiked:isLiked;
+
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  var client = new http.Client();
+  var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+  var response = await client.post(url, body: {'num': '$name'});
+  var info = jsonDecode(response.body);
+
+  await _favoriteHelper.add(info['name'], info['num']);
   print('버튼눌림');
   return !isLiked;
 }

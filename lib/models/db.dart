@@ -108,6 +108,7 @@ class FavoriteHelper {
         '''
       CREATE TABLE Favorites (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        num INTEGER NOT NULL,
         name TEXT NOT NULL
       )
     ''');
@@ -131,13 +132,11 @@ class FavoriteHelper {
   }
 
   // 새로운 데이터를 추가한다.
-  Future add(String item) async {
+  Future add(String item, String itemid) async {
     final db = await _openDb();
     await db.insert(
       'Favorites', // table name
-      {
-        'name': '$item',
-      }, // new Favorites row data
+      {'name': '$item', 'num': '$itemid'}, // new Favorites row data
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
