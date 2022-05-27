@@ -199,7 +199,7 @@ class _PathInfoState extends State<PathInfo> {
               )),
           trailing: Material(
             child: IconButton(
-              icon: LikeButton(size: 25),
+              icon: likeButton(widget.name),
               onPressed: () => log('버튼눌림'),
             ),
           ),
@@ -353,4 +353,99 @@ Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
   await _favoriteHelper.add(info['name'], info['num']);
   print('버튼눌림');
   return !isLiked;
+}
+
+class likeButton extends StatelessWidget {
+  String name;
+  likeButton(this.name);
+
+  late List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    print(_favorites);
+    return _favorites;
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    late List _favorites = [];
+    final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+    var client = new http.Client();
+    var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
+    var response = await client.post(url, body: {'num': '$name'});
+    var info = jsonDecode(response.body);
+
+    print('버튼눌림');
+
+    // 즐겨찾기 추가
+    if (isLiked) {
+      _favoriteHelper.remove(this.name);
+      _favoriteHelper.remove(this.name);
+      print("removed");
+    }
+    // 즐겨찾기 삭제
+    else {
+      _favoriteHelper.add(info['name'], info['num']);
+      _favoriteHelper.add(info['name'], info['num']);
+      print(info['name']);
+      print(info['num']);
+      print("added");
+    }
+
+    return !isLiked;
+  }
+
+  bool isExist() {
+    for (int i = 0; i < _favorites.length; i++) {
+      if (_favorites[i]['name'] == this.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String name = this.name;
+    return Container(
+        margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+        child: FutureBuilder(
+            future: _getFavorites(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                if (isExist()) {
+                  return LikeButton(
+                    onTap: onLikeButtonTapped,
+                    size: 25,
+                    isLiked: true,
+                  );
+                } else {
+                  return LikeButton(
+                    onTap: onLikeButtonTapped,
+                    size: 25,
+                    isLiked: false,
+                  );
+                }
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              } else {
+                return LikeButton(
+                  onTap: onLikeButtonTapped,
+                  size: 25,
+                  isLiked: false,
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+            }));
+  }
 }

@@ -40,7 +40,7 @@ class WebViewExampleState extends State<WebViewExample> {
   Widget build(BuildContext context) {
     return InAppWebView(
       initialUrlRequest: URLRequest(
-          url: Uri.parse("http://203.255.3.246:5001/gnumap"),
+          url: Uri.parse("http://203.255.3.246:5001/getInfoBuilding"),
           method: 'GET',
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
     );
