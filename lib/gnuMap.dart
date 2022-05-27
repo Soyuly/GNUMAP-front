@@ -62,6 +62,19 @@ class WebViewExampleState extends State<WebViewExample> {
 //     return _favorites;
 //   }
 
+// class likeButton extends StatelessWidget {
+//   String name;
+//   likeButton(this.name);
+
+//   late List _favorites = [];
+//   final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+//   Future _getFavorites() async {
+//     _favorites = await _favoriteHelper.getItems();
+//     print(_favorites);
+//     return _favorites;
+//   }
+
 //   Future<bool> onLikeButtonTapped(bool isLiked) async {
 //     late List _favorites = [];
 //     final FavoriteHelper _favoriteHelper = FavoriteHelper();
@@ -69,11 +82,13 @@ class WebViewExampleState extends State<WebViewExample> {
 //     // 즐겨찾기 추가
 //     if (isLiked) {
 //       _favoriteHelper.remove(this.name, 20);
+//       _favoriteHelper.remove(this.name);
 //       print("no");
 //     }
 //     // 즐겨찾기 삭제
 //     else {
 //       _favoriteHelper.add(this.name, 20);
+//       _favoriteHelper.add(this.name);
 //       print("yes");
 //     }
 

@@ -63,7 +63,11 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.blue,
               brightness: _brightness,
             ),
-            home: MainPage(),
+            initialRoute: '/',
+            routes: {
+              '/': (context) => Splash(),
+              '/home': (context) => MainPage(),
+            }
           );
         }
     );
