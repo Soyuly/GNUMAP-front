@@ -40,7 +40,10 @@ class _ReviseInfoState extends State<ReviseInfo> {
     return Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text('정보수정요청'),
+          middle: Text(
+            '정보수정요청',
+            style: Theme.of(context).textTheme.headline5,
+          ),
         ),
         body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -57,6 +60,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                     ),
                   )),
               TextField(
+                maxLength: 15,
                 decoration: InputDecoration(
                   hintText: "건물명을 입력해주세요.",
                 ),
@@ -78,6 +82,8 @@ class _ReviseInfoState extends State<ReviseInfo> {
                     ),
                   )),
               TextField(
+                maxLength: 15,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "건물번호를 입력해주세요.",
                 ),
@@ -97,6 +103,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                     ),
                   )),
               TextField(
+                maxLength: 45,
                 decoration: InputDecoration(
                   hintText: "간략한 주소를 입력해주세요.",
                 ),
@@ -117,6 +124,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                         color: Color.fromRGBO(0, 0, 0, 0.69)),
                   )),
               TextField(
+                maxLength: 200,
                 decoration: InputDecoration(
                   hintText: "내용을 입력해주세요.",
                 ),
@@ -128,17 +136,16 @@ class _ReviseInfoState extends State<ReviseInfo> {
               SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () async {
-                    print('${buildingNameController.text}');
                     try {
                       var url =
-                          Uri.parse('http://203.255.3.246:5001/getreviseInfo');
+                      Uri.parse('http://203.255.3.246:5001/getreviseInfo');
 
                       var response = await http.post(url, body: {
                         'request_building_name':
-                            "${buildingNameController.text}",
+                        "${buildingNameController.text}",
                         'building_num': "${buildingNumController.text}",
                         'request_building_location':
-                            "${buildingLocationController.text}",
+                        "${buildingLocationController.text}",
                         'request_revise': "${reviseInfoController.text}",
                       }).whenComplete(() => _clear());
 
@@ -156,8 +163,21 @@ class _ReviseInfoState extends State<ReviseInfo> {
                             textColor: Color.fromRGBO(0, 16, 72, 0.68),
                             fontSize: 13);
                       }
+
                     } catch (e) {
-                      print('서버에러');
+                      if (buildingNameController.text.length == 0 || buildingNumController.text.length == 0 ||
+                          buildingLocationController.text.length == 0 || reviseInfoController.text.length == 0) {
+                        _clear();
+
+                        Fluttertoast.showToast(
+                            msg: '잘못된 정보입니다. 다시 입력해주세요',
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                            fontSize: 13);
+                      }
                     }
                   },
                   child: Text("보내기"),

@@ -29,12 +29,18 @@
 "revise_description" : "어플의 장애나, 잘못된 정보가 있을경우 개발자한테 연락할 수 있습니다.",
 "go_to_revise" : "문의사항 보내기",
 
+
+
+
 "network_error_title" : "네트워크 연결상태가 불안정합니다.",
 "netowrk_error" : "네트워크 연결상태를 확인해주세요.",
 "search_error_title" : "검색어에 해당하는 건물이 없습니다.",
 "search_error" : "올바른 검색어를 입력해주세요",
 "server_error_title" : "서버가 불안정합니다.",
-"server_error" : "잠시 후에 다시 시도해주세요."
+"server_error" : "잠시 후에 다시 시도해주세요.",
+
+"support_lang_title" : "언어지원",
+"support_lang" : "맞춤형 언어를 설정할 수 있습니다."
 
 
 }

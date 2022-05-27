@@ -270,7 +270,10 @@ class _DetailPageState extends State<_DetailPage> {
     return Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text('${widget.list['name']}'),
+          middle: Text(
+            '${widget.list['name']}',
+            style: Theme.of(context).textTheme.headline5,
+          ),
         ),
         body: FutureBuilder(
             future: _locateMe(),

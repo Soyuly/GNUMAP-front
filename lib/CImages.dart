@@ -40,10 +40,7 @@ class ConvenientItems_top extends StatelessWidget {
               ),
               Text(tr('convenient_store'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -79,10 +76,7 @@ class ConvenientItems_top extends StatelessWidget {
               ),
               Text(tr('atm'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -129,10 +123,7 @@ class ConvenientItems_top extends StatelessWidget {
                       )),
                 ),
                 Text(tr('post_office'),
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        fontFamily: 'AppleSDGothicNeo'))
+                    style: Theme.of(context).textTheme.headline4)
               ],
             ),
           ),
@@ -170,10 +161,7 @@ class ConvenientItems_top extends StatelessWidget {
               ),
               Text(tr('stationery_store'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -209,10 +197,7 @@ class ConvenientItems_top extends StatelessWidget {
               ),
               Text(tr('exercise'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -259,10 +244,7 @@ class ConvenientItems_bottom extends StatelessWidget {
               ),
               Text(tr('strawberry'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -297,10 +279,7 @@ class ConvenientItems_bottom extends StatelessWidget {
                     )),
               ),
               Text(tr('cafeteria'),
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -336,10 +315,7 @@ class ConvenientItems_bottom extends StatelessWidget {
               ),
               Text(tr('printer'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
@@ -376,10 +352,7 @@ class ConvenientItems_bottom extends StatelessWidget {
                 ),
                 Text(tr('cafe'),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        fontFamily: 'AppleSDGothicNeo'))
+                    style: Theme.of(context).textTheme.headline4)
               ],
             ),
           ),
@@ -416,10 +389,7 @@ class ConvenientItems_bottom extends StatelessWidget {
               ),
               Text(tr('blood'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontFamily: 'AppleSDGothicNeo'))
+                  style: Theme.of(context).textTheme.headline4)
             ],
           ),
         ),
