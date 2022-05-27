@@ -19,9 +19,9 @@ class GnuMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
+            backgroundColor: CupertinoColors.systemBackground,
             middle:
-                Text('GNU MAP', style: Theme.of(context).textTheme.headline5),
-            backgroundColor: CupertinoColors.white),
+                Text('GNU MAP', style: Theme.of(context).textTheme.headline5)),
         body: WebViewExample());
   }
 }
