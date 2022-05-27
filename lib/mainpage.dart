@@ -71,7 +71,7 @@ class _MainPageState extends State<MainPage> {
             margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
             height: 130,
             child: Minimap(),
-          )
+          ),
         ]),
       ),
     );
@@ -221,18 +221,17 @@ class _FavoriteState extends State<Favorite> {
   final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
   Future _getFavorites() async {
+    _favoritesString.clear();
     _favorites = await _favoriteHelper.getItems();
     for (int i = 0; i < _favorites.length; i++) {
       _favoritesString.add(_favorites[i]['name']);
     }
     print(_favoritesString);
-    return _favorites;
+    return _favoritesString;
   }
 
-  @override // setState의 구조이다.
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    super.setState(fn);
+  Future _updateFavorites() async {
+    setState(() {});
   }
 
   @override
@@ -249,19 +248,26 @@ class _FavoriteState extends State<Favorite> {
                     itemCount: favoriteItems.length,
                     itemBuilder: (BuildContext context, int index) {
                       return SizedBox(
-                        width: 70,
-                        child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                            child: Scaffold(
-                              backgroundColor: Colors.transparent,
-                            ),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage('assets/cs.jpg')),
-                              borderRadius: BorderRadius.circular(50),
-                            )),
-                      );
+                          width: 70,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => GnuMap()));
+                              _updateFavorites();
+                            },
+                            child: Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                child: Scaffold(
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage('assets/cs.jpg')),
+                                  borderRadius: BorderRadius.circular(50),
+                                )),
+                          ));
                     });
               }
               //error가 발생하게 될 경우 반환하게 되는 부분
