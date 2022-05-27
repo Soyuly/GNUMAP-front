@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gnumap/mainpage.dart';
+import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:gnumap/revise_info.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -49,13 +50,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        // 기본적으로 필요한 언어 설정
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
+    return ThemeBuilder(
+        defaultBrightness: Brightness.light,
         debugShowCheckedModeBanner: false,
-        home: MainPage());
+        builder: (context, _brightness) {
+          return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              brightness: _brightness,
+            ),
+            home: MainPage(),
+          );
+        }
+    );
   }
 }
 
@@ -65,3 +76,11 @@ class MyHttpOverrides extends HttpOverrides {
     return super.createHttpClient(context)..maxConnectionsPerHost = 5;
   }
 }
+
+
+
+
+
+
+
+

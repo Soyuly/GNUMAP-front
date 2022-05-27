@@ -16,6 +16,7 @@ import 'dart:io';
 
 class PathInfo extends StatefulWidget {
   final String name;
+
   const PathInfo({Key? key, required this.name}) : super(key: key);
 
   @override
@@ -323,8 +324,9 @@ class _PathInfoState extends State<PathInfo> {
                     ),
                   ],
                 );
-              }
-            }));
+              }}
+        )
+    );
   }
 }
 

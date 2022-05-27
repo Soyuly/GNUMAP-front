@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gnumap/CImages.dart';
+import 'package:gnumap/settings.dart';
+import 'package:gnumap/theme_changer.dart';
+import 'gnuMap.dart';
 import 'package:location/location.dart';
 
 import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/models/db.dart';
+
+class DarkMode extends StatelessWidget {
+  const DarkMode({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MainPage();
+  }
+}
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,6 +28,17 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  bool isDarkModeEnabled = false;
+
+  void _changeTheme() {
+    ThemeBuilder.of(context)?.changeTheme();
+  }
+  void onStateChanged(bool isDarkModeEnabled) {
+    setState(() {
+      this.isDarkModeEnabled = isDarkModeEnabled;
+    });
+
   late List _histories = [];
   final HistoryHelper _historyHelper = HistoryHelper();
 
@@ -35,20 +59,34 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
+          margin: const EdgeInsets.fromLTRB(15, 0, 13, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                child: Text('그누맵',
+              Text('그누맵',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color.fromRGBO(13, 13, 16, 0.69),
+                    fontFamily: 'AppleSDGothicNeo',
+                    fontWeight: FontWeight.bold,
+                  )),
+              Spacer(),
+              TextButton(onPressed: _changeTheme,
+                child: Text('Mode',
                     style: TextStyle(
-                      fontSize: 30,
-                      color: Color.fromRGBO(13, 13, 16, 0.69),
-                      fontFamily: 'AppleSDGothicNeo',
-                      fontWeight: FontWeight.bold,
-                    )),
+                        fontSize: 15,
+                        color: Colors.lightBlueAccent,
+                        fontFamily: 'AppleSDGothicNeo')),
               ),
-              Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingPage(title: "< Settings")));
+                },
+                child: Icon(Icons.settings, color: Colors.black),
+              ),
             ],
           ),
         ),
@@ -57,6 +95,39 @@ class _MainPageState extends State<MainPage> {
       ),
       body: SafeArea(
         child: Container(
+          margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
+          child: Column(children: [
+            Container(child: SearchBar()),
+            SizedBox(height: 35, child: History()),
+            Container(
+                height: 30,
+                child: Align(
+                    alignment: Alignment.topLeft, child: FavoriteTitle())),
+            SizedBox(
+              height: 100,
+              child: Favorite(),
+            ),
+            Container(
+                height: 40,
+                child: Align(
+                    alignment: Alignment.topLeft, child: ConvenientTitle())),
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                child: ConvenientItems_top()),
+            Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 15, 10),
+                child: ConvenientItems_bottom()),
+            Container(
+                height: 35,
+                margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
+                child:
+                    Align(alignment: Alignment.topLeft, child: GnumapTitle())),
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
+              height: 130,
+              child: Minimap(),
+            )
+          ]),
           margin: const EdgeInsets.fromLTRB(13, 0, 0, 0),
           child: SingleChildScrollView(
             child: Column(children: [
@@ -194,6 +265,31 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
+class History extends StatelessWidget {
+  const History({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> histories = <String>['30동', '컴퓨터과학관', '24동', '경상대교양학관'];
+    return Container(
+      margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: histories.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+              child: Text(histories[index],
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Color.fromRGBO(0, 16, 72, 0.6),
+                      fontFamily: 'AppleSDGothicNeo')),
+            );
+          }),
+    );
+  }
+}
+
 class FavoriteTitle extends StatelessWidget {
   const FavoriteTitle({Key? key}) : super(key: key);
 
@@ -204,7 +300,7 @@ class FavoriteTitle extends StatelessWidget {
       child: Text('즐겨찾기',
           style: TextStyle(
               fontSize: 20,
-              color: Color.fromRGBO(0, 16, 72, 0.6),
+              color: Colors.lightBlueAccent,
               fontFamily: 'AppleSDGothicNeo')),
     );
   }
@@ -295,7 +391,7 @@ class ConvenientTitle extends StatelessWidget {
       child: Text('편의시설',
           style: TextStyle(
               fontSize: 20,
-              color: Color.fromRGBO(0, 16, 72, 0.6),
+              color: Colors.lightBlueAccent,
               fontFamily: 'AppleSDGothicNeo')),
     );
   }
