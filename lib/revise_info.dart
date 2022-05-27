@@ -148,20 +148,6 @@ class _ReviseInfoState extends State<ReviseInfo> {
 
                       var future = response;
 
-                      if (buildingNameController.text.length == 0 || buildingNumController.text.length == 0 ||
-                      buildingLocationController.text.length == 0 || reviseInfoController.text.length == 0) {
-                        _clear();
-
-                        Fluttertoast.showToast(
-                            msg: '잘못된 정보입니다. 다시 입력해주세요',
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
-                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
-                            fontSize: 13);
-                      }
-
                       if (response.body == 'recieved') {
                         _clear();
 
@@ -174,8 +160,21 @@ class _ReviseInfoState extends State<ReviseInfo> {
                             textColor: Color.fromRGBO(0, 16, 72, 0.68),
                             fontSize: 13);
                       }
+
                     } catch (e) {
-                      print('서버에러');
+                      if (buildingNameController.text.length == 0 || buildingNumController.text.length == 0 ||
+                          buildingLocationController.text.length == 0 || reviseInfoController.text.length == 0) {
+                        _clear();
+
+                        Fluttertoast.showToast(
+                            msg: '잘못된 정보입니다. 다시 입력해주세요',
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                            fontSize: 13);
+                      }
                     }
                   },
                   child: Text("보내기"),
