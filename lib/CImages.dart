@@ -17,8 +17,8 @@ class ConvenientItems_top extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(3),
                     child: Scaffold(
@@ -46,8 +46,8 @@ class ConvenientItems_top extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -74,8 +74,8 @@ class ConvenientItems_top extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -103,8 +103,8 @@ class ConvenientItems_top extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -132,8 +132,8 @@ class ConvenientItems_top extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -171,8 +171,8 @@ class ConvenientItems_bottom extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -200,8 +200,8 @@ class ConvenientItems_bottom extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -229,8 +229,8 @@ class ConvenientItems_bottom extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(
@@ -258,8 +258,8 @@ class ConvenientItems_bottom extends StatelessWidget {
               );
             },
               child:SizedBox(
-                width: 60,
-                height: 60,
+                width: 59,
+                height: 59,
                 child: Container(
                     margin: EdgeInsets.all(4),
                     child: Scaffold(

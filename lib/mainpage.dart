@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gnumap/CImages.dart';
@@ -28,16 +29,18 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
+  bool click = true;
   bool isDarkModeEnabled = false;
 
   void _changeTheme() {
     ThemeBuilder.of(context)?.changeTheme();
   }
+
   void onStateChanged(bool isDarkModeEnabled) {
     setState(() {
       this.isDarkModeEnabled = isDarkModeEnabled;
     });
+  }
 
   late List _histories = [];
   final HistoryHelper _historyHelper = HistoryHelper();
@@ -57,6 +60,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Container(
           margin: const EdgeInsets.fromLTRB(15, 0, 13, 0),
@@ -71,19 +75,19 @@ class _MainPageState extends State<MainPage> {
                     fontWeight: FontWeight.bold,
                   )),
               Spacer(),
-              TextButton(onPressed: _changeTheme,
-                child: Text('Mode',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.lightBlueAccent,
-                        fontFamily: 'AppleSDGothicNeo')),
-              ),
+              TextButton(onPressed: () {
+                setState(() {
+                  click = !click;
+                  _changeTheme();
+                });
+              }, child: Icon((click == false) ? Icons.brightness_2_sharp : Icons.sunny, color: Colors.black)),
               TextButton(
-                  onPressed: () {
-                    Navigator.push(
+                onPressed: () {
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SettingPage(title: "< Settings")));
+                          builder: (context) =>
+                              SettingPage(title: "설정")));
                 },
                 child: Icon(Icons.settings, color: Colors.black),
               ),
@@ -96,39 +100,6 @@ class _MainPageState extends State<MainPage> {
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
-          child: Column(children: [
-            Container(child: SearchBar()),
-            SizedBox(height: 35, child: History()),
-            Container(
-                height: 30,
-                child: Align(
-                    alignment: Alignment.topLeft, child: FavoriteTitle())),
-            SizedBox(
-              height: 100,
-              child: Favorite(),
-            ),
-            Container(
-                height: 40,
-                child: Align(
-                    alignment: Alignment.topLeft, child: ConvenientTitle())),
-            Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                child: ConvenientItems_top()),
-            Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 15, 10),
-                child: ConvenientItems_bottom()),
-            Container(
-                height: 35,
-                margin: EdgeInsets.fromLTRB(5, 0, 20, 0),
-                child:
-                    Align(alignment: Alignment.topLeft, child: GnumapTitle())),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 15, 10),
-              height: 130,
-              child: Minimap(),
-            )
-          ]),
-          margin: const EdgeInsets.fromLTRB(13, 0, 0, 0),
           child: SingleChildScrollView(
             child: Column(children: [
               SafeArea(child: SearchBar()),
@@ -174,8 +145,9 @@ class _MainPageState extends State<MainPage> {
                                           await Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => PathInfo(
-                                                    name: _histories[index]
+                                                builder: (context) =>
+                                                    PathInfo(
+                                                        name: _histories[index]
                                                         ['name'])),
                                           );
                                         },
@@ -185,7 +157,7 @@ class _MainPageState extends State<MainPage> {
                                                 color: Color.fromRGBO(
                                                     0, 16, 72, 0.6),
                                                 fontFamily:
-                                                    'AppleSDGothicNeo')),
+                                                'AppleSDGothicNeo')),
                                         style: TextButton.styleFrom(
                                             padding: EdgeInsets.zero,
                                             minimumSize: Size(10, 30),
@@ -408,11 +380,11 @@ class GnumapTitle extends StatelessWidget {
       },
       child: Container(
         child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('GNU MAP',
               style: TextStyle(
                   fontSize: 20,
-                  color: Color.fromRGBO(0, 16, 72, 0.6),
+                  color: Colors.lightBlueAccent,
                   fontFamily: 'AppleSDGothicNeo')),
           Icon(Icons.arrow_forward_ios_rounded),
         ]),
@@ -441,4 +413,10 @@ class Minimap extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )));
   }
+}
+
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  throw UnimplementedError();
 }
