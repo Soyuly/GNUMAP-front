@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gnumap/mainpage.dart';
 import 'package:gnumap/splash.dart';
-import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:gnumap/revise_info.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'dart:io';
 import 'package:gnumap/models/db.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:gnumap/themes.dart';
 
 // 앱에서 지원하는 언어 리스트 변수
 final supportedLocales = [Locale('en', 'US'), Locale('ko', 'KR')];
@@ -37,7 +38,7 @@ Future main() async {
         //만일 이 설정을 하지 않으면 OS 언어를 따라 기본 언어가 설정됨
         //startLocale: Locale('ko', 'KR')
 
-        child: MyApp()),
+        child: EasyDynamicThemeWidget(child: MyApp())),
   );
 }
 
@@ -51,24 +52,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ThemeBuilder(
-        defaultBrightness: Brightness.light,
+    return MaterialApp(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         debugShowCheckedModeBanner: false,
-        builder: (context, _brightness) {
-          return MaterialApp(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                brightness: _brightness,
-              ),
-              initialRoute: '/',
-              routes: {
-                '/': (context) => Splash(),
-                '/home': (context) => MainPage(),
-              });
+        theme: lightThemeData,
+        darkTheme: darkThemeData,
+        themeMode: EasyDynamicTheme.of(context).themeMode,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => Splash(),
+          '/home': (context) => MainPage(),
         });
   }
 }

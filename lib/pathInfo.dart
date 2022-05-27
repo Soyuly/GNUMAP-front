@@ -189,6 +189,7 @@ class _PathInfoState extends State<PathInfo> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: CupertinoColors.white,
         appBar: CupertinoNavigationBar(
           leading: GestureDetector(
               onTap: () => Navigator.push(
@@ -199,12 +200,16 @@ class _PathInfoState extends State<PathInfo> {
               )),
           trailing: Material(
             child: IconButton(
+              padding: EdgeInsets.zero,
               icon: LikeButton(size: 25),
               onPressed: () => log('버튼눌림'),
             ),
           ),
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text(widget.name),
+          middle: Text(
+            widget.name,
+            style: Theme.of(context).textTheme.headline5,
+          ),
         ),
         body: FutureBuilder(
             future: _locateMe(),

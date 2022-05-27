@@ -5,8 +5,10 @@ import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:gnumap/main.dart';
 import 'package:gnumap/mainpage.dart';
 import 'package:gnumap/revise_info.dart';
-import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:app_settings/app_settings.dart';
 
 class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);
@@ -26,7 +28,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   List info = [];
   double? lat;
   double? lng;
@@ -58,9 +59,10 @@ class _SettingPageState extends State<SettingPage> {
       lng = res.longitude;
     });
 
-      return {lat, lng};
-    }
+    return {lat, lng};
+  }
 
+  int? _sliding = 0;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -68,111 +70,235 @@ class _SettingPageState extends State<SettingPage> {
       child: Scaffold(
           appBar: CupertinoNavigationBar(
             backgroundColor: CupertinoColors.systemBackground,
-            middle: Text('설정'),
+            middle: Text(
+              '설정',
+              style: Theme.of(context).textTheme.headline5,
+            ),
           ),
           body:
-          ListView(children: [
+              ListView(padding: EdgeInsets.fromLTRB(25, 20, 25, 0), children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 26),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('언어지원',style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'GyeonggiMedium'),),
-                      Text('맞춤형 언어를 설정할 수 있습니다.',style: TextStyle(fontFamily: 'GyeonggiMedium'))
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 390,
-                  padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('위치정보 설정', style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'GyeonggiMedium'),),
-                      Text('경로찾기와 현위치 서비스에 필요한 위치정보서비스 권한을 허용받습니다.',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      SizedBox(width: 200,child: ElevatedButton(
-                        onPressed: () {
-                          _locateMe();
-                        },
-                        child: Text("위치권한 설정 바로가기"),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-                            padding: MaterialStateProperty.all(EdgeInsets.all(5)),
-                            textStyle: MaterialStateProperty.all(TextStyle(fontSize: 13))
-                        ),
-                      )),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 390,
-                  padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('정보수정 요청 보내기',style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'GyeonggiMedium'),),
-                      Text('어플에 장애나, 잘못된 정보가 있을경우 개발자에게 연락을 취할 수 있습니다.',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      SizedBox(width: 200,child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => ReviseInfo())
-                          );
-                        },
-                        child: Text("정보수정 요청 보내기"),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-                            padding: MaterialStateProperty.all(EdgeInsets.all(5)),
-                            textStyle: MaterialStateProperty.all(TextStyle(fontSize: 13))
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                        child: Text(
+                          tr('lang_setting'),
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                        child: Text(tr('lang_description'),
+                            style: Theme.of(context).textTheme.bodyText2),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: CupertinoSlidingSegmentedControl(
+                            children: {
+                              0: Text('한국어'),
+                              1: Text('English'),
+                            },
+                            groupValue:
+                                context.locale.toString() == 'en_US' ? 1 : 0,
+                            onValueChanged: (int? newValue) {
+                              setState(() {
+                                _sliding = newValue;
+                                if (context.locale.toString() == 'en_US') {
+                                  context.setLocale(Locale('ko', 'KR'));
+                                } else {
+                                  context.setLocale(Locale('en', 'US'));
+                                }
+                              });
+                            }),
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('버전 정보',style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'GyeonggiMedium'),),
-                      Row(children: [
-                        Text('최신버전: v0.5.2   ',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                        Text('현재버전: v0.5.2   ',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                        Text('지도api버전: v0.1.2',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      ],),
-                      Text('현재 그누맵이 최신버전입니다.',style: TextStyle(fontFamily: 'GyeonggiMedium'))
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('경상대학교 컴퓨터과학과: 18CLASS',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      Text('전병규: @instagram',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      Text('양소열: @instagram',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      Text('정윤수: @instagram',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                      Text('강동현: @instagram',style: TextStyle(fontFamily: 'GyeonggiMedium')),
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 26),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            child: Text(
+                              tr('display_setting'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            child: Text(tr('display_description'),
+                                style: Theme.of(context).textTheme.bodyText2),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            child: CupertinoSlidingSegmentedControl(
+                                children: {
+                                  0: Text('Light'),
+                                  1: Text('Dark'),
+                                },
+                                groupValue: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? 1
+                                    : 0,
+                                onValueChanged: (int? newValue) {
+                                  bool isDarkModeOn =
+                                      Theme.of(context).brightness ==
+                                          Brightness.dark;
+                                  setState(() {
+                                    _sliding = newValue;
+                                    if (isDarkModeOn) {
+                                      EasyDynamicTheme.of(context)
+                                          .changeTheme();
+                                    } else {
+                                      EasyDynamicTheme.of(context)
+                                          .changeTheme(dark: true);
+                                    }
+                                  });
+                                }),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 26),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            child: Text(
+                              tr('location_setting'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Text(tr('location_description'),
+                              style: Theme.of(context).textTheme.bodyText2),
+                          SizedBox(
+                              width: 200,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  AppSettings.openLocationSettings();
+                                },
+                                child: Text(tr("go_to_location")),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.lightBlueAccent),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.all(5)),
+                                    textStyle: MaterialStateProperty.all(
+                                        TextStyle(fontSize: 13))),
+                              )),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 26),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            child: Text(
+                              tr("revise_setting"),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Text(tr("revise_description"),
+                              style: Theme.of(context).textTheme.bodyText2),
+                          SizedBox(
+                            width: 200,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReviseInfo()));
+                              },
+                              child: Text(tr("go_to_revise")),
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.lightBlueAccent),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.all(5)),
+                                  textStyle: MaterialStateProperty.all(
+                                      TextStyle(fontSize: 13))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 26),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            child: Text(
+                              '버전 정보',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text('최신버전: v0.5.2   ',
+                                  style: Theme.of(context).textTheme.bodyText2),
+                              Text('현재버전: v0.5.2   ',
+                                  style: Theme.of(context).textTheme.bodyText2),
+                              Text('지도api버전: v0.1.2',
+                                  style: Theme.of(context).textTheme.bodyText2),
+                            ],
+                          ),
+                          Text('현재 그누맵이 최신버전입니다.',
+                              style: Theme.of(context).textTheme.bodyText2)
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            child: Text(
+                              '제작자 정보',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Text('경상대학교 컴퓨터과학과: 18CLASS',
+                              style: Theme.of(context).textTheme.bodyText2),
+                          Text('전병규: @instagram',
+                              style: Theme.of(context).textTheme.bodyText2),
+                          Text('양소열: @instagram',
+                              style: Theme.of(context).textTheme.bodyText2),
+                          Text('정윤수: @instagram',
+                              style: Theme.of(context).textTheme.bodyText2),
+                          Text('강동현: @instagram',
+                              style: Theme.of(context).textTheme.bodyText2),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],)
-
-      ),
+            )
+          ])),
     );
-
-
   }
 }
 
-  @override
-  Widget build(BuildContext context) {
-    throw UnimplementedError();
-  }
-
+@override
+Widget build(BuildContext context) {
+  throw UnimplementedError();
+}

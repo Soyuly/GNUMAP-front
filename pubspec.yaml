@@ -45,6 +45,8 @@ dependencies:
   sqflite:
   path:
   easy_localization: ^3.0.1
+  easy_dynamic_theme: ^2.2.0
+  app_settings: ^4.1.6
 
 dev_dependencies:
   flutter_test:
