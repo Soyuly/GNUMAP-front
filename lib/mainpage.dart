@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         title: Container(
           margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
           child: Row(
@@ -62,27 +63,39 @@ class _MainPageState extends State<MainPage> {
                     fontFamily: 'AppleSDGothicNeo',
                     fontWeight: FontWeight.bold,
                   )),
-              Spacer(),
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      click = !click;
-                      _changeTheme();
-                    });
-                  },
-                  child: Icon(
-                      (click == false) ? Icons.brightness_2_sharp : Icons.sunny,
-                      color: Colors.black)),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SettingPage(title: "설정")));
-                },
-                child: Icon(Icons.settings, color: Colors.black),
-              ),
-              Icon(Icons.settings, color: Color.fromRGBO(13, 13, 16, 0.69))
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: IconButton(
+                        padding: EdgeInsets.zero, // 패딩 설정
+                        constraints: BoxConstraints(), // constraints
+                        onPressed: () {
+                          setState(() {
+                            click = !click;
+                            _changeTheme();
+                          });
+                        },
+                        icon: Icon(
+                            (click == false)
+                                ? Icons.brightness_2_sharp
+                                : Icons.sunny,
+                            color: Color.fromRGBO(13, 13, 16, 0.69))),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero, // 패딩 설정
+                    constraints: BoxConstraints(), // constraints
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingPage(title: "설정")));
+                    },
+                    icon: Icon(Icons.settings,
+                        color: Color.fromRGBO(13, 13, 16, 0.69)),
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -288,23 +301,28 @@ class Favorite extends StatefulWidget {
 }
 
 class _FavoriteState extends State<Favorite> {
-  late List _favorites = [];
+  List _favorites = [];
   late List _favoritesString = [];
   final FavoriteHelper _favoriteHelper = FavoriteHelper();
 
   Future _getFavorites() async {
     _favoritesString.clear();
     _favorites = await _favoriteHelper.getItems();
-    for (int i = 0; i < _favorites.length; i++) {
-      _favoritesString.add(_favorites[i]['name']);
-    }
+    // for (int i = 0; i < _favorites.length; i++) {
+    //   _favoritesString.add(_favorites[i]['name']);
+    // }
     print(_favoritesString);
     return _favoritesString;
   }
 
-  Future _updateFavorites() async {
-    setState(() {});
-  }
+
+  // _getFavorites();
+  // @override // setState의 구조이다.
+  // void setState(VoidCallback fn) {
+  //   // TODO: implement setState
+  //   super.setState(fn);
+  // }
+
 
   @override
   Widget build(BuildContext context) {

@@ -199,7 +199,7 @@ class _PathInfoState extends State<PathInfo> {
               )),
           trailing: Material(
             child: IconButton(
-              icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
+              icon: LikeButton(size: 25),
               onPressed: () => log('버튼눌림'),
             ),
           ),
