@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gnumap/settings.dart';
-import 'package:gnumap/theme_changer.dart';
 import 'package:location/location.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:gnumap/CImages.dart';
 import 'package:gnumap/gnuMap.dart';
 import 'package:gnumap/pathInfo.dart';
 import 'package:gnumap/models/db.dart';
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -19,17 +19,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   bool click = true;
-  bool isDarkModeEnabled = false;
-
-  void _changeTheme() {
-    ThemeBuilder.of(context)?.changeTheme();
-  }
-
-  void onStateChanged(bool isDarkModeEnabled) {
-    setState(() {
-      this.isDarkModeEnabled = isDarkModeEnabled;
-    });
-  }
 
   late List _histories = [];
   final HistoryHelper _historyHelper = HistoryHelper();
@@ -48,21 +37,17 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.locale.toString());
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
+        backgroundColor: Colors.transparent, //appBar 투명색
+        elevation: 0.0, //appBar 그림자 농도 설정 (값 0으로 제거)
         title: Container(
           margin: const EdgeInsets.fromLTRB(13, 0, 13, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('그누맵',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Color.fromRGBO(13, 13, 16, 0.69),
-                    fontFamily: 'AppleSDGothicNeo',
-                    fontWeight: FontWeight.bold,
-                  )),
+              Text(tr('gnumap'), style: Theme.of(context).textTheme.headline1),
               Row(
                 children: [
                   Container(
@@ -71,16 +56,24 @@ class _MainPageState extends State<MainPage> {
                         padding: EdgeInsets.zero, // 패딩 설정
                         constraints: BoxConstraints(), // constraints
                         onPressed: () {
+                          bool isDarkModeOn =
+                              Theme.of(context).brightness == Brightness.dark;
+
                           setState(() {
                             click = !click;
-                            _changeTheme();
+                            if (isDarkModeOn) {
+                              EasyDynamicTheme.of(context).changeTheme();
+                            } else {
+                              EasyDynamicTheme.of(context)
+                                  .changeTheme(dark: true);
+                            }
                           });
                         },
                         icon: Icon(
                             (click == false)
                                 ? Icons.brightness_2_sharp
                                 : Icons.sunny,
-                            color: Color.fromRGBO(13, 13, 16, 0.69))),
+                            color: Theme.of(context).primaryColor)),
                   ),
                   IconButton(
                     padding: EdgeInsets.zero, // 패딩 설정
@@ -92,15 +85,13 @@ class _MainPageState extends State<MainPage> {
                               builder: (context) => SettingPage(title: "설정")));
                     },
                     icon: Icon(Icons.settings,
-                        color: Color.fromRGBO(13, 13, 16, 0.69)),
+                        color: Theme.of(context).primaryColor),
                   ),
                 ],
               )
             ],
           ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: SafeArea(
         child: Container(
@@ -284,11 +275,8 @@ class FavoriteTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 0, 0, 0),
-      child: Text(tr('favorites'),
-          style: TextStyle(
-              fontSize: 20,
-              color: Color.fromRGBO(0, 16, 72, 0.6),
-              fontFamily: 'AppleSDGothicNeo')),
+      child:
+          Text(tr('favorites'), style: Theme.of(context).textTheme.headline2),
     );
   }
 }
@@ -383,11 +371,8 @@ class ConvenientTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(6, 10, 0, 0),
-      child: Text(tr('convenient'),
-          style: TextStyle(
-              fontSize: 20,
-              color: Color.fromRGBO(0, 16, 72, 0.6),
-              fontFamily: 'AppleSDGothicNeo')),
+      child:
+          Text(tr('convenient'), style: Theme.of(context).textTheme.headline2),
     );
   }
 }
@@ -404,11 +389,7 @@ class GnumapTitle extends StatelessWidget {
       child: Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('GNU MAP',
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.lightBlueAccent,
-                  fontFamily: 'AppleSDGothicNeo')),
+          Text('GNU MAP', style: Theme.of(context).textTheme.headline3),
           Icon(Icons.arrow_forward_ios_rounded),
         ]),
       ),
