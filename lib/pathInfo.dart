@@ -42,11 +42,6 @@ class _PathInfoState extends State<PathInfo> {
     _locateMe();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   _locateMe() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -180,10 +175,12 @@ class _PathInfoState extends State<PathInfo> {
     }
 
     List _items = [];
-
     _items = await _historyHelper.isEmpty('${widget.name}');
 
     if (_items.isEmpty) {
+      await _historyHelper.add('${widget.name}');
+    } else {
+      _historyHelper.remove('${widget.name}');
       await _historyHelper.add('${widget.name}');
     }
 
@@ -193,9 +190,18 @@ class _PathInfoState extends State<PathInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
-          trailing: IconButton(
-            icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
-            onPressed: () => log('버튼눌림'),
+          leading: GestureDetector(
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp())),
+              child: Icon(
+                CupertinoIcons.left_chevron,
+                color: CupertinoColors.destructiveRed,
+              )),
+          trailing: Material(
+            child: IconButton(
+              icon: LikeButton(onTap: onLikeButtonTapped, size: 25),
+              onPressed: () => log('버튼눌림'),
+            ),
           ),
           backgroundColor: CupertinoColors.systemBackground,
           middle: Text(widget.name),
@@ -325,9 +331,8 @@ class _PathInfoState extends State<PathInfo> {
                     ),
                   ],
                 );
-              }}
-        )
-    );
+              }
+            }));
   }
 }
 

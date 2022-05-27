@@ -35,12 +35,12 @@ class HistoryHelper {
     final db = await _openDb();
 
     List items = await db.query('History', columns: ['name']);
-    return items.toList();
+    return List.from(items.toList().reversed);
   }
 
   Future isEmpty(String num) async {
     final db = await _openDb();
-
+    num = num.replaceAll("동", "");
     List items = await db.query('History',
         columns: ['name'], where: 'name = ?', whereArgs: [num]);
 

@@ -94,12 +94,46 @@ class _MainPageState extends State<MainPage> {
                                       margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
                                       child: TextButton(
                                         onLongPress: () async {
-                                          print('삭제');
-                                          await _historyHelper.remove(
-                                              _histories[index]['name']);
-                                          setState(() {
-                                            _getHistories();
-                                          });
+                                          showCupertinoDialog(
+                                              context: context,
+                                              useRootNavigator: false,
+                                              builder: (context) {
+                                                return CupertinoAlertDialog(
+                                                  title: Text('히스토리 항목 삭제'),
+                                                  content: Text(
+                                                      '히스토리${_histories[index]['name']}를 정말 삭제하시겠습니까?'),
+                                                  actions: [
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text(
+                                                          "삭제",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        onPressed: () async {
+                                                          print('삭제');
+                                                          await _historyHelper
+                                                              .remove(
+                                                                  _histories[
+                                                                          index]
+                                                                      ['name']);
+                                                          setState(() {
+                                                            _getHistories();
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        }),
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text("확인"),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        })
+                                                  ],
+                                                );
+                                              });
                                         },
                                         onPressed: () async {
                                           await Navigator.push(

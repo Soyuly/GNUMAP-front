@@ -32,7 +32,7 @@
     "go_to_revise" : "Send inquiries",
     
     "network_error_title" : "The network connection is unstable.",
-    "netowrk_error" : "Please check the network connection status.",
+    "network_error" : "Please check the network connection status.",
     "search_error_title" : "No buildings corresponding to the search term.",
     "search_error" : "Please enter a valid search term",
     "server_error_title" : "The server is unstable.",
