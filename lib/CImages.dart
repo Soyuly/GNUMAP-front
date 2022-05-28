@@ -82,40 +82,40 @@ class ConvenientItems_top extends StatelessWidget {
         ),
       ),
       SizedBox(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ConveniencePage(
-                            category: 2,
-                            title: '우체국',
-                            image: 'assets/convenient/postoffice.jpg',
-                          )));
-            },
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 65,
-                  height: 65,
-                  child: Container(
-                      margin: EdgeInsets.all(5),
-                      child: Scaffold(
-                        backgroundColor: Colors.transparent,
-                      ),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image:
-                                AssetImage('assets/convenient/postoffice.jpg')),
-                        borderRadius: BorderRadius.circular(50),
-                      )),
-                ),
-                Text(tr('post_office'),
-                    style: Theme.of(context).textTheme.headline4)
-              ],
-            ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ConveniencePage(
+                          category: 2,
+                          title: '우체국',
+                          image: 'assets/convenient/postoffice.jpg',
+                        )));
+          },
+          child: Column(
+            children: [
+              SizedBox(
+                width: 65,
+                height: 65,
+                child: Container(
+                    margin: EdgeInsets.all(5),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image:
+                              AssetImage('assets/convenient/postoffice.jpg')),
+                      borderRadius: BorderRadius.circular(50),
+                    )),
+              ),
+              Text(tr('post_office'),
+                  style: Theme.of(context).textTheme.headline4)
+            ],
           ),
+        ),
       ),
       SizedBox(
         child: GestureDetector(
@@ -179,7 +179,7 @@ class ConvenientItems_top extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage('assets/convenient/운동장.jfif')),
+                          image: AssetImage('assets/convenient/운동장1.jpg')),
                       borderRadius: BorderRadius.circular(50),
                     )),
               ),

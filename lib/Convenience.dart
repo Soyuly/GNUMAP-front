@@ -34,7 +34,9 @@ class _ConveniencePageState extends State<ConveniencePage> {
       try {
         var url = Uri.parse('http://203.255.3.246:5001/getInfoConvenient');
         var options = {'number': "${widget.category}"};
-        response = await http.post(url, body: options).timeout(Duration(seconds: 10), onTimeout: (){
+        response = await http
+            .post(url, body: options)
+            .timeout(Duration(seconds: 10), onTimeout: () {
           return http.Response('Error', 408);
         });
       } on SocketException {
@@ -44,46 +46,46 @@ class _ConveniencePageState extends State<ConveniencePage> {
           actions: [
             CupertinoDialogAction(
                 isDefaultAction: true,
-                child: Text("확인"), onPressed: () {
-              Navigator.pop(context);
-            })
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
           ],
         );
-      }
-      on HttpException {
+      } on HttpException {
         return CupertinoAlertDialog(
           title: Text("Server Error"),
           content: Text("해당 편의시설 정보를 불러오지 못하였습니다."),
           actions: [
             CupertinoDialogAction(
                 isDefaultAction: true,
-                child: Text("확인"), onPressed: () {
-              Navigator.pop(context);
-            })
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
           ],
         );
       }
 
-      if(jsonDecode(response.body) == null){
+      if (jsonDecode(response.body) == null) {
         return CupertinoAlertDialog(
           title: Text("Server Error"),
           content: Text("해당 편의시설 정보를 불러오지 못하였습니다."),
           actions: [
             CupertinoDialogAction(
                 isDefaultAction: true,
-                child: Text("확인"), onPressed: () {
-              Navigator.pop(context);
-            })
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
           ],
         );
       }
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         try {
-
           String jsonData = response.body;
           // log(jsonData);
           return jsonDecode(jsonData);
-
         } on FormatException {
           return CupertinoAlertDialog(
             title: Text("Server Error"),
@@ -91,14 +93,14 @@ class _ConveniencePageState extends State<ConveniencePage> {
             actions: [
               CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: Text("확인"), onPressed: () {
-                Navigator.pop(context);
-              })
+                  child: Text("확인"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
             ],
           );
         }
       }
-
     }
 
     initState() {
@@ -123,7 +125,8 @@ class _ConveniencePageState extends State<ConveniencePage> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          fit: BoxFit.cover, image: AssetImage(widget.image)),
+                          fit: BoxFit.cover,
+                          image: AssetImage('${widget.image}')),
                     )),
                 Align(
                   alignment: Alignment.center,
@@ -220,7 +223,7 @@ class _ConveniencePageState extends State<ConveniencePage> {
                                                     height: 125,
                                                     image: AssetImage(
                                                         "${li['image']}")),
-                                                        // 'assets/convenient/cafe.jpg')),
+                                                // 'assets/convenient/cafe.jpg')),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.fromLTRB(
@@ -249,7 +252,8 @@ class _ConveniencePageState extends State<ConveniencePage> {
                                                       padding:
                                                           EdgeInsets.fromLTRB(
                                                               0, 60, 0, 0),
-                                                      child: Text("운영시간: ${li['operating_time']}",
+                                                      child: Text(
+                                                          "운영시간: ${li['operating_time']}",
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
@@ -329,7 +333,6 @@ class _DetailPageState extends State<_DetailPage> {
     // 'curLat': '${lat}',
     // 'curLng': '${lng}',
 
-
     final url = Uri.parse('http://203.255.3.246:5001/pathConvenient');
     final response = await http.post(url, body: {
       'curLat': '35.15394690852627',
@@ -342,20 +345,20 @@ class _DetailPageState extends State<_DetailPage> {
     print('Response body: ${response.body}');
     pathInfo = jsonDecode(response.body);
 
-    if(pathInfo['distance'] == null){
+    if (pathInfo['distance'] == null) {
       return CupertinoAlertDialog(
         title: Text("Server Error"),
         content: Text("해당 편의시설 경로를 불러오지 못하였습니다."),
         actions: [
           CupertinoDialogAction(
               isDefaultAction: true,
-              child: Text("확인"), onPressed: () {
-            Navigator.pop(context);
-          })
+              child: Text("확인"),
+              onPressed: () {
+                Navigator.pop(context);
+              })
         ],
       );
     }
-
 
     return {lat, lng, pathInfo};
   }

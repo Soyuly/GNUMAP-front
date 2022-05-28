@@ -71,6 +71,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/translations/
     - assets/cs.jpg
     - assets/minimap.png
     - assets/loading.gif
