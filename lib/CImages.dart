@@ -82,26 +82,15 @@ class ConvenientItems_top extends StatelessWidget {
         ),
       ),
       SizedBox(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ConveniencePage(
-                          category: 2,
-                          title: '우체국',
-                          image: 'assets/convenient/postoffice.jpg',
-                        )));
-          },
           child: GestureDetector(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => ConveniencePage(
-                            category: 3,
-                            title: '문구점',
-                            image: 'assets/convenient/stationary.jpg',
+                            category: 2,
+                            title: '우체국',
+                            image: 'assets/convenient/postoffice.jpg',
                           )));
             },
             child: Column(
@@ -127,7 +116,6 @@ class ConvenientItems_top extends StatelessWidget {
               ],
             ),
           ),
-        ),
       ),
       SizedBox(
         child: GestureDetector(
@@ -175,7 +163,7 @@ class ConvenientItems_top extends StatelessWidget {
                     builder: (context) => ConveniencePage(
                           category: 4,
                           title: '운동',
-                          image: 'assets/convenient/운동장.jfif',
+                          image: 'assets/convenient/운동장1.jpg',
                         )));
           },
           child: Column(
@@ -256,9 +244,9 @@ class ConvenientItems_bottom extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ConveniencePage(
-                          category: 5,
-                          title: '딸기방',
-                          image: 'assets/convenient/strawberry.jpg',
+                          category: 6,
+                          title: '식당',
+                          image: 'assets/convenient/cafeteria.jpg',
                         )));
           },
           child: Column(
@@ -365,9 +353,9 @@ class ConvenientItems_bottom extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ConveniencePage(
-                          category: 1,
-                          title: 'ATM',
-                          image: 'assets/convenient/atm.jpg',
+                          category: 9,
+                          title: '헌혈의집',
+                          image: 'assets/convenient/blood.jpg',
                         )));
           },
           child: Column(
