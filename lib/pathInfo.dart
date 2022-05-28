@@ -14,6 +14,7 @@ import 'package:gnumap/main.dart';
 import 'models/db.dart';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PathInfo extends StatefulWidget {
   final String name;
@@ -36,16 +37,28 @@ class _PathInfoState extends State<PathInfo> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData locationData;
+  List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
+  late bool _isFavorite;
+
+  Future _isFavorites() async {
+    _favorites = await _favoriteHelper.isEmpty('${widget.name}');
+    print(_favorites);
+    _isFavorite = _favorites.isEmpty;
+
+    return _isFavorite;
+  }
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    print(_favorites);
+    return _favorites;
+  }
 
   Future _getHistories() async {
     _histories = await _historyHelper.getItems();
     print(_histories);
     return _histories;
-  }
-
-  initState() {
-    super.initState();
-    _locateMe();
   }
 
   _locateMe() async {
@@ -196,6 +209,7 @@ class _PathInfoState extends State<PathInfo> {
     return {lat, lng, distance, time};
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CupertinoNavigationBar(
@@ -207,13 +221,82 @@ class _PathInfoState extends State<PathInfo> {
                 CupertinoIcons.left_chevron,
                 color: CupertinoColors.destructiveRed,
               )),
-          trailing: Material(
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: LikeButton(size: 25),
-              onPressed: () => log('버튼눌림'),
-            ),
-          ),
+          trailing: FutureBuilder(
+              future: _isFavorites(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+                if (snapshot.hasData == false) {
+                  return Container(child: Text('로딩중'));
+                } else if (snapshot.hasError) {
+                  return Container(child: Text('로딩중'));
+                }
+                // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                else {
+                  return Material(
+                      child: IconButton(
+                    iconSize: 25,
+                    padding: EdgeInsets.zero,
+                    onPressed: () async {
+                      print("실행됨");
+                      final FavoriteHelper _favoriteHelper = FavoriteHelper();
+
+                      List _favitems = [];
+                      _favitems =
+                          await _favoriteHelper.isEmpty('${widget.name}');
+
+                      if (!_isFavorite) {
+                        await _favoriteHelper.remove('${widget.name}');
+                        setState(() {
+                          _getFavorites();
+                          _isFavorite = !_isFavorite;
+                        });
+                        Fluttertoast.showToast(
+                            msg: '즐겨찾기에서 제거되었습니다.',
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                            fontSize: 13);
+                      } else {
+                        var client = new http.Client();
+                        var url =
+                            Uri.parse('http://203.255.3.246:5001/getfavitems');
+                        var response = await client
+                            .post(url, body: {'num': '${widget.name}'});
+                        var info = jsonDecode(response.body);
+
+                        await _favoriteHelper.add(info['name'], info['num']);
+                        setState(() {
+                          _getFavorites();
+                          _isFavorite = !_isFavorite;
+                        });
+                        Fluttertoast.showToast(
+                            msg: '즐겨찾기에 추가되었습니다',
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                            fontSize: 13);
+                      }
+
+                      setState(() {
+                        _getFavorites();
+                      });
+                    },
+                    icon: _isFavorite
+                        ? Icon(
+                            Icons.favorite_border_outlined,
+                            color: Colors.red,
+                          )
+                        : Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          ),
+                  ));
+                }
+              }),
           backgroundColor: CupertinoColors.systemBackground,
           middle: Text(
             widget.name,
@@ -340,23 +423,4 @@ class _PathInfoState extends State<PathInfo> {
               }
             }));
   }
-}
-
-Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
-  /// send your request here
-  // final bool success= await sendRequest();
-
-  /// if failed, you can do nothing
-  // return success? !isLiked:isLiked;
-
-  final FavoriteHelper _favoriteHelper = FavoriteHelper();
-
-  var client = new http.Client();
-  var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-  var response = await client.post(url, body: {'num': '$name'});
-  var info = jsonDecode(response.body);
-
-  await _favoriteHelper.add(info['name'], info['num']);
-  print('버튼눌림');
-  return !isLiked;
 }

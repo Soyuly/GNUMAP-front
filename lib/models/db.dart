@@ -21,8 +21,7 @@ class HistoryHelper {
 
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE History (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL
@@ -104,8 +103,7 @@ class FavoriteHelper {
 
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE Favorites (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         num INTEGER NOT NULL,
@@ -118,7 +116,7 @@ class FavoriteHelper {
   Future getItems() async {
     final db = await _openDb();
 
-    List items = await db.query('Favorites', columns: ['name']);
+    List items = await db.query('Favorites', columns: ['num', 'name']);
     return items.toList();
   }
 
@@ -126,7 +124,9 @@ class FavoriteHelper {
     final db = await _openDb();
 
     List items = await db.query('Favorites',
-        columns: ['name'], where: 'name = ?', whereArgs: [num]);
+        columns: ['num', 'name'],
+        where: 'name = ? OR num = ?',
+        whereArgs: [num, num]);
 
     return items.toList();
   }
@@ -161,8 +161,8 @@ class FavoriteHelper {
     final db = await _openDb();
     await db.delete(
       'Favorites', // table name
-      where: 'name = ?',
-      whereArgs: [name],
+      where: 'name = ? OR num = ?',
+      whereArgs: [name, name],
     );
   }
 }
