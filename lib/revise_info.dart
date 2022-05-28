@@ -40,10 +40,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
     return Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text(
-            '정보수정요청',
-            style: Theme.of(context).textTheme.headline5,
-          ),
+          middle: Text('정보수정요청'),
         ),
         body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -60,6 +57,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                     ),
                   )),
               TextField(
+                maxLength: 15,
                 decoration: InputDecoration(
                   hintText: "건물명을 입력해주세요.",
                 ),
@@ -81,6 +79,8 @@ class _ReviseInfoState extends State<ReviseInfo> {
                     ),
                   )),
               TextField(
+                maxLength: 15,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "건물번호를 입력해주세요.",
                 ),
@@ -100,6 +100,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                     ),
                   )),
               TextField(
+                maxLength: 45,
                 decoration: InputDecoration(
                   hintText: "간략한 주소를 입력해주세요.",
                 ),
@@ -120,6 +121,7 @@ class _ReviseInfoState extends State<ReviseInfo> {
                         color: Color.fromRGBO(0, 0, 0, 0.69)),
                   )),
               TextField(
+                maxLength: 200,
                 decoration: InputDecoration(
                   hintText: "내용을 입력해주세요.",
                 ),
@@ -131,21 +133,31 @@ class _ReviseInfoState extends State<ReviseInfo> {
               SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () async {
-                    print('${buildingNameController.text}');
-                    try {
+                    if (buildingNameController.text.isEmpty || buildingNumController.text.isEmpty ||
+                        buildingLocationController.text.isEmpty || reviseInfoController.text.isEmpty) {
+                      _clear();
+
+                      Fluttertoast.showToast(
+                          msg: '잘못된 정보입니다. 다시 입력해주세요',
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                          textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                          fontSize: 13);
+                    } else {
                       var url =
-                          Uri.parse('http://203.255.3.246:5001/getreviseInfo');
+                      Uri.parse('http://203.255.3.246:5001/getreviseInfo');
 
                       var response = await http.post(url, body: {
                         'request_building_name':
-                            "${buildingNameController.text}",
+                        "${buildingNameController.text}",
                         'building_num': "${buildingNumController.text}",
                         'request_building_location':
-                            "${buildingLocationController.text}",
+                        "${buildingLocationController.text}",
                         'request_revise': "${reviseInfoController.text}",
                       }).whenComplete(() => _clear());
 
-                      var future = response;
 
                       if (response.body == 'recieved') {
                         _clear();
@@ -159,8 +171,19 @@ class _ReviseInfoState extends State<ReviseInfo> {
                             textColor: Color.fromRGBO(0, 16, 72, 0.68),
                             fontSize: 13);
                       }
-                    } catch (e) {
-                      print('서버에러');
+
+                    // } catch (e) {
+                    //     _clear();
+                    //
+                    //     Fluttertoast.showToast(
+                    //         msg: '잘못된 정보입니다. 다시 입력해주세요',
+                    //         toastLength: Toast.LENGTH_LONG,
+                    //         gravity: ToastGravity.BOTTOM,
+                    //         timeInSecForIosWeb: 1,
+                    //         backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
+                    //         textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                    //         fontSize: 13);
+                    // }
                     }
                   },
                   child: Text("보내기"),
