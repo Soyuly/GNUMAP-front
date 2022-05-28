@@ -309,34 +309,32 @@ class _DetailPageState extends State<_DetailPage> {
   }
 
   _locateMe() async {
-    // _serviceEnabled = await location.serviceEnabled();
-    // if (!_serviceEnabled) {
-    //   _serviceEnabled = await location.requestService();
-    //   if (!_serviceEnabled) {
-    //     return;
-    //   }
-    // }
-    //
-    // _permissionGranted = await location.hasPermission();
-    // if (_permissionGranted == PermissionStatus.denied) {
-    //   _permissionGranted = await location.requestPermission();
-    //   if (_permissionGranted != PermissionStatus.granted) {
-    //     return;
-    //   }
-    // }
-    //
-    // // Track user Movements
-    // await location.getLocation().then((res) {
-    //   lat = res.latitude;
-    //   lng = res.longitude;
-    // });
-    // 'curLat': '${lat}',
-    // 'curLng': '${lng}',
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    // Track user Movements
+    await location.getLocation().then((res) {
+      lat = res.latitude;
+      lng = res.longitude;
+    });
 
     final url = Uri.parse('http://203.255.3.246:5001/pathConvenient');
     final response = await http.post(url, body: {
-      'curLat': '35.15394690852627',
-      'curLng': '128.09967466553798',
+      'curLat': '$lat',
+      'curLng': '$lng',
       'destLat': '${widget.list['lat']}',
       'destLng': '${widget.list['lng']}'
     });
@@ -406,7 +404,7 @@ class _DetailPageState extends State<_DetailPage> {
                                 "http://203.255.3.246:5001/findConvenient"),
                             method: 'POST',
                             body: Uint8List.fromList(utf8.encode(
-                                "curLat=35.15394690852627&curLng=128.09967466553798&destLat=${widget.list['lat']}&destLng=${widget.list['lng']}")),
+                                "curLat=${lat}&curLng=${lng}&destLat=${widget.list['lat']}&destLng=${widget.list['lng']}")),
                             headers: {
                               'Content-Type':
                                   'application/x-www-form-urlencoded'
