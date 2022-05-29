@@ -393,15 +393,18 @@ class likeButton extends StatelessWidget {
     }
     // 즐겨찾기 추가(isLiked가 false 인 상태에서 클릭했을 때)
     else {
-      var client = new http.Client();
-      var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-      var response = await client.post(url, body: {'num': '$name'});
-      var info = jsonDecode(response.body);
-      print(info['name']);
-      print(info['num']);
-      _favoriteHelper.add(info['name'], info['num']);
-      _favoriteHelper.add(info['name'], info['num']);
-      print("added");
+      final response = await http.get(Uri.parse(
+          'http://203.255.3.246:5001/getBuildingData?building_name=$name'));
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        var info = jsonDecode(response.body);
+        print("즐겨찾기");
+        _favoriteHelper.add(info[0]['building_num'], info[0]['building_name']);
+        print("added");
+      } else {
+        throw Exception('Failed to load album');
+      }
     }
 
     return !isLiked;
