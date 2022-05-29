@@ -123,6 +123,7 @@ flutter:
     - assets/convenient/헌혈버스.jpg
     - assets/convenient/경상대센터.jpg
     - assets/convenient/후문우체국.jpg
+    - img/중앙도서관.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

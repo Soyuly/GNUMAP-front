@@ -342,33 +342,13 @@ class _PathInfoState extends State<PathInfo> {
   }
 }
 
-// Future<bool> onLikeButtonTapped(bool isLiked, String name) async {
-//   /// send your request here
-//   // final bool success= await sendRequest();
-
-//   /// if failed, you can do nothing
-//   // return success? !isLiked:isLiked;
-
-//   final FavoriteHelper _favoriteHelper = FavoriteHelper();
-
-//   // 검색한 이름으로 건물 정보를 가져오기
-//   var client = new http.Client();
-//   var url = Uri.parse('http://203.255.3.246:5001/getInfoBuilding');
-//   var response = await client.post(url, body: {'num': '$name'});
-//   var info = jsonDecode(response.body);
-
-//   await _favoriteHelper.add(info['name'], info['num']);
-//   print('버튼눌림');
-//   return !isLiked;
-// }
-
 class likeButton extends StatelessWidget {
   // 그 전에 검색할 때, 자신의 위치가 샌프란시스코로 나옴, 누가 달아논 주석을 본 거 같은데 다시 찾으려니 안 보임..
   // 디바이스에 이미 즐겨찾기가 추가된 상태라면, 빨간색 하트를 표시하게 하고, 아니면, 회색하트를 표시하게함
   // 즐겨찾기 추가를 하면, 검색어에 해당하는 건물 데이터, 이미지 위치를 서버에서 받아온다.
   // CupertinoSearchTextField 에서 isBack에 setState안에 _getFavorites 함수 실행
-  String name;
-  likeButton(this.name);
+  String num;
+  likeButton(this.num);
 
   late List _favorites = [];
   final FavoriteHelper _favoriteHelper = FavoriteHelper();
@@ -386,21 +366,23 @@ class likeButton extends StatelessWidget {
 
     // 즐겨찾기에서 삭제(isLiked가 true 인 상태에서 클릭했을 때)
     if (isLiked) {
-      _favoriteHelper.remove(this.name);
-      _favoriteHelper.remove(this.name);
-      print(this.name);
+      _favoriteHelper.remove(this.num);
       print("removed");
     }
     // 즐겨찾기 추가(isLiked가 false 인 상태에서 클릭했을 때)
     else {
       final response = await http.get(Uri.parse(
-          'http://203.255.3.246:5001/getBuildingData?building_name=$name'));
+          'http://203.255.3.246:5001/getBuildingData?building_name=$num'));
       print(response.body);
 
       if (response.statusCode == 200) {
         var info = jsonDecode(response.body);
         print("즐겨찾기");
-        _favoriteHelper.add(info[0]['building_num'], info[0]['building_name']);
+        _favoriteHelper.add(info[0]['building_num'], info[0]['building_name'],
+            info[0]['building_image']);
+        print(info[0]['building_num']);
+        print(info[0]['building_name']);
+        print(info[0]['building_image']);
         print("added");
       } else {
         throw Exception('Failed to load album');
@@ -412,8 +394,12 @@ class likeButton extends StatelessWidget {
 
   // 이미 검색어가 즐겨찾기에 추가되어 있는지 확인
   bool isExist() {
+    print("ddddd");
+    print(this.num.runtimeType);
+
     for (int i = 0; i < _favorites.length; i++) {
-      if (_favorites[i]['name'] == this.name) {
+      print(this._favorites[i]['num'].runtimeType);
+      if (_favorites[i]['num'] == this.num) {
         return true;
       }
     }
@@ -422,7 +408,6 @@ class likeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String name = this.name;
     return Container(
         margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
         child: FutureBuilder(

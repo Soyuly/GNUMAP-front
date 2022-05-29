@@ -21,8 +21,7 @@ class HistoryHelper {
 
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE History (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL
@@ -104,12 +103,12 @@ class FavoriteHelper {
 
   // 데이터베이스 테이블을 생성한다.
   Future _onCreate(Database db, int version) async {
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE Favorites (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        num INTEGER NOT NULL,
-        name TEXT NOT NULL
+        num TEXT NOT NULL,
+        name TEXT NOT NULL,
+        image TEXT NOT NULL
       )
     ''');
   }
@@ -118,7 +117,7 @@ class FavoriteHelper {
   Future getItems() async {
     final db = await _openDb();
 
-    List items = await db.query('Favorites', columns: ['name']);
+    List items = await db.query('Favorites');
     return items.toList();
   }
 
@@ -132,11 +131,15 @@ class FavoriteHelper {
   }
 
   // 새로운 데이터를 추가한다.
-  Future add(String item, String itemid) async {
+  Future add(String item, String itemid, String image) async {
     final db = await _openDb();
     await db.insert(
       'Favorites', // table name
-      {'name': '$item', 'num': '$itemid'}, // new Favorites row data
+      {
+        'num': '$item',
+        'name': '$itemid',
+        'image': '$image'
+      }, // new Favorites row data
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -157,12 +160,12 @@ class FavoriteHelper {
   }
 
   // 데이터를 삭제한다.
-  Future remove(String name) async {
+  Future remove(String num) async {
     final db = await _openDb();
     await db.delete(
       'Favorites', // table name
-      where: 'name = ?',
-      whereArgs: [name],
+      where: 'num = ?',
+      whereArgs: [num],
     );
   }
 }
