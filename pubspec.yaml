@@ -58,6 +58,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: ^0.9.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,66 +72,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
     - assets/translations/
-    - assets/cs.jpg
-    - assets/minimap.png
-    - assets/loading.gif
-    - assets/conven.gif
-    - assets/error.gif
-    - assets/logo.jpg
-    - assets/convenient/aed.jpg
-    - assets/convenient/atm.jpg
-    - assets/convenient/blood.jpg
-    - assets/convenient/cafe.jpg
-    - assets/convenient/cafeteria.jpg
-    - assets/convenient/convenientstore.jpg
-    - assets/convenient/CU 경상대느티마루점.jpg
-    - assets/convenient/CU 공학관점.jpg
-    - assets/convenient/CU 경상대 생활관점.jpg
-    - assets/convenient/GNU스포츠콤플렉스.jpg
-    - assets/convenient/GS25 경상대 기숙사후문점.jpg
-    - assets/convenient/GS25 경상대 생활관점.jpg
-    - assets/convenient/GS25 경상대 학사점.jpg
-    - assets/convenient/NH농협은행.jpg
-    - assets/convenient/postoffice.jpg
-    - assets/convenient/printer.jpg
-    - assets/convenient/stationary.jpg
-    - assets/convenient/strawberry.jpg
-    - assets/convenient/경상대 우체국.jpg
-    - assets/convenient/경상대우체국.jpg
-    - assets/convenient/경영대딸기방.jpg
-    - assets/convenient/공대식당.jpg
-    - assets/convenient/교육문화센터 식당.jpg
-    - assets/convenient/교직원식당.jpg
-    - assets/convenient/구내문구점.jpg
-    - assets/convenient/농구장2.jpg
-    - assets/convenient/기숙사농구장.jpg
-    - assets/convenient/기숙사 헬스장.jpg
-    - assets/convenient/농구장2.jpg
-    - assets/convenient/배구장2.jpg
-    - assets/convenient/복지관 복사실.jpg
-    - assets/convenient/아람관.jpg
-    - assets/convenient/우체국365코너.jpg
-    - assets/convenient/운동장1.jpg
-    - assets/convenient/이마트 24경상대 공학관점.jpg
-    - assets/convenient/이마트24 경상대 교육문화점.jpg
-    - assets/convenient/이마트24 경상대 도서관점.jpg
-    - assets/convenient/이마트24 경상대 학생회관점.jpg
-    - assets/convenient/인문대딸기방.jpg
-    - assets/convenient/지앤유북카페.jpg
-    - assets/convenient/테니스장.jpg
-    - assets/convenient/학생회관 복사실.jpg
-    - assets/convenient/헌혈버스.jpg
-    - assets/convenient/헌혈의집 경상대센터.jpg
-    - assets/buildings/1.jpeg
-    - assets/buildings/2.jpeg
-    - assets/buildings/3.jpeg
-    - assets/buildings/4.jpeg
-    - assets/buildings/28.jpeg
-    - assets/buildings/29.jpeg
-    - assets/buildings/30.jpeg
-    - assets/convenient/경상대센터.jpg
-    - assets/convenient/후문우체국.jpg
+    - assets/buildings/
+    - assets/convenient/   
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -158,3 +104,8 @@ flutter:
         - asset: assets/fonts/강원교육새음.ttf   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+  remove_alpha_ios : true

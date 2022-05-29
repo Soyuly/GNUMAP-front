@@ -108,21 +108,19 @@ class _MainPageState extends State<MainPage> {
                       color: Color.fromRGBO(188, 188, 188, 0.54),
                       borderRadius: BorderRadius.circular(10)),
                   onSubmitted: (name) async {
-                    try {
-                      bool isBack = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PathInfo(name: name.replaceAll("동", ""))),
-                      );
-
+                    bool? isBack = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PathInfo(name: name)),
+                    );
+                    print(isBack);
+                    if (isBack != null) {
                       if (isBack) {
                         setState(() {
                           _getHistories();
+                          _getFavorites();
                         });
                       }
-                    } catch (e) {
-                      print(e);
                     }
                   },
                 ),
@@ -346,8 +344,18 @@ class _MainPageState extends State<MainPage> {
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                         fit: BoxFit.cover,
-                                                        image: AssetImage(
-                                                            'assets/buildings/${_favorites[index]['num']}.jpeg')),
+                                                        image: Image.asset(
+                                                          'assets/buildings/${_favorites[index]['num']}.jpeg',
+                                                          errorBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  Object error,
+                                                                  StackTrace?
+                                                                      stackTrace) {
+                                                            return Image.asset(
+                                                                'assets/buildings/error.jpeg');
+                                                          },
+                                                        ).image),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             50),

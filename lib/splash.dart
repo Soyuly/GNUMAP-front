@@ -18,7 +18,7 @@ class _SplashState extends State<Splash> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                  Image.asset('assets/logo.jpg', width: 200),
+                  Image.asset('assets/intro.png', width: 500),
                 ]))));
   }
 

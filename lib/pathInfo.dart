@@ -62,6 +62,7 @@ class _PathInfoState extends State<PathInfo> {
   }
 
   _locateMe() async {
+    print('넘어감');
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -94,6 +95,27 @@ class _PathInfoState extends State<PathInfo> {
         'num': '${widget.name}'
       }).timeout(Duration(seconds: 10), onTimeout: () {
         return http.Response('Error', 408);
+      });
+    } on http.ClientException {
+      if (!mounted) return;
+      return WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showCupertinoDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(tr('network_error_title')),
+                content: Text(tr('network_error')),
+                actions: [
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: Text("확인"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            }).then((value) => Navigator.pop(context));
       });
     } on SocketException {
       if (!mounted) return;
@@ -234,6 +256,7 @@ class _PathInfoState extends State<PathInfo> {
                 else {
                   return Material(
                       child: IconButton(
+                    color: Theme.of(context).primaryColor,
                     iconSize: 25,
                     padding: EdgeInsets.zero,
                     onPressed: () async {
@@ -265,7 +288,7 @@ class _PathInfoState extends State<PathInfo> {
                         var response = await client
                             .post(url, body: {'num': '${widget.name}'});
                         var info = jsonDecode(response.body);
-
+                        print('즐겨찾기 response $info');
                         await _favoriteHelper.add(info['name'], info['num']);
                         setState(() {
                           _getFavorites();
@@ -286,9 +309,11 @@ class _PathInfoState extends State<PathInfo> {
                       });
                     },
                     icon: _isFavorite
-                        ? Icon(
-                            Icons.favorite_border_outlined,
-                            color: Colors.red,
+                        ? Container(
+                            child: Icon(
+                              Icons.favorite_border_outlined,
+                              color: Colors.red,
+                            ),
                           )
                         : Icon(
                             Icons.favorite,
