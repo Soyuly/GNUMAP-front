@@ -93,39 +93,27 @@ class ConvenientItems_top extends StatelessWidget {
                           image: 'assets/convenient/postoffice.jpg',
                         )));
           },
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ConveniencePage(
-                            category: 3,
-                            title: '문구점',
-                            image: 'assets/convenient/stationary.jpg',
-                          )));
-            },
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 65,
-                  height: 65,
-                  child: Container(
-                      margin: EdgeInsets.all(5),
-                      child: Scaffold(
-                        backgroundColor: Colors.transparent,
-                      ),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image:
-                                AssetImage('assets/convenient/postoffice.jpg')),
-                        borderRadius: BorderRadius.circular(50),
-                      )),
-                ),
-                Text(tr('post_office'),
-                    style: Theme.of(context).textTheme.headline4)
-              ],
-            ),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 65,
+                height: 65,
+                child: Container(
+                    margin: EdgeInsets.all(5),
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image:
+                              AssetImage('assets/convenient/postoffice.jpg')),
+                      borderRadius: BorderRadius.circular(50),
+                    )),
+              ),
+              Text(tr('post_office'),
+                  style: Theme.of(context).textTheme.headline4)
+            ],
           ),
         ),
       ),
@@ -175,7 +163,7 @@ class ConvenientItems_top extends StatelessWidget {
                     builder: (context) => ConveniencePage(
                           category: 4,
                           title: '운동',
-                          image: 'assets/convenient/운동장.jfif',
+                          image: 'assets/convenient/운동장1.jpg',
                         )));
           },
           child: Column(
@@ -191,7 +179,7 @@ class ConvenientItems_top extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage('assets/convenient/운동장.jfif')),
+                          image: AssetImage('assets/convenient/운동장1.jpg')),
                       borderRadius: BorderRadius.circular(50),
                     )),
               ),
@@ -256,9 +244,9 @@ class ConvenientItems_bottom extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ConveniencePage(
-                          category: 5,
-                          title: '딸기방',
-                          image: 'assets/convenient/strawberry.jpg',
+                          category: 6,
+                          title: '식당',
+                          image: 'assets/convenient/cafeteria.jpg',
                         )));
           },
           child: Column(
@@ -365,9 +353,9 @@ class ConvenientItems_bottom extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ConveniencePage(
-                          category: 1,
-                          title: 'ATM',
-                          image: 'assets/convenient/atm.jpg',
+                          category: 9,
+                          title: '헌혈의집',
+                          image: 'assets/convenient/blood.jpg',
                         )));
           },
           child: Column(

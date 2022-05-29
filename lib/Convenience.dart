@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -24,15 +26,81 @@ class ConveniencePage extends StatefulWidget {
 }
 
 class _ConveniencePageState extends State<ConveniencePage> {
+  var response;
+
   @override
   Widget build(BuildContext context) {
     _getConvenient() async {
-      var url = Uri.parse('http://203.255.3.246:5001/getInfoConvenient');
-      var options = {'number': "${widget.category}"};
-      var response = await http.post(url, body: options);
-      // print('${response.body}');
-      String jsonString = response.body;
-      return jsonDecode(jsonString);
+      try {
+        var url = Uri.parse('http://203.255.3.246:5001/getInfoConvenient');
+        var options = {'number': "${widget.category}"};
+        response = await http
+            .post(url, body: options)
+            .timeout(Duration(seconds: 10), onTimeout: () {
+          return http.Response('Error', 408);
+        });
+      } on SocketException {
+        return CupertinoAlertDialog(
+          title: Text("Network Error"),
+          content: Text("네트워크 연결을 확인해주세요"),
+          actions: [
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      } on HttpException {
+        return CupertinoAlertDialog(
+          title: Text("Server Error"),
+          content: Text("해당 편의시설 정보를 불러오지 못하였습니다."),
+          actions: [
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      }
+
+      if (jsonDecode(response.body) == null) {
+        return CupertinoAlertDialog(
+          title: Text("Server Error"),
+          content: Text("해당 편의시설 정보를 불러오지 못하였습니다."),
+          actions: [
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      }
+      if (response.statusCode == 200) {
+        try {
+          String jsonData = response.body;
+          // log(jsonData);
+          return jsonDecode(jsonData);
+        } on FormatException {
+          return CupertinoAlertDialog(
+            title: Text("Server Error"),
+            content: Text("해당 편의시설 정보를 정상적으로 가져오지 못하였습니다."),
+            actions: [
+              CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text("확인"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+            ],
+          );
+        }
+      }
     }
 
     initState() {
@@ -57,7 +125,8 @@ class _ConveniencePageState extends State<ConveniencePage> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          fit: BoxFit.cover, image: AssetImage(widget.image)),
+                          fit: BoxFit.cover,
+                          image: AssetImage('${widget.image}')),
                     )),
                 Align(
                   alignment: Alignment.center,
@@ -78,7 +147,27 @@ class _ConveniencePageState extends State<ConveniencePage> {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                     if (snapshot.hasData == false) {
-                      return CircularProgressIndicator();
+                      return Container(
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/conven.gif",
+                                  height: 205.0,
+                                  width: 200.0,
+                                ),
+                                Text('하모가 아끼는 편의시설로 가요~',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: Color.fromRGBO(0, 122, 255, 1),
+                                      fontFamily: 'GangwonEduSaeeum',
+                                    ))
+                              ],
+                            )),
+                      );
                     }
                     //error가 발생하게 될 경우 반환하게 되는 부분
                     else if (snapshot.hasError) {
@@ -100,10 +189,7 @@ class _ConveniencePageState extends State<ConveniencePage> {
                           itemCount: list.length,
                           itemBuilder: (BuildContext context, int index) {
                             var li = list[index];
-                            // print("${li['id']} ${li['name']}  ${li['address']}");
-                            // Text("${li['name']}"),
-                            // Text("${li['phone']}"),
-                            // Text("${li['distance']}"),
+                            log(li['image']);
                             return GestureDetector(
                                 onTap: () async {
                                   Navigator.push(
@@ -136,8 +222,8 @@ class _ConveniencePageState extends State<ConveniencePage> {
                                                     width: 145,
                                                     height: 125,
                                                     image: AssetImage(
-                                                        // "${li['image']}")),
-                                                        'assets/convenient/cafe.jpg')),
+                                                        "${li['image']}")),
+                                                // 'assets/convenient/cafe.jpg')),
                                               ),
                                               Container(
                                                 padding: EdgeInsets.fromLTRB(
@@ -166,7 +252,8 @@ class _ConveniencePageState extends State<ConveniencePage> {
                                                       padding:
                                                           EdgeInsets.fromLTRB(
                                                               0, 60, 0, 0),
-                                                      child: Text("현재위치로부터 m",
+                                                      child: Text(
+                                                          "운영시간: ${li['operating_time']}",
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
@@ -257,6 +344,21 @@ class _DetailPageState extends State<_DetailPage> {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     pathInfo = jsonDecode(response.body);
+
+    if (pathInfo['distance'] == null) {
+      return CupertinoAlertDialog(
+        title: Text("Server Error"),
+        content: Text("해당 편의시설 경로를 불러오지 못하였습니다."),
+        actions: [
+          CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text("확인"),
+              onPressed: () {
+                Navigator.pop(context);
+              })
+        ],
+      );
+    }
 
     return {lat, lng, pathInfo};
   }

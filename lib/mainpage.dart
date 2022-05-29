@@ -108,17 +108,22 @@ class _MainPageState extends State<MainPage> {
                       color: Color.fromRGBO(188, 188, 188, 0.54),
                       borderRadius: BorderRadius.circular(10)),
                   onSubmitted: (name) async {
-                    bool isBack = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PathInfo(name: name)),
-                    );
+                    try {
+                      bool isBack = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PathInfo(name: name.replaceAll("동", ""))),
+                      );
 
-                    if (isBack) {
-                      setState(() {
-                        _getHistories();
-                        _getFavorites();
-                      });
+                      if (isBack) {
+                        setState(() {
+                          _getHistories();
+                          _getFavorites();
+                        });
+                      }
+                    } catch (e) {
+                      print(e);
                     }
                   },
                 ),
