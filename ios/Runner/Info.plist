@@ -34,7 +34,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>이 어플은 위치권한 설정해줘야함ㅇㅇ</string>
+	<string>그누맵 어플을 사용하기 위해서는 위치권한설정이 필요합니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

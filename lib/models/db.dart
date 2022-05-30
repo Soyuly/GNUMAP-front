@@ -161,8 +161,8 @@ class FavoriteHelper {
     final db = await _openDb();
     await db.delete(
       'Favorites', // table name
-      where: 'name = ? OR num = ?',
-      whereArgs: [name, name],
+      where: 'name LIKE ? OR num = ?',
+      whereArgs: ['%$name%', name],
     );
   }
 }
