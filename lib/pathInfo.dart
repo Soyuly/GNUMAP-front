@@ -43,7 +43,7 @@ class _PathInfoState extends State<PathInfo> {
 
   Future _isFavorites() async {
     _favorites = await _favoriteHelper.isEmpty('${widget.name}');
-    print(_favorites);
+    print("isfavorite $_favorites");
     _isFavorite = _favorites.isEmpty;
 
     return _isFavorite;
