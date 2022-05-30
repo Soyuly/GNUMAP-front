@@ -125,8 +125,8 @@ class FavoriteHelper {
 
     List items = await db.query('Favorites',
         columns: ['num', 'name'],
-        where: 'name = ? OR num = ?',
-        whereArgs: [num, num]);
+        where: 'name LIKE ? OR num = ?',
+        whereArgs: ['%$num%', num]);
 
     return items.toList();
   }

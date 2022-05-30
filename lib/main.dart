@@ -63,7 +63,9 @@ class _MyAppState extends State<MyApp> {
         initialRoute: '/',
         routes: {
           '/': (context) => Splash(),
-          '/home': (context) => MainPage(),
+          '/home': (context) => GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: MainPage()),
         });
   }
 }

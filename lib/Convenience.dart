@@ -380,17 +380,48 @@ class _DetailPageState extends State<_DetailPage> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
               if (snapshot.hasData == false) {
-                return CircularProgressIndicator();
+                return Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/loading.gif",
+                            height: 205.0,
+                            width: 200.0,
+                          ),
+                          Text('하모가 열심히 길을 찾고 있습니다.',
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Color.fromRGBO(0, 122, 255, 1),
+                                fontFamily: 'GangwonEduSaeeum',
+                              ))
+                        ],
+                      )),
+                );
               }
               //error가 발생하게 될 경우 반환하게 되는 부분
               else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
+                return Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/error.gif",
+                          height: 205.0,
+                          width: 200.0,
+                        ),
+                        Text('경로를 찾을 수 없습니다.',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Color.fromRGBO(0, 122, 255, 1),
+                              fontFamily: 'GangwonEduSaeeum',
+                            ))
+                      ],
+                    ));
               }
               // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
               else {
@@ -434,17 +465,11 @@ class _DetailPageState extends State<_DetailPage> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: Text('소요거리',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color.fromRGBO(0, 122, 255, 1),
-                                        fontFamily: 'AppleSDGothicNeo',
-                                        fontWeight: FontWeight.bold)),
+                                    style:
+                                        Theme.of(context).textTheme.headline6),
                               ),
                               Text(pathInfo['distance'],
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      color: Color.fromRGBO(0, 16, 72, 0.6),
-                                      fontFamily: 'AppleSDGothicNeo')),
+                                  style: Theme.of(context).textTheme.subtitle1),
                             ],
                           ),
                           Row(
@@ -452,18 +477,13 @@ class _DetailPageState extends State<_DetailPage> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 child: Text('소요시간',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color.fromRGBO(0, 122, 255, 1),
-                                        fontFamily: 'AppleSDGothicNeo',
-                                        fontWeight: FontWeight.bold)),
+                                    style:
+                                        Theme.of(context).textTheme.headline6),
                               ),
                               Container(
                                 child: Text(pathInfo['time'],
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Color.fromRGBO(0, 16, 72, 0.6),
-                                        fontFamily: 'AppleSDGothicNeo')),
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1),
                               ),
                             ],
                           ),

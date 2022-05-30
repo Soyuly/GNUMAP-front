@@ -255,71 +255,75 @@ class _PathInfoState extends State<PathInfo> {
                 // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
                 else {
                   return Material(
+                      color: Colors.transparent,
                       child: IconButton(
-                    color: Theme.of(context).primaryColor,
-                    iconSize: 25,
-                    padding: EdgeInsets.zero,
-                    onPressed: () async {
-                      print("실행됨");
-                      final FavoriteHelper _favoriteHelper = FavoriteHelper();
+                        iconSize: 25,
+                        padding: EdgeInsets.zero,
+                        onPressed: () async {
+                          print("실행됨");
+                          final FavoriteHelper _favoriteHelper =
+                              FavoriteHelper();
 
-                      List _favitems = [];
-                      _favitems =
-                          await _favoriteHelper.isEmpty('${widget.name}');
+                          List _favitems = [];
+                          _favitems =
+                              await _favoriteHelper.isEmpty('${widget.name}');
 
-                      if (!_isFavorite) {
-                        await _favoriteHelper.remove('${widget.name}');
-                        setState(() {
-                          _getFavorites();
-                          _isFavorite = !_isFavorite;
-                        });
-                        Fluttertoast.showToast(
-                            msg: '즐겨찾기에서 제거되었습니다.',
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
-                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
-                            fontSize: 13);
-                      } else {
-                        var client = new http.Client();
-                        var url =
-                            Uri.parse('http://203.255.3.246:5001/getfavitems');
-                        var response = await client
-                            .post(url, body: {'num': '${widget.name}'});
-                        var info = jsonDecode(response.body);
-                        print('즐겨찾기 response $info');
-                        await _favoriteHelper.add(info['name'], info['num']);
-                        setState(() {
-                          _getFavorites();
-                          _isFavorite = !_isFavorite;
-                        });
-                        Fluttertoast.showToast(
-                            msg: '즐겨찾기에 추가되었습니다',
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Color.fromRGBO(0, 122, 255, 0.15),
-                            textColor: Color.fromRGBO(0, 16, 72, 0.68),
-                            fontSize: 13);
-                      }
+                          if (!_isFavorite) {
+                            await _favoriteHelper.remove('${widget.name}');
+                            setState(() {
+                              _getFavorites();
+                              _isFavorite = !_isFavorite;
+                            });
+                            Fluttertoast.showToast(
+                                msg: '즐겨찾기에서 제거되었습니다.',
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor:
+                                    Color.fromRGBO(0, 122, 255, 0.15),
+                                textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                                fontSize: 13);
+                          } else {
+                            var client = new http.Client();
+                            var url = Uri.parse(
+                                'http://203.255.3.246:5001/getfavitems');
+                            var response = await client
+                                .post(url, body: {'num': '${widget.name}'});
+                            var info = jsonDecode(response.body);
+                            print('즐겨찾기 response $info');
+                            await _favoriteHelper.add(
+                                info['name'], info['num']);
+                            setState(() {
+                              _getFavorites();
+                              _isFavorite = !_isFavorite;
+                            });
+                            Fluttertoast.showToast(
+                                msg: '즐겨찾기에 추가되었습니다',
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor:
+                                    Color.fromRGBO(0, 122, 255, 0.15),
+                                textColor: Color.fromRGBO(0, 16, 72, 0.68),
+                                fontSize: 13);
+                          }
 
-                      setState(() {
-                        _getFavorites();
-                      });
-                    },
-                    icon: _isFavorite
-                        ? Container(
-                            child: Icon(
-                              Icons.favorite_border_outlined,
-                              color: Colors.red,
-                            ),
-                          )
-                        : Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          ),
-                  ));
+                          setState(() {
+                            _getFavorites();
+                          });
+                        },
+                        icon: _isFavorite
+                            ? Container(
+                                child: Icon(
+                                  Icons.favorite_border_outlined,
+                                  color: Colors.red,
+                                ),
+                              )
+                            : Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              ),
+                      ));
                 }
               }),
           backgroundColor: CupertinoColors.systemBackground,
