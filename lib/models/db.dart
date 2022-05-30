@@ -118,17 +118,35 @@ class FavoriteHelper {
   Future getItems() async {
     final db = await _openDb();
 
-    List items = await db.query('Favorites', columns: ['name']);
+    List items = await db.query('Favorites', columns: ['num', 'name']);
     return items.toList();
   }
 
   Future isEmpty(String num) async {
     final db = await _openDb();
 
-    List items = await db.query('Favorites',
-        columns: ['name'], where: 'name = ?', whereArgs: [num]);
+    var parsenum;
+    try {
+      parsenum = int.parse(num);
+    } catch (e) {
+      parsenum = num;
+    }
 
-    return items.toList();
+    if (parsenum is int) {
+      print("이거 $num실행");
+      List items = await db.query('Favorites',
+          columns: ['num', 'name'], where: 'num = ?', whereArgs: [parsenum]);
+
+      return items.toList();
+    } else {
+      print("$num 이거실헹");
+      List items = await db.query('Favorites',
+          columns: ['num', 'name'],
+          where: 'name like ?',
+          whereArgs: ['%$parsenum%']);
+
+      return items.toList();
+    }
   }
 
   // 새로운 데이터를 추가한다.
@@ -161,8 +179,8 @@ class FavoriteHelper {
     final db = await _openDb();
     await db.delete(
       'Favorites', // table name
-      where: 'name = ?',
-      whereArgs: [name],
+      where: 'name LIKE ? OR num = ?',
+      whereArgs: ['%$name%', name],
     );
   }
 }

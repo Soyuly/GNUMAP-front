@@ -21,12 +21,20 @@ class _MainPageState extends State<MainPage> {
   bool click = true;
 
   late List _histories = [];
+  late List _favorites = [];
+  final FavoriteHelper _favoriteHelper = FavoriteHelper();
   final HistoryHelper _historyHelper = HistoryHelper();
 
   Future _getHistories() async {
     _histories = await _historyHelper.getItems();
-    print(_histories);
+    print('히스토리 목록 : $_histories');
     return _histories;
+  }
+
+  Future _getFavorites() async {
+    _favorites = await _favoriteHelper.getItems();
+    print('즐겨찾기 목록 : $_favorites');
+    return _favorites;
   }
 
   @override
@@ -100,21 +108,19 @@ class _MainPageState extends State<MainPage> {
                       color: Color.fromRGBO(188, 188, 188, 0.54),
                       borderRadius: BorderRadius.circular(10)),
                   onSubmitted: (name) async {
-                    try {
-                      bool isBack = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PathInfo(name: name.replaceAll("동", ""))),
-                      );
-
+                    bool? isBack = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PathInfo(name: name)),
+                    );
+                    print(isBack);
+                    if (isBack != null) {
                       if (isBack) {
                         setState(() {
                           _getHistories();
+                          _getFavorites();
                         });
                       }
-                    } catch (e) {
-                      print(e);
                     }
                   },
                 ),
@@ -142,7 +148,7 @@ class _MainPageState extends State<MainPage> {
                             }
                             // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
                             else {
-                              print(_histories);
+                              print('히스토리 목록 : $_histories');
                               return ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: _histories.length,
@@ -194,13 +200,22 @@ class _MainPageState extends State<MainPage> {
                                               });
                                         },
                                         onPressed: () async {
-                                          await Navigator.push(
+                                          bool? isBack = await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => PathInfo(
                                                     name: _histories[index]
                                                         ['name'])),
                                           );
+                                          print(isBack);
+                                          if (isBack != null) {
+                                            if (isBack) {
+                                              setState(() {
+                                                _getHistories();
+                                                _getFavorites();
+                                              });
+                                            }
+                                          }
                                         },
                                         child: Text(_histories[index]['name'],
                                             style: TextStyle(
@@ -226,7 +241,150 @@ class _MainPageState extends State<MainPage> {
                       alignment: Alignment.topLeft, child: FavoriteTitle())),
               SizedBox(
                 height: 100,
-                child: Favorite(),
+                child: Container(
+                    margin: const EdgeInsets.fromLTRB(3, 7, 0, 0),
+                    child: FutureBuilder(
+                        future: _getFavorites(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData == false) {
+                            return Container(child: Text(tr('loading')));
+                          }
+                          //error가 발생하게 될 경우 반환하게 되는 부분
+                          else if (snapshot.hasError) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Error: ${snapshot.error}',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            );
+                          }
+                          // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+                          else {
+                            return Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: _favorites.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onLongPress: () async {
+                                          showCupertinoDialog(
+                                              context: context,
+                                              useRootNavigator: false,
+                                              builder: (context) {
+                                                return CupertinoAlertDialog(
+                                                  title: Text('즐겨찾기항목 삭제'),
+                                                  content: Text(
+                                                      '즐겨찾기 ${_favorites[index]['name']} 을(를) 정말 삭제하시겠습니까?'),
+                                                  actions: [
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text(
+                                                          "삭제",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                        onPressed: () async {
+                                                          print('삭제');
+                                                          await _favoriteHelper
+                                                              .remove(
+                                                                  _favorites[
+                                                                          index]
+                                                                      ['name']);
+                                                          setState(() {
+                                                            _getFavorites();
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        }),
+                                                    CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text("취소"),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        })
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        onTap: () async {
+                                          bool? isBack = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => PathInfo(
+                                                    name:
+                                                        "${_favorites[index]['num']}")),
+                                          );
+                                          print(isBack);
+                                          if (isBack != null) {
+                                            if (isBack) {
+                                              setState(() {
+                                                _getHistories();
+                                                _getFavorites();
+                                              });
+                                            }
+                                          }
+                                        },
+                                        child: SizedBox(
+                                          width: 70,
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      0, 0, 8, 0),
+                                                  child: Scaffold(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: Image.asset(
+                                                          'assets/buildings/${_favorites[index]['num']}.jpeg',
+                                                          errorBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  Object error,
+                                                                  StackTrace?
+                                                                      stackTrace) {
+                                                            return Image.asset(
+                                                                'assets/buildings/error.jpeg');
+                                                          },
+                                                        ).image),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                  )),
+                                              Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 0, 5, 0),
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                      '${_favorites[index]['num']}동\n${_favorites[index]['name']}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              'AppleSDGothicNeo',
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }));
+                          }
+                        })),
               ),
               Container(
                   height: 40,
@@ -270,89 +428,6 @@ class FavoriteTitle extends StatelessWidget {
       child:
           Text(tr('favorites'), style: Theme.of(context).textTheme.headline2),
     );
-  }
-}
-
-class Favorite extends StatefulWidget {
-  const Favorite({Key? key}) : super(key: key);
-
-  @override
-  State<Favorite> createState() => _FavoriteState();
-}
-
-class _FavoriteState extends State<Favorite> {
-  List _favorites = [];
-  late List _favoritesString = [];
-  final FavoriteHelper _favoriteHelper = FavoriteHelper();
-
-  Future _getFavorites() async {
-    _favoritesString.clear();
-    _favorites = await _favoriteHelper.getItems();
-    // for (int i = 0; i < _favorites.length; i++) {
-    //   _favoritesString.add(_favorites[i]['name']);
-    // }
-    print(_favoritesString);
-    return _favoritesString;
-  }
-
-  // _getFavorites();
-  // @override // setState의 구조이다.
-  // void setState(VoidCallback fn) {
-  //   // TODO: implement setState
-  //   super.setState(fn);
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<dynamic> favoriteItems = _favoritesString;
-    return Container(
-        margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-        child: FutureBuilder(
-            future: _getFavorites(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: favoriteItems.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                          width: 70,
-                          child: GestureDetector(
-                            onTap: () async {
-                              await Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => GnuMap()));
-                            },
-                            child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                child: Scaffold(
-                                  backgroundColor: Colors.transparent,
-                                ),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage('assets/cs.jpg')),
-                                  borderRadius: BorderRadius.circular(50),
-                                )),
-                          ));
-                    });
-              }
-              //error가 발생하게 될 경우 반환하게 되는 부분
-              else if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
-              } else {
-                return SizedBox(
-                  height: 10,
-                );
-              }
-              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
-            }));
   }
 }
 
