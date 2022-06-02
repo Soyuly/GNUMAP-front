@@ -37,6 +37,8 @@ class _MainPageState extends State<MainPage> {
     return _favorites;
   }
 
+  TextEditingController _search = new TextEditingController();
+  String text = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +105,17 @@ class _MainPageState extends State<MainPage> {
                   child: Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
                 child: CupertinoSearchTextField(
+                  controller: _search,
                   itemSize: 20,
+                  onChanged: (newVal) {
+                    if (newVal.length <= 10) {
+                      text = newVal;
+                    } else {
+                      _search.text = text;
+                      _search.selection = TextSelection.fromPosition(
+                          TextPosition(offset: _search.text.length));
+                    }
+                  },
                   decoration: BoxDecoration(
                       color: Color.fromRGBO(188, 188, 188, 0.54),
                       borderRadius: BorderRadius.circular(10)),
