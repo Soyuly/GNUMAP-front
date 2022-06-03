@@ -123,7 +123,8 @@ class _MainPageState extends State<MainPage> {
                     bool? isBack = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PathInfo(name: name)),
+                          builder: (context) =>
+                              PathInfo(name: name.replaceAll("동", ""))),
                     );
                     print(isBack);
                     if (isBack != null) {
