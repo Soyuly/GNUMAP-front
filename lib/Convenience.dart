@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/io_client.dart' as http;
 import 'package:location/location.dart';
 
 class ConveniencePage extends StatefulWidget {
@@ -26,80 +29,47 @@ class ConveniencePage extends StatefulWidget {
 }
 
 class _ConveniencePageState extends State<ConveniencePage> {
-  var response;
+
 
   @override
   Widget build(BuildContext context) {
-    _getConvenient() async {
-      try {
-        var url = Uri.parse('http://203.255.3.246:5001/getInfoConvenient');
-        var options = {'number': "${widget.category}"};
-        response = await http
-            .post(url, body: options)
-            .timeout(Duration(seconds: 10), onTimeout: () {
-          return http.Response('Error', 408);
-        });
-      } on SocketException {
-        return CupertinoAlertDialog(
-          title: Text("Network Error"),
-          content: Text("네트워크 연결을 확인해주세요"),
-          actions: [
-            CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text("확인"),
-                onPressed: () {
-                  Navigator.pop(context);
-                })
-          ],
-        );
-      } on HttpException {
-        return CupertinoAlertDialog(
-          title: Text("Server Error"),
-          content: Text("해당 편의시설 정보를 불러오지 못하였습니다."),
-          actions: [
-            CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text("확인"),
-                onPressed: () {
-                  Navigator.pop(context);
-                })
-          ],
-        );
-      }
 
-      if (jsonDecode(response.body) == null) {
-        return CupertinoAlertDialog(
-          title: Text("Server Error"),
-          content: Text("해당 편의시설 정보를 불러오지 못하였습니다."),
-          actions: [
-            CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text("확인"),
-                onPressed: () {
-                  Navigator.pop(context);
-                })
-          ],
-        );
-      }
-      if (response.statusCode == 200) {
-        try {
-          String jsonData = response.body;
-          // log(jsonData);
-          return jsonDecode(jsonData);
-        } on FormatException {
-          return CupertinoAlertDialog(
-            title: Text("Server Error"),
-            content: Text("해당 편의시설 정보를 정상적으로 가져오지 못하였습니다."),
-            actions: [
-              CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text("확인"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  })
-            ],
-          );
-        }
+    _getConvenient() async {
+      var client = new http.Client();
+      var response;
+      var url = Uri.parse('http://203.255.3.246:5001/getInfoConvenient');
+      response = await client.post(url, body: {
+        'number': "${widget.category}"
+      }).timeout(Duration(seconds: 5), onTimeout: () {
+        return http.Response('Error', 408); //요청시간 만료
+      });
+
+      try {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        String jsonData = response.body;
+        return jsonDecode(response.body);
+      } on FormatException {
+        if (!mounted) return;
+        return WidgetsBinding.instance.addPostFrameCallback((_) async {
+          showCupertinoDialog(
+              context: context,
+              useRootNavigator: false,
+              builder: (context) {
+                return CupertinoAlertDialog(
+                  title: Text('네트워크 에러'),
+                  content: Text('네트워크 연결을 확인해주세요'),
+                  actions: [
+                    CupertinoDialogAction(
+                        isDefaultAction: true,
+                        child: Text("확인"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })
+                  ],
+                );
+              }).then((value) => Navigator.pop(context));
+        });
       }
     }
 
@@ -253,7 +223,7 @@ class _ConveniencePageState extends State<ConveniencePage> {
                                                           EdgeInsets.fromLTRB(
                                                               0, 60, 0, 0),
                                                       child: Text(
-                                                          "운영시간: ${li['operating_time']}",
+                                                          "운영간: ${li['operating_time']}",
                                                           style: TextStyle(
                                                               fontSize: 12,
                                                               fontFamily:
