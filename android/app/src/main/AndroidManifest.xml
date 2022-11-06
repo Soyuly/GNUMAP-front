@@ -42,5 +42,8 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="98el168ddc" />
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-8024302282258736~3131276476"/>
     </application>
 </manifest>
