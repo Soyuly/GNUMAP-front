@@ -73,11 +73,19 @@ class ConvenientItem extends GetView<ConvenientController> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '소요거리 : ${distance}m, 소요거리 : ${time}분',
-                            style: TextStyle(
-                                fontSize: 13, fontFamily: 'AppleSDGothicNeo'),
-                          ),
+                          time < 90
+                              ? Text(
+                                  '소요거리 : ${distance}m, 소요시간 : ${time}분',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'AppleSDGothicNeo'),
+                                )
+                              : Text(
+                                  '소요거리, 소요시간 알수없음',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'AppleSDGothicNeo'),
+                                ),
                           Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Text("운영시간: $open ~ $close",

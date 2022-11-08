@@ -19,7 +19,7 @@ class MyPosController extends GetxController {
   MyPosController({required this.repository}) : assert(repository != null);
   final _me = MyPos().obs;
 
-  get me => _me;
+  get me => _me.value;
 
   set me(value) => _me.value = value;
 

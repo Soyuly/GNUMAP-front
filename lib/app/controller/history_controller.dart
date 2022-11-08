@@ -32,7 +32,7 @@ class HistoryController extends GetxController {
     if (isExisted == false && items.length < 10) {
       items.insert(0, history);
     } else if (isExisted == false && items.length >= 10) {
-      deleteHistory(items[10]);
+      deleteHistory(items[9]);
       items.insert(0, history);
     }
     var box = await Hive.openBox('history');

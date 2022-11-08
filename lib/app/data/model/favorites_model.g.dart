@@ -19,17 +19,23 @@ class FavoritesAdapter extends TypeAdapter<Favorites> {
     return Favorites(
       name: fields[0] as String,
       num: fields[1] as int,
+      lat: fields[2] as String,
+      lng: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Favorites obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.num);
+      ..write(obj.num)
+      ..writeByte(2)
+      ..write(obj.lat)
+      ..writeByte(3)
+      ..write(obj.lng);
   }
 
   @override

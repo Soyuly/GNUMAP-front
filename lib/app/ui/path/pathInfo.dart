@@ -22,6 +22,7 @@ class PathResult extends GetView<MyPosController> {
     Get.put(FavoritesController());
     return Scaffold(
         appBar: CupertinoNavigationBar(
+          backgroundColor: CupertinoColors.systemBackground,
           leading: GestureDetector(
               onTap: () async {
                 Get.back();
@@ -30,7 +31,8 @@ class PathResult extends GetView<MyPosController> {
                 CupertinoIcons.left_chevron,
                 color: CupertinoColors.destructiveRed,
               )),
-          middle: Text(Get.arguments["name"].toString()),
+          middle: Text(Get.arguments["name"].toString(),
+              style: Theme.of(context).textTheme.headline5),
           trailing: LikeIconButton(),
         ),
         body: Container(

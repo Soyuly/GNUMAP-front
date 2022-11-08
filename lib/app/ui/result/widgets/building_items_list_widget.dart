@@ -15,26 +15,31 @@ class BuildingItemsList extends GetView<BuildingPathInfoController> {
               .getAll(Get.arguments['keyword']);
         },
         builder: (_) {
+          print(_.buildingsList);
           return _.buildingsList.length < 1
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? (_.hasData)
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Center(
+                      child: Text(
+                        '검색결과가 없습니다',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    )
               : ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: _.buildingsList.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: SizedBox(
-                        child: BuildingItem(
-                            num: _.buildingsList[index].num,
-                            name: _.buildingsList[index].name,
-                            distance: _.buildingsList[index].distance,
-                            time: _.buildingsList[index].time,
-                            lat: _.buildingsList[index].lat,
-                            lng: _.buildingsList[index].lng),
-                      ),
+                    return SizedBox(
+                      child: BuildingItem(
+                          num: _.buildingsList[index].num,
+                          name: _.buildingsList[index].name,
+                          distance: _.buildingsList[index].distance,
+                          time: _.buildingsList[index].time,
+                          lat: _.buildingsList[index].lat,
+                          lng: _.buildingsList[index].lng),
                     );
                   });
         },

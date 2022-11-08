@@ -21,10 +21,9 @@ class PathWebView extends GetView<MyPosController> {
             builder: (_) {
               return InAppWebView(
                 initialUrlRequest: URLRequest(
-                    url: Uri.parse(BASE_URL + "/find"),
-                    method: 'POST',
-                    body: Uint8List.fromList(utf8.encode(
-                        "lat=${_.me.value.lat}&lng=${_.me.value.lng}&num=${name}")),
+                    url: Uri.parse(BASE_URL +
+                        "/v1/path/${_.me.lat}/${_.me.lng}/${Get.arguments['lat']}/${Get.arguments['lng']}"),
+                    method: 'GET',
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded'
                     }),

@@ -22,6 +22,7 @@ class _SearchFieldState extends State<SearchField> {
         child: Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
       child: CupertinoSearchTextField(
+        placeholder: "search_placeholder".tr,
         controller: _search,
         itemSize: 20,
         onChanged: (value) {

@@ -9,29 +9,36 @@ class LikeIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FavoritesController controller = Get.put(FavoritesController());
+    if (Get.arguments['num'] != null) {
+      return IconButton(
+          onPressed: () async {
+            bool isExisted =
+                Get.find<FavoritesController>().isExisted(Get.arguments['num']);
 
-    return IconButton(
-        onPressed: () async {
-          bool isExisted =
-              Get.find<FavoritesController>().isExisted(Get.arguments['num']);
-
-          if (isExisted) {
-            Get.find<FavoritesController>()
-                .deleteFavoriteByNum(Get.arguments['num']);
-          } else {
-            final favorite = Favorites(
-                name: Get.arguments['name'], num: Get.arguments['num']);
-            Get.find<FavoritesController>().addFavorites(favorite);
-          }
-        },
-        icon: Obx(() => controller.isExisted(Get.arguments['num'])
-            ? Icon(
-                Icons.favorite,
-                color: Colors.pink,
-              )
-            : Icon(
-                Icons.favorite_border_outlined,
-                color: Colors.pink,
-              )));
+            if (isExisted) {
+              Get.find<FavoritesController>()
+                  .deleteFavoriteByNum(Get.arguments['num']);
+            } else {
+              final favorite = Favorites(
+                  name: Get.arguments['name'],
+                  num: Get.arguments['num'],
+                  lat: Get.arguments['lat'],
+                  lng: Get.arguments['lng']);
+              Get.find<FavoritesController>().addFavorites(favorite);
+            }
+          },
+          icon: Obx(() => controller.isExisted(Get.arguments['num'])
+              ? Icon(
+                  Icons.favorite,
+                  color: Colors.pink,
+                )
+              : Icon(
+                  Icons.favorite_border_outlined,
+                  color: Colors.pink,
+                )));
+    } else {
+      return SizedBox.shrink();
+      ;
+    }
   }
 }

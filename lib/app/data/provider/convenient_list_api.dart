@@ -18,9 +18,9 @@ class ConvenientClient {
   getAll(String category) async {
     final baseUrl = Uri.parse(BASE_URL +
         '/v1/convenient/' +
-        controller.me.value.lat.toString() +
+        controller.me.lat.toString() +
         '/' +
-        controller.me.value.lng.toString() +
+        controller.me.lng.toString() +
         '/' +
         category);
 

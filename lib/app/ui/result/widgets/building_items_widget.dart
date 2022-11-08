@@ -71,14 +71,24 @@ class BuildingItem extends StatelessWidget {
                       SizedBox(
                         height: 14,
                       ),
-                      Text(
-                        '여기에서 ${distance}m, $time분',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xff0B40FF),
-                          fontFamily: 'AppleSDGothicNeo',
-                        ),
-                      ),
+                      time < 90
+                          ? Text(
+                              distance >= 1000
+                                  ? '여기에서 ${distance / 1000}km, $time분'
+                                  : '여기에서 ${distance}m, $time분',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color(0xff0B40FF),
+                                fontFamily: 'AppleSDGothicNeo',
+                              ))
+                          : Text(
+                              '소요거리, 소요시간 알수없음',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color(0xff0B40FF),
+                                fontFamily: 'AppleSDGothicNeo',
+                              ),
+                            ),
                     ],
                   ),
                 ),

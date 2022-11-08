@@ -1,10 +1,3 @@
-import 'dart:async';
-import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:gnumap/app/ui/convenients/widgets/convenient_items.dart';
 import 'package:gnumap/app/ui/convenients/widgets/convenient_items_list.dart';
 import 'package:gnumap/app/ui/convenients/widgets/convenient_top_banner.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +17,10 @@ class ConvenientPage extends StatelessWidget {
       child: Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text('편의시설'),
+          middle: Text(
+            '편의시설',
+            style: Theme.of(context).textTheme.headline5,
+          ),
         ),
         body: Container(
           child: Column(children: [

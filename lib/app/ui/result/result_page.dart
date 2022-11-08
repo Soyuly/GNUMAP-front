@@ -36,11 +36,8 @@ class ResultPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IntroduceText(),
-            SizedBox(
-              height: 50,
-            ),
-            BuildingItemsList()
+            Expanded(flex: 3, child: IntroduceText()),
+            Expanded(flex: 15, child: BuildingItemsList())
           ],
         ),
       ),

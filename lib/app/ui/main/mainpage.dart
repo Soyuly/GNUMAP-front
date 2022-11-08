@@ -32,7 +32,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(45.0), // here the desired height
+        preferredSize: Size.fromHeight(40.0), // here the desired height
         child: AppBar(
           systemOverlayStyle: Get.isDarkMode
               ? SystemUiOverlayStyle.light

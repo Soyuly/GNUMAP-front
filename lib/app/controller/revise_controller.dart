@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:gnumap/app/data/model/revise_model.dart';
 import 'package:gnumap/app/data/repository/revise_repository.dart';
@@ -12,6 +14,12 @@ class ReviseController extends GetxController {
   set item(value) => _item.value = value;
 
   postRevise(ReviseModel reviseModel) {
-    repository.postRevise(reviseModel);
+    try {
+      repository.postRevise(reviseModel);
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
   }
 }

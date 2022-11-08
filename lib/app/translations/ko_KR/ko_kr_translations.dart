@@ -38,5 +38,6 @@ final Map<String, String> koKr = {
   "body": "어플 내의 버그나 수정 또는 추가가 필요한 건물들을 상세하게 설명 해주세요.",
   'donate': "서버비 지원하기",
   'donate_description': "광고 시청을 통해서 그누맵 서비스 지원을 위한 서버비를 지원 해주세요!",
-  'ad': "광고 시청하기"
+  'ad': "광고 시청하기",
+  "search_placeholder": "건물명 또는 건물번호를 입력 해주세요."
 };

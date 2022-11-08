@@ -18,9 +18,9 @@ class BuildingPathInfoApiClient {
   getAll(String keyword) async {
     var baseUrl = Uri.parse(BASE_URL +
         '/v1/building/' +
-        controller.me.value.lat.toString() +
+        controller.me.lat.toString() +
         '/' +
-        controller.me.value.lng.toString() +
+        controller.me.lng.toString() +
         '/' +
         keyword);
 

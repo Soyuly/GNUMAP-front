@@ -16,7 +16,20 @@ class SubmitButton extends StatelessWidget {
             apiClient: ReviseApiClient(httpClient: http.Client()))));
     return ElevatedButton(
         onPressed: () async {
-          _revise.postRevise(_revise.item);
+          bool isSent = _revise.postRevise(_revise.item);
+
+          if (isSent) {
+            Get.snackbar(
+              '전송 성공!',
+              '문의사항이 정상적으로 전달 되었습니다. 검토 후 2 ~ 3일 내에 반영 될 예정입니다.',
+              snackPosition: SnackPosition.BOTTOM,
+              forwardAnimationCurve: Curves.elasticInOut,
+              reverseAnimationCurve: Curves.easeOut,
+            );
+            Get.back();
+          } else {
+            Get.snackbar('전솔 실패', '문의사항이 정상적으로 전달 되지 않았습니다. 잠시 후 다시 시도해주세요.');
+          }
         },
         child: Text("보내기"),
         style: ElevatedButton.styleFrom(

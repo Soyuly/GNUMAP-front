@@ -10,5 +10,15 @@ class Favorites {
   @HiveField(1)
   final int num;
 
-  Favorites({required this.name, required this.num});
+  @HiveField(2)
+  final String lat;
+
+  @HiveField(3)
+  final String lng;
+
+  Favorites(
+      {required this.name,
+      required this.num,
+      required this.lat,
+      required this.lng});
 }

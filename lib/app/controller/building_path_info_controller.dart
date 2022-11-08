@@ -11,6 +11,8 @@ class BuildingPathInfoController extends GetxController {
 
   final _building = BuildingModel().obs;
 
+  final _hasData = true.obs;
+
   get buildingsList => _buildingsList.value;
 
   set buildingsList(value) => _buildingsList.value = value;
@@ -19,9 +21,19 @@ class BuildingPathInfoController extends GetxController {
 
   set building(value) => _building.value = value;
 
+  get hasData => _hasData.value;
+
+  set hasData(value) => _hasData.value = value;
+
   getAll(String keyword) {
     repository.getAll(keyword).then((data) {
-      buildingsList = data;
+      try {
+        buildingsList = data;
+        hasData = true;
+      } catch (e) {
+        hasData = false;
+        print("여기로");
+      }
     });
   }
 }

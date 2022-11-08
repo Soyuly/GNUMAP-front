@@ -40,5 +40,6 @@ final Map<String, String> enUS = {
   "donate": "Server cost support",
   "donate_description":
       "Please support the server fee for supporting Gnumap service by watching advertisements!",
-  "ad": "Watching Ad"
+  "ad": "Watching Ad",
+  "search_placeholder": "building number or building name."
 };

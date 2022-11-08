@@ -29,7 +29,7 @@ Future<void> main() async {
     theme: lightThemeData,
     darkTheme: darkThemeData,
     debugShowCheckedModeBanner: false,
-    initialRoute: Routes.MAIN,
+    initialRoute: Routes.INITIAL,
     defaultTransition: Transition.cupertino,
     locale: Get.deviceLocale,
     translationsKeys: AppTranslation.translations,
