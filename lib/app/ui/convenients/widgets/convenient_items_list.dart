@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gnumap/app/controller/convenient_controller.dart';
+import 'package:gnumap/app/controller/my_pos_controller.dart';
 import 'package:gnumap/app/ui/convenients/widgets/convenient_items.dart';
 
 class ConvenientItemsList extends GetView<ConvenientController> {
@@ -14,6 +15,7 @@ class ConvenientItemsList extends GetView<ConvenientController> {
           padding: EdgeInsets.fromLTRB(17, 15, 17, 6),
           child: GetX<ConvenientController>(
             initState: (state) {
+              Get.find<MyPosController>().setPath();
               Get.find<ConvenientController>()
                   .getAll(Get.arguments['category']);
             },

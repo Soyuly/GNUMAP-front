@@ -17,7 +17,7 @@ class TitleTextField extends StatelessWidget {
     return TextField(
       maxLength: 15,
       decoration: InputDecoration(
-        hintText: "건물명을 입력해주세요.",
+        hintText: "문의사항을 입력 해주세요.",
         hintStyle: TextStyle(
             fontSize: 13,
             fontFamily: 'AppleSDGothicNeo',

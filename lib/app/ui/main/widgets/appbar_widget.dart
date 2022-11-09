@@ -23,9 +23,13 @@ class MainAppBar extends StatelessWidget {
                     padding: EdgeInsets.zero, // 패딩 설정
                     constraints: BoxConstraints(), // constraints
                     onPressed: () {
-                      Get.changeTheme(
-                        Get.isDarkMode ? lightThemeData : darkThemeData,
-                      );
+                      if (Get.isDarkMode) {
+                        print('ㅇ');
+                        Get.changeTheme(lightThemeData);
+                      } else {
+                        print('x');
+                        Get.changeTheme(darkThemeData);
+                      }
                     },
                     icon: Icon(
                         Get.isDarkMode ? Icons.brightness_2_sharp : Icons.sunny,

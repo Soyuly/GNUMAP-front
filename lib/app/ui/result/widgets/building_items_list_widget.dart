@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gnumap/app/controller/building_path_info_controller.dart';
+import 'package:gnumap/app/controller/my_pos_controller.dart';
 import 'package:gnumap/app/ui/result/widgets/building_items_widget.dart';
 
 class BuildingItemsList extends GetView<BuildingPathInfoController> {
@@ -11,6 +12,7 @@ class BuildingItemsList extends GetView<BuildingPathInfoController> {
     return Container(
       child: GetX<BuildingPathInfoController>(
         initState: (state) {
+          Get.find<MyPosController>().setPath();
           Get.find<BuildingPathInfoController>()
               .getAll(Get.arguments['keyword']);
         },

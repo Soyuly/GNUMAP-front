@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:gnumap/app/ui/convenients/Convenience.dart';
 
 class ConvenientsItem extends StatelessWidget {
-  final title;
+  final api;
   final name;
-  const ConvenientsItem({Key? key, required this.title, required this.name})
+  final title;
+  const ConvenientsItem(
+      {Key? key, required this.api, required this.title, required this.name})
       : super(key: key);
 
   @override
@@ -14,8 +16,9 @@ class ConvenientsItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Get.toNamed('/convenient', arguments: {
-            "category": title,
+            "category": api,
             "name": name,
+            "title": title,
           });
         },
         child: Column(
@@ -31,7 +34,7 @@ class ConvenientsItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage('assets/convenient/$name.jpg')),
+                        image: AssetImage('assets/icons/$name.jpg')),
                     borderRadius: BorderRadius.circular(50),
                   )),
             ),

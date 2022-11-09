@@ -16,8 +16,10 @@ class TimeAndDistance extends GetView<PathInfoController> {
       flex: 1,
       child: GetX<PathInfoController>(
           initState: (state) {
-            Get.find<PathInfoController>()
-                .getInfo(Get.arguments['lat'], Get.arguments['lng']);
+            Get.find<MyPosController>().setPath();
+            Get.find<PathInfoController>().getInfo(
+                Get.arguments['lat'].toString(),
+                Get.arguments['lng'].toString());
           },
           builder: (_) => _.pathInfo.time == 9999
               ? Center(
@@ -27,20 +29,36 @@ class TimeAndDistance extends GetView<PathInfoController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                        icon: Icon(
-                          Icons.refresh,
-                          size: 25.0,
+                    GestureDetector(
+                      onTap: () {
+                        Get.find<MyPosController>().setPath();
+                        Get.offAndToNamed('/path', arguments: {
+                          'name': Get.arguments['name'],
+                          'num': Get.arguments['num'],
+                          'lat': Get.arguments['lat'],
+                          'lng': Get.arguments['lng']
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        width: 40,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.find<MyPosController>().setPath();
+                            Get.offAndToNamed('/path', arguments: {
+                              'name': Get.arguments['name'],
+                              'num': Get.arguments['num'],
+                              'lat': Get.arguments['lat'],
+                              'lng': Get.arguments['lng']
+                            });
+                          },
+                          icon: Icon(
+                            Icons.refresh,
+                            size: 30.0,
+                          ),
                         ),
-                        onPressed: () {
-                          controller.setPath();
-                          Get.toNamed('/path', arguments: {
-                            'name': Get.arguments['name'],
-                            'num': Get.arguments['num'],
-                            'lat': controller.me.lat,
-                            'lng': controller.me.lng
-                          });
-                        }),
+                      ),
+                    ),
                     Row(
                       children: [
                         Container(
@@ -51,7 +69,7 @@ class TimeAndDistance extends GetView<PathInfoController> {
                         _.pathInfo.distance < 30000
                             ? Text(
                                 _.pathInfo.distance >= 1000
-                                    ? '${_.pathInfo.distance / 1000.toString()}km'
+                                    ? '${(_.pathInfo.distance / 1000).toString()}km'
                                     : '${_.pathInfo.distance.toString()}m',
                                 style: Theme.of(context).textTheme.subtitle1)
                             : Text('알수없음',

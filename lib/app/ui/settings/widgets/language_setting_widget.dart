@@ -32,7 +32,6 @@ class LanguageSetting extends StatelessWidget {
                   1: Text('English'),
                 },
                 groupValue: Get.locale == Locale('en', 'US') ? 1 : 0,
-                // context.locale.toString() == 'en_US' ? 1 : 0,
                 onValueChanged: (int? newValue) {
                   if (Get.locale == Locale('en', 'US')) {
                     Get.updateLocale(const Locale('ko', 'KR'));
