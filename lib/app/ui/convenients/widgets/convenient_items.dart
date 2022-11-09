@@ -106,7 +106,7 @@ class ConvenientItem extends GetView<ConvenientController> {
           ),
           Container(
             height: 1,
-            color: Color(0xff767676),
+            color: Color(0xffB9B9B9),
           ),
           SizedBox(
             height: 15,

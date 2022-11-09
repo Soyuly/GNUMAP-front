@@ -21,7 +21,7 @@ class ConvenientTopBanner extends StatelessWidget {
         Align(
           alignment: Alignment.center,
           child: Text(
-            Get.arguments['category'].toString(),
+            Get.arguments['title'].toString(),
             style: TextStyle(
                 color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
           ),

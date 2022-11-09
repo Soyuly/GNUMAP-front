@@ -1,20 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
-import 'package:get/get.dart';
-import 'package:gnumap/app/ui/revise/revise_info.dart';
 import 'package:gnumap/app/ui/settings/widgets/developer_info_widget.dart';
 import 'package:gnumap/app/ui/settings/widgets/display_setting_wiget.dart';
 import 'package:gnumap/app/ui/settings/widgets/donate_button_widget.dart';
 import 'package:gnumap/app/ui/settings/widgets/language_setting_widget.dart';
 import 'package:gnumap/app/ui/settings/widgets/location_setting_widget.dart';
 import 'package:gnumap/app/ui/settings/widgets/revise_setting_widget.dart';
-import 'package:gnumap/main.dart';
 
 import 'package:location/location.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
-import 'package:app_settings/app_settings.dart';
 
 class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);
