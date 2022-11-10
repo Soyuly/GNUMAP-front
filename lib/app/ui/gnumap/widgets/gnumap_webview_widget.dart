@@ -7,14 +7,11 @@ class GnuMapWebView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 11,
-      child: InAppWebView(
-        initialUrlRequest: URLRequest(
-            url: Uri.parse(BASE_URL + "/v1/gnumap"),
-            method: 'GET',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
-      ),
+    return InAppWebView(
+      initialUrlRequest: URLRequest(
+          url: Uri.parse(BASE_URL + "/v1/gnumap"),
+          method: 'GET',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}),
     );
   }
 }

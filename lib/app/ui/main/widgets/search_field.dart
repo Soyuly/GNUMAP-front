@@ -20,7 +20,7 @@ class _SearchFieldState extends State<SearchField> {
 
     return SafeArea(
         child: Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
+      margin: const EdgeInsets.fromLTRB(0, 8, 13, 0),
       child: CupertinoSearchTextField(
         placeholder: "search_placeholder".tr,
         controller: _search,

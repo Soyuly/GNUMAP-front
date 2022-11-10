@@ -72,7 +72,7 @@ class TimeAndDistance extends GetView<PathInfoController> {
                                     ? '${(_.pathInfo.distance / 1000).toString()}km'
                                     : '${_.pathInfo.distance.toString()}m',
                                 style: Theme.of(context).textTheme.subtitle1)
-                            : Text('알수없음',
+                            : Text('범위 초과',
                                 style: Theme.of(context).textTheme.subtitle1),
                       ],
                     ),
@@ -85,7 +85,7 @@ class TimeAndDistance extends GetView<PathInfoController> {
                         _.pathInfo.time < 90
                             ? Text('${_.pathInfo.time.toString()}분',
                                 style: Theme.of(context).textTheme.subtitle1)
-                            : Text('알수없음',
+                            : Text('범위 초과',
                                 style: Theme.of(context).textTheme.subtitle1),
                       ],
                     ),
