@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -34,7 +36,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>그누맵 어플을 사용하기 위해서는 위치권한설정이 필요합니다.</string>
+	<string>학교 내의 건물과 편의시설 찾기, 소요시간(소요거리) 정보 제공을 위해서는 위치권한 설정이 필요합니다. 그누맵 사용을 위해서 위치 권한을 허락해 주세요.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
