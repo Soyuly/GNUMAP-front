@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:gnumap/app/controller/theme_controller.dart';
 import 'package:gnumap/app/ui/settings/settings.dart';
 import 'package:gnumap/app/ui/theme/dark_theme.dart';
 import 'package:gnumap/app/ui/theme/light_theme.dart';
@@ -11,7 +10,6 @@ class MainAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeController _controller = Get.put(ThemeController());
     return Container(
       margin: const EdgeInsets.fromLTRB(8, 10, 0, 0),
       child: Row(

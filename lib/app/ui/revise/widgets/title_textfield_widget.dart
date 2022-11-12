@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gnumap/app/controller/revise_controller.dart';
-import 'package:gnumap/app/controller/theme_controller.dart';
 import 'package:gnumap/app/data/provider/revise_post_api.dart';
 import 'package:gnumap/app/data/repository/revise_repository.dart';
 import 'package:http/http.dart' as http;

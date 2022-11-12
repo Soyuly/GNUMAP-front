@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gnumap/app/controller/theme_controller.dart';
 
 class IntroduceText extends StatelessWidget {
   const IntroduceText({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ThemeController _controller = Get.put(ThemeController());
     return Container(
       margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
       child: Text(
