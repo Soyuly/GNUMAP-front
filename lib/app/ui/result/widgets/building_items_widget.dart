@@ -52,19 +52,31 @@ class BuildingItem extends StatelessWidget {
                         children: [
                           Text(
                             '$num동',
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.black,
-                                fontFamily: 'AppleSDGothicNeo',
-                                fontWeight: FontWeight.w600),
+                            style: Get.isDarkMode
+                                ? TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                    fontFamily: 'AppleSDGothicNeo',
+                                    fontWeight: FontWeight.w600)
+                                : TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.black,
+                                    fontFamily: 'AppleSDGothicNeo',
+                                    fontWeight: FontWeight.w600),
                           ),
                           Text(
                             name,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontFamily: 'AppleSDGothicNeo',
-                                fontWeight: FontWeight.w600),
+                            style: Get.isDarkMode
+                                ? TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontFamily: 'AppleSDGothicNeo',
+                                    fontWeight: FontWeight.w600)
+                                : TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontFamily: 'AppleSDGothicNeo',
+                                    fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -76,18 +88,30 @@ class BuildingItem extends StatelessWidget {
                               distance >= 1000
                                   ? '여기에서 ${distance / 1000}km, $time분'
                                   : '여기에서 ${distance}m, $time분',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Color(0xff0B40FF),
-                                fontFamily: 'AppleSDGothicNeo',
-                              ))
+                              style: Get.isDarkMode
+                                  ? TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blue,
+                                      fontFamily: 'AppleSDGothicNeo',
+                                    )
+                                  : TextStyle(
+                                      fontSize: 15,
+                                      color: Color(0xff0B40FF),
+                                      fontFamily: 'AppleSDGothicNeo',
+                                    ))
                           : Text(
                               '소요거리, 소요시간 알수없음',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Color(0xff0B40FF),
-                                fontFamily: 'AppleSDGothicNeo',
-                              ),
+                              style: Get.isDarkMode
+                                  ? TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.blue,
+                                      fontFamily: 'AppleSDGothicNeo',
+                                    )
+                                  : TextStyle(
+                                      fontSize: 15,
+                                      color: Color(0xff0B40FF),
+                                      fontFamily: 'AppleSDGothicNeo',
+                                    ),
                             ),
                     ],
                   ),

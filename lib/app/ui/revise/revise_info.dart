@@ -38,17 +38,18 @@ class _ReviseInfoState extends State<ReviseInfo> {
     return Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text('정보수정요청'),
+          middle: Text('정보수정요청', style: Theme.of(context).textTheme.headline5),
         ),
         body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: ListView(children: [
               ReviseItemTitle(name: "제목"),
-              SizedBox(height: 20),
+              SizedBox(height: 3),
               TitleTextField(),
               ReviseItemTitle(name: "수정내용"),
-              SizedBox(height: 20),
+              SizedBox(height: 3),
               BodyTextField(),
+              SizedBox(height: 15),
               SubmitButton(),
             ])));
   }

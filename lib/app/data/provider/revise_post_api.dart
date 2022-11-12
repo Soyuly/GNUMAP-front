@@ -11,7 +11,7 @@ import 'package:gnumap/app/data/repository/revise_repository.dart';
 import 'package:gnumap/app/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
-var baseUrl = Uri.parse(BASE_URL + '/v1/postMail');
+var baseUrl = Uri.parse(BASE_URL + '/v1/revise');
 
 class ReviseApiClient {
   final http.Client httpClient;

@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gnumap/app/controller/history_controller.dart';
-import 'package:gnumap/app/data/model/history_model.dart';
 
 class HistoryItems extends GetView<HistoryController> {
   const HistoryItems({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var color = Get.isDarkMode ? Colors.white : Theme.of(context).primaryColor;
     return Container(
       height: 22,
       child: GetX<HistoryController>(
@@ -62,7 +62,7 @@ class HistoryItems extends GetView<HistoryController> {
                     child: Text(_.items[index].name,
                         style: TextStyle(
                             fontSize: 13,
-                            color: Theme.of(context).primaryColor,
+                            color: color,
                             fontFamily: 'AppleSDGothicNeo')),
                     style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

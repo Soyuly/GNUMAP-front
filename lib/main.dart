@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gnumap/app/data/model/favorites_model.dart';
-import 'package:gnumap/app/data/model/history_model.dart';
 import 'package:gnumap/app/translations/app_translations.dart';
 import 'package:gnumap/app/ui/theme/light_theme.dart';
 import 'package:gnumap/app/ui/theme/dark_theme.dart';
