@@ -24,11 +24,17 @@ class ResultPage extends StatelessWidget {
           onTap: () {
             Get.back();
           },
-          child: Icon(
-            CupertinoIcons.chevron_back,
-            color: Colors.black,
-            size: 30,
-          ),
+          child: Get.isDarkMode
+              ? Icon(
+                  CupertinoIcons.chevron_back,
+                  color: Colors.white,
+                  size: 30,
+                )
+              : Icon(
+                  CupertinoIcons.chevron_back,
+                  color: Colors.black,
+                  size: 30,
+                ),
         ),
       ),
       body: Container(

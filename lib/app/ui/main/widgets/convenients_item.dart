@@ -6,8 +6,13 @@ class ConvenientsItem extends StatelessWidget {
   final api;
   final name;
   final title;
+  final appbar;
   const ConvenientsItem(
-      {Key? key, required this.api, required this.title, required this.name})
+      {Key? key,
+      required this.api,
+      required this.title,
+      required this.name,
+      required this.appbar})
       : super(key: key);
 
   @override
@@ -19,6 +24,7 @@ class ConvenientsItem extends StatelessWidget {
             "category": api,
             "name": name,
             "title": title,
+            "appbar": appbar,
           });
         },
         child: Column(

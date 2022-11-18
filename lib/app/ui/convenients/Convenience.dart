@@ -15,15 +15,13 @@ class ConvenientPage extends StatelessWidget {
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
           middle: Text(
-            Get.arguments['title'],
+            Get.arguments['appbar'],
             style: Theme.of(context).textTheme.headline5,
           ),
         ),
-        body: Container(
-          child: Column(children: [
-            ConvenientItemsList(),
-          ]),
-        ),
+        body: Column(children: [
+          ConvenientItemsList(),
+        ]),
       ),
     );
   }

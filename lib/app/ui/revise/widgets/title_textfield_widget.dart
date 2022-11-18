@@ -15,13 +15,18 @@ class TitleTextField extends StatelessWidget {
         repository: ReviseRepository(
             apiClient: ReviseApiClient(httpClient: http.Client()))));
     return TextField(
-      maxLength: 15,
+      maxLength: 50,
       decoration: InputDecoration(
         hintText: "문의사항을 입력 해주세요.",
-        hintStyle: TextStyle(
-            fontSize: 13,
-            fontFamily: 'AppleSDGothicNeo',
-            color: Color.fromRGBO(0, 0, 0, 0.6)),
+        hintStyle: Get.isDarkMode
+            ? TextStyle(
+                fontSize: 13,
+                fontFamily: 'AppleSDGothicNeo',
+                color: Colors.white)
+            : TextStyle(
+                fontSize: 13,
+                fontFamily: 'AppleSDGothicNeo',
+                color: Color.fromRGBO(0, 0, 0, 0.6)),
       ),
       controller: _controller,
       style: TextStyle(

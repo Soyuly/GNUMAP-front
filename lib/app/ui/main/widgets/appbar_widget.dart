@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:gnumap/app/ui/settings/settings.dart';
 import 'package:gnumap/app/ui/theme/dark_theme.dart';
@@ -24,10 +25,8 @@ class MainAppBar extends StatelessWidget {
                     constraints: BoxConstraints(), // constraints
                     onPressed: () {
                       if (Get.isDarkMode) {
-                        print('ㅇ');
                         Get.changeTheme(lightThemeData);
                       } else {
-                        print('x');
                         Get.changeTheme(darkThemeData);
                       }
                     },
@@ -48,7 +47,7 @@ class MainAppBar extends StatelessWidget {
                     Icon(Icons.settings, color: Theme.of(context).primaryColor),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
