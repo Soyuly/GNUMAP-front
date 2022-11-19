@@ -24,8 +24,18 @@
 - 한 스크린.dart 파일안에 모든 위젯이 있는게 아니라, 위젯을 단위별로 쪼개서 더 손쉬운 위젯 관리 가능
 - GetX TransLation 사용
 
-## 스크린샷
-- 추후 추가 예정
+## 배포
+#### AppStore
+https://apps.apple.com/us/app/%EA%B7%B8%EB%88%84%EB%A7%B5-gnu-map/id6444317161
+#### PlayStore
+https://play.google.com/store/apps/details?id=com.eighteenclass.gnumap
+
+## 버전 변경점
+#### v1.0.4
+건물 검색할 때 빈 검색어 예외처리 및, 글자수 10글자 제한
+
+#### v.1.0.3
+한국어 모드에서 편의시설 타이틀이 이상하게 나타나는 오류 수정
 
 ## 레퍼런스
 https://github.com/kauemurakami/getx_pattern
