@@ -38,6 +38,21 @@ class _SearchFieldState extends State<SearchField> {
             color: Color.fromRGBO(188, 188, 188, 0.54),
             borderRadius: BorderRadius.circular(10)),
         onSubmitted: (name) async {
+          if (name.trim() == "") {
+            Get.dialog(CupertinoAlertDialog(
+              title: Text('검색어가 올바르지 않습니다.'),
+              content: Text('건물번호 또는 건물명을 다시 입력해주세요.'),
+              actions: [
+                CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: Text("확인"),
+                    onPressed: () {
+                      Get.back();
+                    })
+              ],
+            ));
+            return;
+          }
           final history = History(name: name);
           Get.find<HistoryController>().addHistory(history);
           Get.toNamed("/result", arguments: {"keyword": name});
