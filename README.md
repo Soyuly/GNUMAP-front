@@ -31,6 +31,9 @@ https://apps.apple.com/us/app/%EA%B7%B8%EB%88%84%EB%A7%B5-gnu-map/id6444317161
 https://play.google.com/store/apps/details?id=com.eighteenclass.gnumap
 
 ## 버전 변경점
+#### v1.0.5
+학교 저작권 문제로 어플리케이션 로고 변경
+
 #### v1.0.4
 건물 검색할 때 빈 검색어 예외처리 및, 글자수 10글자 제한
 

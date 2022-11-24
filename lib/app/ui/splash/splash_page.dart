@@ -10,7 +10,7 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   @override
-  Widget build(BuildContext  context) {
+  Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
             color: Colors.white,
@@ -19,7 +19,18 @@ class _SplashState extends State<Splash> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                  Image.asset('assets/intro.png', width: 500),
+                  Expanded(
+                      flex: 12,
+                      child: Image.asset('assets/intro.png', width: 500)),
+                  Expanded(
+                      flex: 1,
+                      child: Text(
+                        '학교 공용 와이파이로 접속이 불가능합니다. \n 그누맵 사용 시 데이터 사용을 권장합니다.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'AppleSDGothicNeo',
+                            color: Color(0xff767676)),
+                      ))
                 ]))));
   }
 

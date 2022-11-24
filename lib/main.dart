@@ -9,12 +9,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'app/routes/app_pages.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
   await Hive.initFlutter();
+
   runApp(GetMaterialApp(
     theme: lightThemeData,
     darkTheme: darkThemeData,
