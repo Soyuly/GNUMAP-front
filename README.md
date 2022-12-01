@@ -31,6 +31,15 @@ https://apps.apple.com/us/app/%EA%B7%B8%EB%88%84%EB%A7%B5-gnu-map/id6444317161
 https://play.google.com/store/apps/details?id=com.eighteenclass.gnumap
 
 ## 버전 변경점
+#### v1.0.8
+- 어플 용량을 획기적으로 줄였습니다. 더욱 가볍게 지누맵을 이용해보세요!
+
+#### v1.0.7
+- 저작권 문제로 어플 이름을 지누맵으로 변경하였습니다
+
+#### v1.0.6
+- 한국어 모드에서 편의시설 페이지 접속 시 타이틀명이 변수 이름으로 뜨는 버그 수정
+
 #### v1.0.5
 학교 저작권 문제로 어플리케이션 로고 변경
 
