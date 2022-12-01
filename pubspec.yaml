@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.4+7
+version: 1.0.8+11
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
@@ -42,6 +42,9 @@ dependencies:
   get: ^4.6.5
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  firebase_core: ^2.3.0
+  firebase_storage: ^11.0.6
+  unorm_dart: ^0.2.0
 
 
 dev_dependencies:
@@ -95,13 +98,10 @@ flutter:
         - asset: assets/fonts/AppleFont/AppleSDGothicNeoB.ttf
           weight: 700
 
-    - family: GangwonEduSaeeum
-      fonts:
-        - asset: assets/fonts/강원교육새음.ttf   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
   image_path: "assets/logo.png"
   remove_alpha_ios : true

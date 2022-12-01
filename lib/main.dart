@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gnumap/app/translations/app_translations.dart';
 import 'package:gnumap/app/ui/theme/light_theme.dart';
@@ -9,12 +10,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'app/routes/app_pages.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
   await Hive.initFlutter();
+
   runApp(GetMaterialApp(
     theme: lightThemeData,
     darkTheme: darkThemeData,

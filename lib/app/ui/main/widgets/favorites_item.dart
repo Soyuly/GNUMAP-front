@@ -45,7 +45,7 @@ class FavoritesItem extends GetView<FavoritesController> {
                                     image: DecorationImage(
                                         fit: BoxFit.cover,
                                         image: Image.asset(
-                                          'assets/buildings/${_.items[index].num}.jpeg',
+                                          'assets/buildings/${_.items[index].num}-min.jpeg',
                                         ).image),
                                     borderRadius: BorderRadius.circular(40),
                                   )),

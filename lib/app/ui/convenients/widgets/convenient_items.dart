@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gnumap/app/controller/convenient_controller.dart';
+import 'package:gnumap/app/utils/storage_service.dart';
 
 class ConvenientItem extends GetView<ConvenientController> {
   final String name;
@@ -24,6 +25,7 @@ class ConvenientItem extends GetView<ConvenientController> {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Storage storage = Storage();
     return GestureDetector(
       onTap: () {
         Get.toNamed('/path/convenient',
@@ -37,14 +39,35 @@ class ConvenientItem extends GetView<ConvenientController> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Image(
-                      fit: BoxFit.cover,
+                FutureBuilder(
+                  future: storage.downloadURL("convenients", name + ".jpg"),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: Image.network(
+                          snapshot.data!,
+                          fit: BoxFit.cover,
+                          width: 110,
+                          height: 110,
+                        ),
+                        // 'assets/convenient/cafe.jpg')),
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        !snapshot.hasData) {
+                      return SizedBox(
+                        width: 110,
+                        height: 110,
+                      );
+                    }
+                    return SizedBox(
                       width: 110,
                       height: 110,
-                      image: AssetImage("assets/convenient/$name.jpg")),
-                  // 'assets/convenient/cafe.jpg')),
+                    );
+                  },
                 ),
                 Container(
                   height: 100,

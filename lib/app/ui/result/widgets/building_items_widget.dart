@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gnumap/app/utils/storage_service.dart';
 
 class BuildingItem extends StatelessWidget {
   final int num;
@@ -20,6 +21,7 @@ class BuildingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Storage storage = Storage();
     return GestureDetector(
       onTap: () => Get.toNamed('/path',
           arguments: {'name': name, 'num': num, 'lat': lat, 'lng': lng}),
@@ -29,14 +31,36 @@ class BuildingItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                ClipRRect(
-                  child: Image.asset(
-                    'assets/buildings/$num.jpeg',
-                    width: 110,
-                    height: 98,
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
+                FutureBuilder(
+                  future: storage.downloadURL(
+                      "buildings", num.toString() + ".jpeg"),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: Image.network(
+                          snapshot.data!,
+                          fit: BoxFit.cover,
+                          width: 110,
+                          height: 110,
+                        ),
+                        // 'assets/convenient/cafe.jpg')),
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        !snapshot.hasData) {
+                      return SizedBox(
+                        width: 110,
+                        height: 110,
+                      );
+                    }
+                    return SizedBox(
+                      width: 110,
+                      height: 110,
+                    );
+                  },
                 ),
                 SizedBox(
                   width: 15,
