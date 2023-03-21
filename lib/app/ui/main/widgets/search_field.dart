@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:gnumap/app/controller/history_controller.dart';
 import 'package:gnumap/app/data/model/history_model.dart';
 
+import '../../../controller/area_controller.dart';
+
 class SearchField extends StatefulWidget {
   const SearchField({Key? key}) : super(key: key);
 
@@ -20,7 +22,8 @@ class _SearchFieldState extends State<SearchField> {
 
     return SafeArea(
         child: Container(
-      margin: const EdgeInsets.fromLTRB(0, 8, 13, 0),
+      height: 37,
+      margin: const EdgeInsets.fromLTRB(0, 8, 13, 5),
       child: CupertinoSearchTextField(
         placeholder: "search_placeholder".tr,
         controller: _search,
@@ -53,7 +56,9 @@ class _SearchFieldState extends State<SearchField> {
             ));
             return;
           }
-          final history = History(name: name);
+          print(Get.find<AreaController>().area);
+          final history =
+              History(name: name, area: Get.find<AreaController>().area);
           Get.find<HistoryController>().addHistory(history);
           Get.toNamed("/result", arguments: {"keyword": name});
         },

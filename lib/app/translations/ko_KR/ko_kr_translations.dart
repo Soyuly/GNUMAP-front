@@ -34,7 +34,8 @@ final Map<String, String> koKr = {
   "location_description": "경로찾기와 현위치 서비스에 필요한 위치정보서비스 권한을 허용받습니다.",
   "go_to_location": "위치권한 설정 바로가기",
   "revise_setting": "문의사항 보내기",
-  "revise_description": "어플의 장애나, 잘못된 정보가 있을경우 개발자한테 연락할 수 있습니다.",
+  "revise_description":
+      "어플의 장애나, 잘못된 정보가 있을경우 개발자한테 연락할 수 있습니다.\n이메일 문의: thduf0623@naver.com",
   "go_to_revise": "문의사항 보내기",
   "network_error_title": "네트워크 연결상태가 불안정합니다.",
   "netowrk_error": "네트워크 연결상태를 확인해주세요.",
@@ -49,5 +50,5 @@ final Map<String, String> koKr = {
   'donate': "서버비 지원하기",
   'donate_description': "광고 시청을 통해서 그누맵 서비스 지원을 위한 서버비를 지원 해주세요!",
   'ad': "광고 시청하기",
-  "search_placeholder": "건물명 또는 건물번호를 입력 해주세요."
+  "search_placeholder": "ex) 24 또는 교양"
 };

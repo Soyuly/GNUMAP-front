@@ -15,14 +15,18 @@ class BuildingPathInfoApiClient {
       MyPosController(repository: MyPosRepository(myPosClient: MyPosClient())));
   BuildingPathInfoApiClient({required this.httpClient});
 
-  getAll(String keyword) async {
+  getAll(String keyword, String area) async {
     var baseUrl = Uri.parse(BASE_URL +
         '/v1/building/' +
         controller.me.lat.toString() +
         '/' +
         controller.me.lng.toString() +
         '/' +
-        keyword);
+        keyword +
+        '/' +
+        area);
+
+    print(baseUrl);
 
     try {
       var response = await httpClient.get(baseUrl);

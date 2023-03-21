@@ -20,17 +20,15 @@ class TitleTextField extends StatelessWidget {
         hintText: "문의사항을 입력 해주세요.",
         hintStyle: Get.isDarkMode
             ? TextStyle(
-                fontSize: 13,
-                fontFamily: 'AppleSDGothicNeo',
-                color: Colors.white)
+                fontSize: 13, fontFamily: 'Pretendard', color: Colors.white)
             : TextStyle(
                 fontSize: 13,
-                fontFamily: 'AppleSDGothicNeo',
+                fontFamily: 'Pretendard',
                 color: Color.fromRGBO(0, 0, 0, 0.6)),
       ),
       controller: _controller,
       style: TextStyle(
-        fontFamily: 'AppleSDGothicNeo',
+        fontFamily: 'Pretendard',
       ),
       onChanged: (value) => {_revise.item.title = value},
     );

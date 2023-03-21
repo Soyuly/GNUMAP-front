@@ -14,12 +14,12 @@ class IntroduceText extends StatelessWidget {
             ? TextStyle(
                 fontSize: 30,
                 color: Colors.white,
-                fontFamily: 'AppleSDGothicNeo',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.bold)
             : TextStyle(
                 fontSize: 30,
                 color: Colors.black,
-                fontFamily: 'AppleSDGothicNeo',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.bold),
       ),
     );

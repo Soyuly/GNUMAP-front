@@ -21,7 +21,7 @@ void main() async {
   runApp(GetMaterialApp(
     theme: lightThemeData,
     darkTheme: darkThemeData,
-    themeMode: ThemeMode.light,
+    themeMode: ThemeMode.system,
     debugShowCheckedModeBanner: false,
     initialRoute: Routes.INITIAL,
     defaultTransition: Transition.cupertino,

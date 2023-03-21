@@ -15,13 +15,13 @@ class ReviseItemTitle extends StatelessWidget {
             ? TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'AppleSDGothicNeo',
+                fontFamily: 'Pretendard',
                 color: Colors.white,
               )
             : TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'AppleSDGothicNeo',
+                fontFamily: 'Pretendard',
                 color: Color.fromRGBO(0, 0, 0, 0.69),
               ),
       ),
