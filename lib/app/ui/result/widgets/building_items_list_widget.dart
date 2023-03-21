@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gnumap/app/controller/area_controller.dart';
 import 'package:gnumap/app/controller/building_path_info_controller.dart';
 import 'package:gnumap/app/controller/my_pos_controller.dart';
 import 'package:gnumap/app/ui/result/widgets/building_items_widget.dart';
@@ -9,12 +10,16 @@ class BuildingItemsList extends GetView<BuildingPathInfoController> {
 
   @override
   Widget build(BuildContext context) {
+    String searchArea =
+        Get.arguments['area'] ?? Get.find<AreaController>().area;
+
+    print(Get.find<AreaController>().area);
     return Container(
       child: GetX<BuildingPathInfoController>(
         initState: (state) {
           Get.find<MyPosController>().setPath();
           Get.find<BuildingPathInfoController>()
-              .getAll(Get.arguments['keyword']);
+              .getAll(Get.arguments['keyword'], searchArea);
         },
         builder: (_) {
           print(_.buildingsList);
@@ -36,12 +41,14 @@ class BuildingItemsList extends GetView<BuildingPathInfoController> {
                   itemBuilder: (context, index) {
                     return SizedBox(
                       child: BuildingItem(
-                          num: _.buildingsList[index].num,
-                          name: _.buildingsList[index].name,
-                          distance: _.buildingsList[index].distance,
-                          time: _.buildingsList[index].time,
-                          lat: _.buildingsList[index].lat,
-                          lng: _.buildingsList[index].lng),
+                        num: _.buildingsList[index].num,
+                        name: _.buildingsList[index].name,
+                        distance: _.buildingsList[index].distance,
+                        time: _.buildingsList[index].time,
+                        lat: _.buildingsList[index].lat,
+                        lng: _.buildingsList[index].lng,
+                        area: searchArea,
+                      ),
                     );
                   });
         },

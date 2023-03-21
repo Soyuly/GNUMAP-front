@@ -8,6 +8,8 @@ import 'package:gnumap/app/binding/revise_binding.dart';
 import 'package:gnumap/app/controller/my_pos_controller.dart';
 import 'package:gnumap/app/data/provider/my_pos_provider.dart';
 import 'package:gnumap/app/data/repository/my_pos_repository.dart';
+import 'package:gnumap/app/ui/bus/bus_page.dart';
+import 'package:gnumap/app/ui/bus/widgets/bus_webview_widget.dart';
 import 'package:gnumap/app/ui/convenients/Convenience.dart';
 import 'package:gnumap/app/ui/gnumap/gnu_map.dart';
 import 'package:gnumap/app/ui/main/mainpage.dart';
@@ -35,6 +37,7 @@ class AppPages {
         page: () => ReviseInfo(),
         binding: ReviseBinding()),
     GetPage(name: Routes.MAP, page: () => GnuMap()),
+    GetPage(name: Routes.BUS, page: () => BusMap()),
     GetPage(
         name: Routes.CONVENIENT,
         page: () => ConvenientPage(),

@@ -7,5 +7,8 @@ class History {
   @HiveField(0)
   final String name;
 
-  History({required this.name});
+  @HiveField(1)
+  final String area;
+
+  History({required this.name, required this.area});
 }

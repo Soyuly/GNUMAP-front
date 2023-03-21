@@ -83,13 +83,13 @@ class ConvenientItem extends GetView<ConvenientController> {
                             name,
                             style: TextStyle(
                                 fontSize: 17,
-                                fontFamily: 'AppleSDGothicNeo',
+                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
                             phone,
                             style: TextStyle(
-                                fontSize: 13, fontFamily: 'AppleSDGothicNeo'),
+                                fontSize: 13, fontFamily: 'Pretendard'),
                           ),
                         ],
                       ),
@@ -100,21 +100,18 @@ class ConvenientItem extends GetView<ConvenientController> {
                               ? Text(
                                   '소요거리 : ${distance}m, 소요시간 : ${time}분',
                                   style: TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: 'AppleSDGothicNeo'),
+                                      fontSize: 13, fontFamily: 'Pretendard'),
                                 )
                               : Text(
                                   '소요거리, 소요시간 알수없음',
                                   style: TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: 'AppleSDGothicNeo'),
+                                      fontSize: 13, fontFamily: 'Pretendard'),
                                 ),
                           Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Text("운영시간: $open ~ $close",
                                 style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'AppleSDGothicNeo')),
+                                    fontSize: 12, fontFamily: 'Pretendard')),
                           ),
                         ],
                       ),

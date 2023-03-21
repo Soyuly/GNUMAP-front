@@ -18,21 +18,17 @@ class MainAppBar extends StatelessWidget {
           Text('gnumap'.tr, style: Theme.of(context).textTheme.headline1),
           Row(
             children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: IconButton(
-                    padding: EdgeInsets.zero, // 패딩 설정
-                    constraints: BoxConstraints(), // constraints
-                    onPressed: () {
-                      if (Get.isDarkMode) {
-                        Get.changeTheme(lightThemeData);
-                      } else {
-                        Get.changeTheme(darkThemeData);
-                      }
-                    },
-                    icon: Icon(
-                        Get.isDarkMode ? Icons.brightness_2_sharp : Icons.sunny,
-                        color: Theme.of(context).primaryColor)),
+              IconButton(
+                padding: EdgeInsets.zero, // 패딩 설정
+                constraints: BoxConstraints(), // constraints
+                onPressed: () {
+                  Get.toNamed('/bus');
+                },
+                icon: Icon(Icons.bus_alert,
+                    size: 25, color: Theme.of(context).primaryColor),
+              ),
+              SizedBox(
+                width: 10,
               ),
               IconButton(
                 padding: EdgeInsets.zero, // 패딩 설정

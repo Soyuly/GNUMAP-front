@@ -28,8 +28,7 @@ class _SplashState extends State<Splash> {
                         '학교 공용 와이파이로 접속이 불가능합니다. \n 그누맵 사용 시 데이터 사용을 권장합니다.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontFamily: 'AppleSDGothicNeo',
-                            color: Color(0xff767676)),
+                            fontFamily: 'Pretendard', color: Color(0xff767676)),
                       ))
                 ]))));
   }
@@ -38,7 +37,7 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2)).then((value) {
-      Get.toNamed("/main");
+      Get.offAllNamed("/main");
     });
   }
 }

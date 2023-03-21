@@ -25,8 +25,8 @@ class BuildingPathInfoController extends GetxController {
 
   set hasData(value) => _hasData.value = value;
 
-  getAll(String keyword) {
-    repository.getAll(keyword).then((data) {
+  getAll(String keyword, String area) {
+    repository.getAll(keyword, area).then((data) {
       try {
         buildingsList = data;
         hasData = true;

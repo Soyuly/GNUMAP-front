@@ -33,12 +33,12 @@ class DisplaySetting extends StatelessWidget {
                   0: Text('Light'),
                   1: Text('Dark'),
                 },
-                groupValue: Get.isDarkMode ? 1 : 0,
+                groupValue: context.isDarkMode ? 1 : 0,
                 onValueChanged: (int? newValue) {
-                  if (Get.isDarkMode) {
-                    Get.changeTheme(lightThemeData);
+                  if (context.isDarkMode) {
+                    Get.changeThemeMode(ThemeMode.light);
                   } else {
-                    Get.changeTheme(darkThemeData);
+                    Get.changeThemeMode(ThemeMode.dark);
                   }
                 }),
           ),

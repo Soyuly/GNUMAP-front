@@ -23,21 +23,19 @@ class BodyTextField extends StatelessWidget {
         hintText: "내용을 입력해주세요.",
         hintStyle: Get.isDarkMode
             ? TextStyle(
-                fontSize: 13,
-                fontFamily: 'AppleSDGothicNeo',
-                color: Colors.white)
+                fontSize: 13, fontFamily: 'Pretendard', color: Colors.white)
             : TextStyle(
                 fontSize: 13,
-                fontFamily: 'AppleSDGothicNeo',
+                fontFamily: 'Pretendard',
                 color: Color.fromRGBO(0, 0, 0, 0.6)),
       ),
       controller: _controller,
       style: Get.isDarkMode
           ? TextStyle(
-              fontSize: 14, fontFamily: 'AppleSDGothicNeo', color: Colors.white)
+              fontSize: 14, fontFamily: 'Pretendard', color: Colors.white)
           : TextStyle(
               fontSize: 14,
-              fontFamily: 'AppleSDGothicNeo',
+              fontFamily: 'Pretendard',
               color: Color.fromRGBO(0, 0, 0, 0.9)),
       onChanged: (value) => {_revise.item.body = _controller.text},
     );

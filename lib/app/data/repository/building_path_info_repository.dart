@@ -6,7 +6,7 @@ class BuildingPathInfoRepository {
   BuildingPathInfoRepository({required this.apiClient})
       : assert(apiClient != null);
 
-  getAll(String keyword) {
-    return apiClient.getAll(keyword);
+  getAll(String keyword, String area) {
+    return apiClient.getAll(keyword, area);
   }
 }

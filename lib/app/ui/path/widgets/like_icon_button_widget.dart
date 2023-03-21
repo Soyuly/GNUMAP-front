@@ -9,6 +9,7 @@ class LikeIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FavoritesController controller = Get.put(FavoritesController());
+
     if (Get.arguments['num'] != null) {
       return IconButton(
           onPressed: () async {
@@ -23,7 +24,8 @@ class LikeIconButton extends StatelessWidget {
                   name: Get.arguments['name'],
                   num: Get.arguments['num'],
                   lat: Get.arguments['lat'],
-                  lng: Get.arguments['lng']);
+                  lng: Get.arguments['lng'],
+                  area: Get.arguments['area']);
               Get.find<FavoritesController>().addFavorites(favorite);
             }
           },

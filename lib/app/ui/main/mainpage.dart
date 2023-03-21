@@ -10,6 +10,7 @@ import 'package:gnumap/app/ui/main/widgets/history_items.dart';
 import 'package:gnumap/app/ui/main/widgets/item_title.dart';
 import 'package:gnumap/app/ui/main/widgets/minimap_widget.dart';
 import 'package:gnumap/app/ui/main/widgets/search_field.dart';
+import 'package:gnumap/app/ui/main/widgets/top_widget.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -23,15 +24,38 @@ class _MainPageState extends State<MainPage> {
 
   TextEditingController _search = new TextEditingController();
   String text = "";
+  DateTime? currentBackPressTime;
+
+  // 2번 눌러서 앱 종료하기
+  Future<bool> onWillPop() async {
+    print("실행");
+    DateTime now = DateTime.now();
+
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+
+      Get.snackbar('지누맵 종료하기', '한번 더 뒤로가기를 누르면 지누맵이 종료됩니다.',
+          snackPosition: SnackPosition.BOTTOM,
+          forwardAnimationCurve: Curves.elasticInOut,
+          reverseAnimationCurve: Curves.easeOut);
+      return Future.value(false);
+    }
+
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(40.0), // here the desired height
           child: AppBar(
-            systemOverlayStyle: Get.isDarkMode
+            systemOverlayStyle: context.isDarkMode
                 ? SystemUiOverlayStyle.light
                 : SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent, //appBar 투명색
@@ -40,29 +64,34 @@ class _MainPageState extends State<MainPage> {
             title: MainAppBar(),
           ),
         ),
-        body: SafeArea(
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
-            child: SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SearchField(),
-                    HistoryItems(),
-                    ItemTitle(
-                      title: "Favorites",
-                    ),
-                    FavoritesItem(),
-                    ItemTitle(
-                      title: "Convenient",
-                    ),
-                    Conveneints(),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    GnuMapTitle(),
-                    Minimap(),
-                  ]),
+        body: WillPopScope(
+          onWillPop: () {
+            return onWillPop();
+          },
+          child: SafeArea(
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(13, 15, 0, 0),
+              child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MainTopWidget(),
+                      HistoryItems(),
+                      ItemTitle(
+                        title: "favorites".tr,
+                      ),
+                      FavoritesItem(),
+                      ItemTitle(
+                        title: "convenient".tr,
+                      ),
+                      Conveneints(),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      GnuMapTitle(),
+                      Minimap(),
+                    ]),
+              ),
             ),
           ),
         ),

@@ -56,14 +56,16 @@ class HistoryItems extends GetView<HistoryController> {
                           });
                     },
                     onPressed: () {
-                      Get.toNamed("/result",
-                          arguments: {"keyword": _.items[index].name});
+                      Get.toNamed("/result", arguments: {
+                        "keyword": _.items[index].name,
+                        "area": _.items[index].area
+                      });
                     },
                     child: Text(_.items[index].name,
                         style: TextStyle(
                             fontSize: 13,
                             color: color,
-                            fontFamily: 'AppleSDGothicNeo')),
+                            fontFamily: 'Pretendard')),
                     style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size(10, 30),

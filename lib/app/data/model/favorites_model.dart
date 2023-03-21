@@ -16,9 +16,13 @@ class Favorites {
   @HiveField(3)
   final String lng;
 
+  @HiveField(4)
+  final String area;
+
   Favorites(
       {required this.name,
       required this.num,
       required this.lat,
-      required this.lng});
+      required this.lng,
+      required this.area});
 }

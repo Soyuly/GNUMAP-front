@@ -9,4 +9,5 @@ abstract class Routes {
   static const CONVENIENT = '/convenient';
   static const MAP = '/map';
   static const RESULT = '/result';
+  static const BUS = '/bus';
 }

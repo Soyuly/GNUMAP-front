@@ -38,7 +38,8 @@ class _ReviseInfoState extends State<ReviseInfo> {
     return Scaffold(
         appBar: CupertinoNavigationBar(
           backgroundColor: CupertinoColors.systemBackground,
-          middle: Text('정보수정요청', style: Theme.of(context).textTheme.headline5),
+          middle:
+              Text('문의사항 보내기', style: Theme.of(context).textTheme.headline5),
         ),
         body: Padding(
             padding: const EdgeInsets.all(16.0),

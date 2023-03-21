@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "104314103353",
+    "project_id": "gnumap-c0e4d",
+    "storage_bucket": "gnumap-c0e4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104314103353:android:3a794703b0e7df9724cfe8",
+        "android_client_info": {
+          "package_name": "com.eighteenclass.gnumap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104314103353-rs5bttmp3i7ifjd22p9e532dkt4lh5ot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCG92Otek-cHVMzl6WUsJ7-cD4DS8sv50o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104314103353-rs5bttmp3i7ifjd22p9e532dkt4lh5ot.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "104314103353-44hhtjb76ocge742llk1tok44skitklv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.eighteenclass.gnumap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
