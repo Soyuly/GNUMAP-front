@@ -31,6 +31,9 @@ https://apps.apple.com/us/app/%EA%B7%B8%EB%88%84%EB%A7%B5-gnu-map/id6444317161
 https://play.google.com/store/apps/details?id=com.eighteenclass.gnumap
 
 ## 버전 변경점
+### 1.1.1
+- 업데이트 후 기존의 즐겨찾기와 히스토리 목록이 뜨지 않는 버그를 수정하였습니다.
+
 ### 1.1.0
 - 칠암, 의간, 통영 캠퍼스 건물 정보를 추가하였습니다.
 - 학교 순환버스 정보 조회 기능 추가하였습니다.
