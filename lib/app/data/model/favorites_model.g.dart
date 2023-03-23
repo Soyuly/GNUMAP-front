@@ -21,7 +21,7 @@ class FavoritesAdapter extends TypeAdapter<Favorites> {
       num: fields[1] as int,
       lat: fields[2] as String,
       lng: fields[3] as String,
-      area: fields[4] as String,
+      area: fields[4] == null ? 'gajwa' : fields[4] as String,
     );
   }
 

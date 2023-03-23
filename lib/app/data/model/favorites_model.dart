@@ -16,7 +16,7 @@ class Favorites {
   @HiveField(3)
   final String lng;
 
-  @HiveField(4)
+  @HiveField(4, defaultValue: "gajwa")
   final String area;
 
   Favorites(

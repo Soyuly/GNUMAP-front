@@ -18,7 +18,7 @@ class HistoryAdapter extends TypeAdapter<History> {
     };
     return History(
       name: fields[0] as String,
-      area: fields[1] as String,
+      area: fields[1] == null ? '가좌' : fields[1] as String,
     );
   }
 
